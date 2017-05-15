@@ -1,4 +1,4 @@
-package net.pl3x.bukkit.cities.claim.region.flag;
+package net.pl3x.bukkit.cities.claim.region.group;
 
 public enum GroupType {
     MANAGER(3),

@@ -1,19 +1,19 @@
 package net.pl3x.bukkit.cities.claim.region.group;
 
-import net.pl3x.bukkit.cities.claim.region.flag.GroupFlagType;
-import net.pl3x.bukkit.cities.claim.region.flag.GroupType;
+import net.pl3x.bukkit.cities.claim.region.group.trust.TrustType;
+import net.pl3x.bukkit.cities.claim.region.group.trust.Trusts;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class RegionGroups {
+public class Groups {
     private final UUID owner;
     private final Map<GroupType, Members> groupMembers = new HashMap<>();
-    private final Map<GroupType, GroupFlags> groupFlags = new HashMap<>();
+    private final Map<GroupType, Trusts> groupTrusts = new HashMap<>();
 
-    public RegionGroups(UUID owner) {
+    public Groups(UUID owner) {
         this.owner = owner;
     }
 
@@ -50,17 +50,17 @@ public class RegionGroups {
         }
     }
 
-    public Boolean getFlag(GroupType group, GroupFlagType flag) {
-        GroupFlags flags = groupFlags.get(group);
-        return flags == null ? null : flags.getFlag(flag);
+    public Boolean getTrust(GroupType group, TrustType trust) {
+        Trusts trusts = groupTrusts.get(group);
+        return trusts == null ? null : trusts.getTrust(trust);
     }
 
-    public void setFlag(GroupType group, GroupFlagType flag, Boolean value) {
-        GroupFlags flags = groupFlags.get(group);
-        if (flags == null) {
-            flags = new GroupFlags();
+    public void setTrust(GroupType group, TrustType trust, Boolean value) {
+        Trusts trusts = groupTrusts.get(group);
+        if (trusts == null) {
+            trusts = new Trusts();
         }
-        flags.setFlag(flag, value);
-        groupFlags.put(group, flags);
+        trusts.setTrust(trust, value);
+        groupTrusts.put(group, trusts);
     }
 }

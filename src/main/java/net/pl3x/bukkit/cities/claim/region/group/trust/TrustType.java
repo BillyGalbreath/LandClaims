@@ -1,6 +1,6 @@
-package net.pl3x.bukkit.cities.claim.region.flag;
+package net.pl3x.bukkit.cities.claim.region.group.trust;
 
-public enum GroupFlagType {
+public enum TrustType {
     BUILD(false),
     INTERACT(false),
     CONTAINER(false),
@@ -8,7 +8,7 @@ public enum GroupFlagType {
 
     private final boolean def;
 
-    GroupFlagType(boolean def) {
+    TrustType(boolean def) {
         this.def = def;
     }
 

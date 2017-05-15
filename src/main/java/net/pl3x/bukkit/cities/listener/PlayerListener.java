@@ -1,7 +1,7 @@
 package net.pl3x.bukkit.cities.listener;
 
 import net.pl3x.bukkit.cities.Pl3xCities;
-import net.pl3x.bukkit.cities.Pl3xPlayer;
+import net.pl3x.bukkit.cities.player.Pl3xPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -21,17 +21,18 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
+        Pl3xPlayer pl3xPlayer = Pl3xPlayer.getPlayer(event.getPlayer()); // load player data
         new BukkitRunnable() {
             @Override
             public void run() {
-                Pl3xPlayer.getPlayer(event.getPlayer()).updateLocation();
+                pl3xPlayer.updateLocation(); // wait 20 ticks to update location for spawn relocation
             }
         }.runTaskLater(plugin, 20);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        Pl3xPlayer.remove(event.getPlayer());
+        Pl3xPlayer.unload(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -45,12 +46,12 @@ public class PlayerListener implements Listener {
         Pl3xPlayer.getPlayer(event.getPlayer()).updateLocation();
     }
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         Pl3xPlayer.getPlayer(event.getPlayer()).updateLocation();
     }
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
         Pl3xPlayer.getPlayer(event.getPlayer()).updateLocation();
     }

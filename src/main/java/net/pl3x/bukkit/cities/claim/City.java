@@ -38,9 +38,11 @@ public class City extends Region {
         return null;
     }
 
+    public void loadPlots() {
+        //
+    }
+
     public void unload() {
-        plots.forEach(Plot::stopVisuals);
         plots.clear();
-        stopVisuals();
     }
 }

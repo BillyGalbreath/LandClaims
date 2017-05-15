@@ -3,6 +3,7 @@ package net.pl3x.bukkit.cities.command;
 import net.pl3x.bukkit.cities.Pl3xCities;
 import net.pl3x.bukkit.cities.configuration.Config;
 import net.pl3x.bukkit.cities.configuration.Lang;
+import net.pl3x.bukkit.cities.player.Pl3xPlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -35,6 +36,8 @@ public class CmdPl3xCities implements TabExecutor {
         if (args.length > 0 && args[0].equalsIgnoreCase("reload")) {
             Config.reload();
             Lang.reload();
+
+            Pl3xPlayer.reloadAll();
 
             Lang.send(sender, Lang.RELOAD
                     .replace("{plugin}", plugin.getName())
