@@ -12,6 +12,12 @@ public class Lang {
     public static String COMMAND_NO_PERMISSION;
     public static String VERSION;
     public static String RELOAD;
+    public static String CITY_CHANGE_TITLE;
+    public static String CITY_CHANGE_SUBTITLE;
+    public static String CITY_CHANGE_ACTIONBAR;
+
+    private Lang() {
+    }
 
     public static void reload() {
         Pl3xCities plugin = Pl3xCities.getPlugin();
@@ -25,6 +31,9 @@ public class Lang {
         COMMAND_NO_PERMISSION = config.getString("command-no-permission", "&4You do not have permission for that command!");
         VERSION = config.getString("version", "&d{plugin} v{version}.");
         RELOAD = config.getString("reload", "&d{plugin} v{version} reloaded.");
+        CITY_CHANGE_TITLE = config.getString("city-change-title", "&2&l{city}");
+        CITY_CHANGE_SUBTITLE = config.getString("city-change-subtitle", "&6PvP: {pvp}");
+        CITY_CHANGE_ACTIONBAR = config.getString("city-change-actionbar", "&2&l{city}");
     }
 
     public static void send(CommandSender recipient, String message) {

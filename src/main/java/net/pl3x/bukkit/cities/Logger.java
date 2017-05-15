@@ -5,6 +5,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 public class Logger {
+    private Logger() {
+    }
+
     private static void log(String msg) {
         msg = ChatColor.translateAlternateColorCodes('&',
                 "&3[&d" + Pl3xCities.getPlugin().getName() + "&3]&r " + msg);

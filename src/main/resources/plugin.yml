@@ -5,3 +5,16 @@ description: ${project.artifactId} Paper Plugin
 author: BillyGalbreath
 softdepend:
 - Vault
+- ProtocolLib
+
+commands:
+    pl3xcities:
+        description: Reload configs
+        usage: /<command> (reload)
+        aliases:
+        - cities
+
+permissions:
+    command.pl3xcities:
+        description: Allows reload configs
+        default: op

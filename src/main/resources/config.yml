@@ -6,3 +6,9 @@ debug-mode: false
 
 # Language file (for translations)
 language-file: lang-en.yml
+
+# Title timings (in ticks)
+title:
+    fade-in: 10
+    stay: 30
+    fade-out: 20

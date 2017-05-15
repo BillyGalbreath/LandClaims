@@ -1,4 +1,4 @@
-package net.pl3x.bukkit.cities.commands;
+package net.pl3x.bukkit.cities.command;
 
 import net.pl3x.bukkit.cities.Pl3xCities;
 import net.pl3x.bukkit.cities.configuration.Config;

@@ -1,3 +1,7 @@
 command-no-permission: "&4You do not have permission for that command!"
 version: "&d{plugin} v{version}."
 reload: "&d{plugin} v{version} reloaded."
+
+city-change-title: "&2&l{city}"
+city-change-subtitle: "&6PvP: {pvp}"
+city-change-actionbar: "&2&l{city}"
