@@ -2,6 +2,8 @@ package net.pl3x.bukkit.claims.player;
 
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.claim.ClaimManager;
+import net.pl3x.bukkit.claims.claim.tool.BasicClaimTool;
+import net.pl3x.bukkit.claims.claim.tool.ClaimTool;
 import net.pl3x.bukkit.claims.configuration.PlayerConfig;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -37,9 +39,7 @@ public class Pl3xPlayer extends PlayerConfig {
 
     private Player player;
     private Location lastLocation;
-    private ToolMode toolMode = ToolMode.BASIC;
-    private Location selection;
-    private Claim resizingClaim;
+    private ClaimTool claimTool = new BasicClaimTool();
     private Claim inClaim;
 
     private Pl3xPlayer(Player player) {
@@ -47,12 +47,13 @@ public class Pl3xPlayer extends PlayerConfig {
         this.player = player;
     }
 
-    public void unload() {
+    /**
+     * Use Pl3xPlayer#unload(Player) instead
+     */
+    private void unload() {
         player = null;
         lastLocation = null;
-        toolMode = null;
-        selection = null;
-        resizingClaim = null;
+        claimTool = null;
         inClaim = null;
     }
 
@@ -99,27 +100,11 @@ public class Pl3xPlayer extends PlayerConfig {
         inClaim(ClaimManager.getInstance().getClaim(lastLocation));
     }
 
-    public ToolMode getToolMode() {
-        return toolMode;
+    public ClaimTool getClaimTool() {
+        return claimTool;
     }
 
-    public void setToolMode(ToolMode toolMode) {
-        this.toolMode = toolMode;
-    }
-
-    public Location getSelection() {
-        return selection;
-    }
-
-    public void setSelection(Location location) {
-        this.selection = location;
-    }
-
-    public Claim getResizingClaim() {
-        return resizingClaim;
-    }
-
-    public void setResizingClaim(Claim resizingClaim) {
-        this.resizingClaim = resizingClaim;
+    public void setClaimTool(ClaimTool claimTool) {
+        this.claimTool = claimTool;
     }
 }

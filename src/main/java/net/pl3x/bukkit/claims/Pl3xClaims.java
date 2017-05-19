@@ -6,7 +6,7 @@ import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.listener.PlayerListener;
 import net.pl3x.bukkit.claims.listener.ProtectionListener;
-import net.pl3x.bukkit.claims.listener.RegionToolListener;
+import net.pl3x.bukkit.claims.listener.ClaimToolListener;
 import net.pl3x.bukkit.claims.player.Pl3xPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -44,7 +44,7 @@ public class Pl3xClaims extends JavaPlugin {
         Logger.info("&3                                   ▀███▄▄▄   ▄▄▄███▀                  Pl3x&oClaims");
         Logger.info("&3                                      ▀▀▀█████▀▀▀                          ©2017");
 
-        getServer().getPluginManager().registerEvents(new RegionToolListener(this), this);
+        getServer().getPluginManager().registerEvents(new ClaimToolListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         getServer().getPluginManager().registerEvents(new ProtectionListener(this), this);
 

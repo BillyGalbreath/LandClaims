@@ -17,17 +17,10 @@ public class Config {
 
     public static List<String> ENABLED_WORLDS = new ArrayList<>();
 
-    public static String WILD_NAME = "Wilderness";
-    public static Boolean WILD_PVP = true; // leave this as Boolean to prevent unboxing errors elsewhere
-
-    public static int TITLE_TIME_FADE_IN = 10;
-    public static int TITLE_TIME_STAY = 30;
-    public static int TITLE_TIME_FADE_OUT = 20;
-
-    public static String WAND_MATERIAL = "STICK";
-    public static byte WAND_DATA = (byte) 0;
-    public static String WAND_NAME = "STICK";
-    public static List<String> WAND_LORE = new ArrayList<>();
+    public static String CLAIM_TOOL_MATERIAL = "STICK";
+    public static byte CLAIM_TOOL_DATA = (byte) 0;
+    public static String CLAIM_TOOL_NAME = "STICK";
+    public static List<String> CLAIM_TOOL_LORE = new ArrayList<>();
 
     private Config() {
     }
@@ -44,56 +37,49 @@ public class Config {
 
         ENABLED_WORLDS = config.getStringList("enabled-worlds");
 
-        WILD_NAME = config.getString("wild.name", "Wilderness");
-        WILD_PVP = config.getBoolean("wild.pvp", true);
-
-        TITLE_TIME_FADE_IN = config.getInt("title.fade-in", 10);
-        TITLE_TIME_STAY = config.getInt("title.stay", 30);
-        TITLE_TIME_FADE_OUT = config.getInt("title.fade-out", 20);
-
-        WAND_MATERIAL = config.getString("wand.material", "STICK");
-        WAND_DATA = (byte) config.getInt("wand.data", 0);
-        WAND_NAME = ChatColor.translateAlternateColorCodes('&',
-                config.getString("wand.name", "Claim Tool"));
-        WAND_LORE.clear();
-        config.getStringList("wand.lore").forEach(lore ->
-                WAND_LORE.add(ChatColor.translateAlternateColorCodes('&', lore)));
+        CLAIM_TOOL_MATERIAL = config.getString("claim-tool.material", "STICK");
+        CLAIM_TOOL_DATA = (byte) config.getInt("claim-tool.data", 0);
+        CLAIM_TOOL_NAME = ChatColor.translateAlternateColorCodes('&',
+                config.getString("claim-tool.name", "Claim Tool"));
+        CLAIM_TOOL_LORE.clear();
+        config.getStringList("claim-tool.lore").forEach(lore ->
+                CLAIM_TOOL_LORE.add(ChatColor.translateAlternateColorCodes('&', lore)));
 
     }
 
-    public static boolean isWorldDisabled(World world) {
+    public static boolean isWorldEnabled(World world) {
         for (String name : ENABLED_WORLDS) {
             if (name.equalsIgnoreCase(world.getName())) {
-                return false; // enabled
+                return true;
             }
         }
-        return true; // disabled
+        return false;
     }
 
-    public static boolean isRegionWand(ItemStack item) {
+    public static boolean isClaimTool(ItemStack item) {
         if (item == null || item.getType() == Material.AIR) {
             return false; // no item
         }
-        if (!item.getType().name().equals(Config.WAND_MATERIAL)) {
+        if (!item.getType().name().equals(Config.CLAIM_TOOL_MATERIAL)) {
             return false; // wrong material
         }
         //noinspection deprecation
-        if (item.getData().getData() != Config.WAND_DATA) {
+        if (item.getData().getData() != Config.CLAIM_TOOL_DATA) {
             return false; // wrong data
         }
-        if (Config.WAND_NAME != null && !Config.WAND_NAME.equals("")) {
+        if (Config.CLAIM_TOOL_NAME != null && !Config.CLAIM_TOOL_NAME.equals("")) {
             if (!item.hasItemMeta()) {
                 return false; // no item meta
             }
-            if (!item.getItemMeta().getDisplayName().equals(Config.WAND_NAME)) {
+            if (!item.getItemMeta().getDisplayName().equals(Config.CLAIM_TOOL_NAME)) {
                 return false; // name mismatch
             }
         }
-        if (Config.WAND_LORE != null && !Config.WAND_LORE.isEmpty()) {
+        if (Config.CLAIM_TOOL_LORE != null && !Config.CLAIM_TOOL_LORE.isEmpty()) {
             if (!item.hasItemMeta()) {
                 return false; // no item meta
             }
-            for (String lore : Config.WAND_LORE) {
+            for (String lore : Config.CLAIM_TOOL_LORE) {
                 if (!item.getItemMeta().getLore().contains(lore)) {
                     return false; // name mismatch
                 }

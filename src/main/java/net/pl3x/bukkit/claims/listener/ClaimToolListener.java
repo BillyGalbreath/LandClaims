@@ -15,10 +15,10 @@ import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.HashSet;
 
-public class RegionToolListener implements Listener {
+public class ClaimToolListener implements Listener {
     private final Pl3xClaims plugin;
 
-    public RegionToolListener(Pl3xClaims plugin) {
+    public ClaimToolListener(Pl3xClaims plugin) {
         this.plugin = plugin;
     }
 
@@ -29,7 +29,7 @@ public class RegionToolListener implements Listener {
         }
 
         Player player = event.getPlayer();
-        if (Config.isWorldDisabled(player.getWorld())) {
+        if (Config.isWorldEnabled(player.getWorld())) {
             return; // claims not enabled in this world
         }
 
@@ -46,17 +46,13 @@ public class RegionToolListener implements Listener {
             return; // no block clicked
         }
 
-        if (!Config.isRegionWand(player.getInventory().getItemInMainHand())) {
-            return; // not using region wand
+        if (!Config.isClaimTool(player.getInventory().getItemInMainHand())) {
+            return; // not using claim tool
         }
 
         Pl3xPlayer pl3xPlayer = Pl3xPlayer.getPlayer(player);
-        if (pl3xPlayer.getSelection() == null) {
-            // make a new selection
-            pl3xPlayer.setSelection(clickedBlock.getLocation());
-        } else {
-            // finish the selection
-
-        }
+        //
+        //
+        //
     }
 }
