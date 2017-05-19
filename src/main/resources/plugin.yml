@@ -8,13 +8,13 @@ softdepend:
 - ProtocolLib
 
 commands:
-    pl3xcities:
+    pl3xclaims:
         description: Reload configs
         usage: /<command> (reload)
         aliases:
         - claims
 
 permissions:
-    command.pl3xcities:
+    command.pl3xclaims:
         description: Allows reload configs
         default: op

@@ -11,10 +11,10 @@ import org.bukkit.command.TabExecutor;
 import java.util.Collections;
 import java.util.List;
 
-public class CmdPl3xCities implements TabExecutor {
+public class CmdPl3xClaims implements TabExecutor {
     private final Pl3xClaims plugin;
 
-    public CmdPl3xCities(Pl3xClaims plugin) {
+    public CmdPl3xClaims(Pl3xClaims plugin) {
         this.plugin = plugin;
     }
 
@@ -28,7 +28,7 @@ public class CmdPl3xCities implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("command.pl3xcities")) {
+        if (!sender.hasPermission("command.pl3xclaims")) {
             Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
             return true;
         }

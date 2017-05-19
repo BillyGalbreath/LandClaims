@@ -1,7 +1,7 @@
 package net.pl3x.bukkit.claims;
 
 import net.pl3x.bukkit.claims.claim.ClaimManager;
-import net.pl3x.bukkit.claims.command.CmdPl3xCities;
+import net.pl3x.bukkit.claims.command.CmdPl3xClaims;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.hook.VaultHook;
@@ -9,7 +9,6 @@ import net.pl3x.bukkit.claims.listener.PlayerListener;
 import net.pl3x.bukkit.claims.listener.ProtectionListener;
 import net.pl3x.bukkit.claims.listener.RegionToolListener;
 import net.pl3x.bukkit.claims.player.Pl3xPlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -46,17 +45,6 @@ public class Pl3xClaims extends JavaPlugin {
         Logger.info("&3                                   ▀███▄▄▄   ▄▄▄███▀                  Pl3x&oClaims");
         Logger.info("&3                                      ▀▀▀█████▀▀▀                          ©2017");
 
-        try {
-            Class.forName("com.destroystokyo.paper.PaperConfig");
-            Logger.info("Paper version: " + Bukkit.getVersion());
-        } catch (ClassNotFoundException e) {
-            Logger.error("Missing needed Paper API!");
-            Logger.error(getName() + " is only compatible with Paper servers!");
-            Logger.error("https://ci.destroystokyo.com/job/PaperSpigot/");
-            Logger.warn(getName() + " will now disable itself.");
-            return;
-        }
-
         if (getServer().getPluginManager().isPluginEnabled("Vault")) {
             Logger.info("Hooked into Vault");
         } else {
@@ -80,7 +68,7 @@ public class Pl3xClaims extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         getServer().getPluginManager().registerEvents(new ProtectionListener(this), this);
 
-        getCommand("pl3xcities").setExecutor(new CmdPl3xCities(this));
+        getCommand("pl3xclaims").setExecutor(new CmdPl3xClaims(this));
 
         ClaimManager.getInstance().loadClaims();
 
