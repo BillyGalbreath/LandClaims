@@ -37,7 +37,7 @@ public class Pl3xPlayer extends PlayerConfig {
 
     private Player player;
     private Location lastLocation;
-    private ToolMode toolMode = ToolMode.CITY;
+    private ToolMode toolMode = ToolMode.BASIC;
     private Location selection;
     private Claim resizingClaim;
     private Claim inClaim;

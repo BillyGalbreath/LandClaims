@@ -3,9 +3,6 @@ main: ${project.groupId}.${project.artifactId}
 version: ${project.version}
 description: ${project.artifactId} Paper Plugin
 author: BillyGalbreath
-softdepend:
-- Vault
-- ProtocolLib
 
 commands:
     pl3xclaims:
