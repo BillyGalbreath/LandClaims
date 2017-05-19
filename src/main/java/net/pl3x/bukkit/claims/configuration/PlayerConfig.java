@@ -17,7 +17,7 @@ public abstract class PlayerConfig extends YamlConfiguration {
         this.file = new File(Pl3xClaims.getPlugin().getDataFolder(),
                 "userdata" + File.separator + uuid.toString() + ".yml");
         if (!file.exists()) {
-            save();
+            save(); // api will make sure parent directories are made
         }
         reload();
     }

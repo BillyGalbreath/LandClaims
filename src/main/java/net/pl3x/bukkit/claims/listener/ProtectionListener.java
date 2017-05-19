@@ -32,7 +32,7 @@ public class ProtectionListener implements Listener {
         Claim toClaim = ClaimManager.getInstance().getClaim(event.getBlock().getLocation());
 
         // stop fire spread if crossing border OR claim has firespread flag disabled
-        if (fromClaim != toClaim || !toClaim.getFlags().getFlag(FlagType.FIRESPREAD)) {
+        if (fromClaim != toClaim || !toClaim.getFlag(FlagType.FIRESPREAD)) {
             event.setCancelled(true);
         }
     }

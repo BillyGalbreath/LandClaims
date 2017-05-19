@@ -1,0 +1,29 @@
+id: 0
+parent: -1
+owner: 5db23b22-9dd8-4672-94ab-4963a48c2e71
+coordinates:
+  world: world
+  min:
+    x: 10
+    z: 15
+  max:
+    x: 125
+    z: 250
+trusts:
+  builders:
+  - 84ceffd2-5294-4b53-88f9-b6640a186795
+  - 7f67d504-4d04-4d98-9a89-72d359824e5a
+  - 0b54d4f1-8ce9-46b3-a723-4ffdeeae3d7d
+  - e4adb6ec-ee30-46d4-8619-5e468be4702d
+  - 1d4dab19-e0fd-46ca-bcfb-50e895b4c408
+  containers: []
+  accessors: []
+  managers: []
+flags:
+  pvp: false
+  explosions: false
+  firespread: false
+  spawn_animals: true
+  spawn_mobs: false
+  mob_damage: false
+  mob_griefing: false

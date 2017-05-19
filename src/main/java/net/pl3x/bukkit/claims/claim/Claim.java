@@ -1,115 +1,145 @@
 package net.pl3x.bukkit.claims.claim;
 
-import net.pl3x.bukkit.claims.claim.flag.Flags;
-import net.pl3x.bukkit.claims.claim.group.Groups;
-import org.bukkit.Location;
+import net.pl3x.bukkit.claims.claim.flag.FlagType;
+import org.bukkit.entity.Player;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.UUID;
 
-/**
- * 2D Claim (X,Z)
- */
 public class Claim {
-    private static long nextId = 0;
-
-    public static long getNextId() {
-        return nextId++;
-    }
-
     private final long id;
-    private final long parent;
+    private final UUID owner;
+    private final Claim parent;
     private final Coordinates coordinates;
-    private final Flags flags;
-    private final Groups groups;
+    private final Map<FlagType, Boolean> flags;
+    private final Map<UUID, TrustType> trusts;
+    private final Collection<UUID> managers = new HashSet<>();
+    private final Collection<Claim> children = new HashSet<>();
 
-    public Claim(long id, long parent, UUID owner, Coordinates coordinates) {
+    public Claim(long id, UUID owner, Claim parent, Coordinates coordinates) {
         this.id = id;
+        this.owner = owner;
         this.parent = parent;
         this.coordinates = coordinates;
-
-        flags = new Flags();
-        groups = new Groups(owner);
-
-        // fix next id in case we ended up skipping ids when loading from disk
-        if (id >= nextId) {
-            nextId = id + 1;
-        }
+        this.flags = new HashMap<>();
+        this.trusts = new HashMap<>();
     }
 
     public long getId() {
         return id;
     }
 
-    public long getParentId() {
-        return parent;
+    public UUID getOwner() {
+        return owner;
     }
 
     public Claim getParent() {
-        return ClaimManager.getInstance().getClaim(parent);
+        return parent;
     }
 
     public Coordinates getCoordinates() {
         return coordinates;
     }
 
-    public Flags getFlags() {
-        return flags;
+    public Boolean getFlag(FlagType flag) {
+        return flags.get(flag);
     }
 
-    public Groups getGroups() {
-        return groups;
+    public void setFlag(FlagType flag, Boolean value) {
+        if (value == null) {
+            flags.remove(flag);
+            return;
+        }
+        flags.put(flag, value);
     }
 
-    /**
-     * Get the farthest most northwest and bottom location
-     *
-     * @return Most northwest and bottom location
-     */
-    public Location getMinLocation() {
-        return coordinates.getMinLocation();
+    public TrustType getTrust(Player player) {
+        return getTrust(player.getUniqueId());
     }
 
-    /**
-     * Get the farthest most southeast and top location
-     *
-     * @return Most southeast and top location
-     */
-    public Location getMaxLocation() {
-        return coordinates.getMaxLocation();
+    public void setTrust(Player player, TrustType trustType) {
+        setTrust(player.getUniqueId(), trustType);
     }
 
-    /**
-     * Check if a claim overlaps this claim at any location
-     *
-     * @param claim Claim to check
-     * @return True if any location overlaps this claim
-     */
-    public boolean overlaps(Claim claim) {
-        return coordinates.overlaps(claim.getCoordinates());
+    public TrustType getTrust(UUID uuid) {
+        return trusts.get(uuid);
     }
 
-    /**
-     * Check if a claim fits completely inside this claim
-     *
-     * @param claim Claim to check
-     * @return True if claim fits completely inside this claim
-     */
-    public boolean contains(Claim claim) {
-        return coordinates.contains(claim.getCoordinates());
+    public void setTrust(UUID uuid, TrustType trustType) {
+        if (trustType == null) {
+            trusts.remove(uuid);
+            return;
+        }
+        trusts.put(uuid, trustType);
     }
 
-    public boolean contains(Location location) {
-        return coordinates.contains(location);
+    public Collection<UUID> getManagers() {
+        return managers;
     }
 
-    /**
-     * Check if a specific point is inside this claim
-     *
-     * @param x X coordinate
-     * @param z Z coordinate
-     * @return True is point is inside this claim
-     */
-    public boolean contains(int x, int z) {
-        return coordinates.contains(x, z);
+    public void addManager(UUID uuid) {
+        managers.add(uuid);
+    }
+
+    public void removeManager(UUID uuid) {
+        managers.remove(uuid);
+    }
+
+    public Collection<Claim> getChildren() {
+        return children;
+    }
+
+    public void addChild(Claim claim) {
+        children.add(claim);
+    }
+
+    public void removeChild(Claim claim) {
+        children.remove(claim);
+    }
+
+    public boolean allowAccess(UUID uuid) {
+        if (owner == uuid) {
+            return true;
+        }
+        switch (trusts.get(uuid)) {
+            case ACCESS:
+            case CONTAINER:
+            case BUILDER:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public boolean allowContainers(UUID uuid) {
+        if (owner == uuid) {
+            return true;
+        }
+        switch (trusts.get(uuid)) {
+            case CONTAINER:
+            case BUILDER:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public boolean allowBuild(UUID uuid) {
+        if (owner == uuid) {
+            return true;
+        }
+        switch (trusts.get(uuid)) {
+            case BUILDER:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public boolean allowManage(UUID uuid) {
+        return owner == uuid || managers.contains(uuid);
     }
 }

@@ -3,7 +3,7 @@ package net.pl3x.bukkit.claims.claim.flag;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Flags {
+public class Flag {
     private final Map<FlagType, Boolean> flags = new HashMap<>();
 
     public Boolean getFlag(FlagType flag) {
