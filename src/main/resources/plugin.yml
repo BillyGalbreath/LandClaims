@@ -12,7 +12,7 @@ commands:
         description: Reload configs
         usage: /<command> (reload)
         aliases:
-        - cities
+        - claims
 
 permissions:
     command.pl3xcities:
