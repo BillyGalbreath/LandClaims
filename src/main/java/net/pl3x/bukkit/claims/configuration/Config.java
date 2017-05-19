@@ -48,12 +48,7 @@ public class Config {
     }
 
     public static boolean isWorldEnabled(World world) {
-        for (String name : ENABLED_WORLDS) {
-            if (name.equalsIgnoreCase(world.getName())) {
-                return true;
-            }
-        }
-        return false;
+        return ENABLED_WORLDS.contains(world.getName());
     }
 
     public static boolean isClaimTool(ItemStack item) {
