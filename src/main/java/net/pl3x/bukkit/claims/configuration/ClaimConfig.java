@@ -2,6 +2,7 @@ package net.pl3x.bukkit.claims.configuration;
 
 import net.pl3x.bukkit.claims.Logger;
 import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.claim.Coordinates;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -52,7 +53,7 @@ public class ClaimConfig extends YamlConfiguration {
         reload();
     }
 
-    protected void reload() {
+    public void reload() {
         synchronized (saveLock) {
             try {
                 load(file);
@@ -61,7 +62,7 @@ public class ClaimConfig extends YamlConfiguration {
         }
     }
 
-    protected void save() {
+    public void save() {
         synchronized (saveLock) {
             try {
                 save(file);
@@ -76,6 +77,26 @@ public class ClaimConfig extends YamlConfiguration {
                 Logger.error("Could not delete claim file: " + claimId);
             }
         }
+    }
+
+    public void setId(long id) {
+        set("id", id);
+    }
+
+    public void setOwner(UUID owner) {
+        set("owner", owner);
+    }
+
+    public void setParent(Claim parent) {
+        set("parent", parent == null ? -1 : parent.getId());
+    }
+
+    public void setCoordinates(Coordinates coordinates) {
+        set("coordinates.world", coordinates.getWorld());
+        set("coordinates.min.x", coordinates.getMinX());
+        set("coordinates.min.z", coordinates.getMinZ());
+        set("coordinates.max.x", coordinates.getMaxX());
+        set("coordinates.max.z", coordinates.getMaxZ());
     }
 
     public long getId() {

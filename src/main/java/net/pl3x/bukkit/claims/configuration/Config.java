@@ -19,8 +19,13 @@ public class Config {
 
     public static String CLAIM_TOOL_MATERIAL = "STICK";
     public static byte CLAIM_TOOL_DATA = (byte) 0;
-    public static String CLAIM_TOOL_NAME = "STICK";
+    public static String CLAIM_TOOL_NAME = "Claim Tool";
     public static List<String> CLAIM_TOOL_LORE = new ArrayList<>();
+
+    public static String INSPECT_TOOL_MATERIAL = "FEATHER";
+    public static byte INSPECT_TOOL_DATA = (byte) 0;
+    public static String INSPECT_TOOL_NAME = "Inspect Tool";
+    public static List<String> INSPECT_TOOL_LORE = new ArrayList<>();
 
     private Config() {
     }
@@ -44,6 +49,14 @@ public class Config {
         CLAIM_TOOL_LORE.clear();
         config.getStringList("claim-tool.lore").forEach(lore ->
                 CLAIM_TOOL_LORE.add(ChatColor.translateAlternateColorCodes('&', lore)));
+
+        INSPECT_TOOL_MATERIAL = config.getString("inspect-tool.material", "FEATHER");
+        INSPECT_TOOL_DATA = (byte) config.getInt("inspect-tool.data", 0);
+        INSPECT_TOOL_NAME = ChatColor.translateAlternateColorCodes('&',
+                config.getString("inspect-tool.name", "Inspect Tool"));
+        INSPECT_TOOL_LORE.clear();
+        config.getStringList("inspect-tool.lore").forEach(lore ->
+                INSPECT_TOOL_LORE.add(ChatColor.translateAlternateColorCodes('&', lore)));
 
     }
 
@@ -76,7 +89,39 @@ public class Config {
             }
             for (String lore : Config.CLAIM_TOOL_LORE) {
                 if (!item.getItemMeta().getLore().contains(lore)) {
-                    return false; // name mismatch
+                    return false; // lore mismatch
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean isInspectTool(ItemStack item) {
+        if (item == null || item.getType() == Material.AIR) {
+            return false; // no item
+        }
+        if (!item.getType().name().equals(Config.INSPECT_TOOL_MATERIAL)) {
+            return false; // wrong material
+        }
+        //noinspection deprecation
+        if (item.getData().getData() != Config.INSPECT_TOOL_DATA) {
+            return false; // wrong data
+        }
+        if (Config.INSPECT_TOOL_NAME != null && !Config.INSPECT_TOOL_NAME.equals("")) {
+            if (!item.hasItemMeta()) {
+                return false; // no item meta
+            }
+            if (!item.getItemMeta().getDisplayName().equals(Config.INSPECT_TOOL_NAME)) {
+                return false; // name mismatch
+            }
+        }
+        if (Config.INSPECT_TOOL_LORE != null && !Config.INSPECT_TOOL_LORE.isEmpty()) {
+            if (!item.hasItemMeta()) {
+                return false; // no item meta
+            }
+            for (String lore : Config.INSPECT_TOOL_LORE) {
+                if (!item.getItemMeta().getLore().contains(lore)) {
+                    return false; // lore mismatch
                 }
             }
         }

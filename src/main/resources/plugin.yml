@@ -15,3 +15,15 @@ permissions:
     command.pl3xclaims:
         description: Allows reload configs
         default: op
+    claims.visualize:
+        description: Allows to visualize claims
+        default: true
+    claims.visualize.nearby:
+        description: Allows to visualize multiple nearby claims
+        default: op
+    claims.inspect.seeclaimsize:
+        description: Allows to see the claim size with inspect tool
+        default: true
+    claims.inspect.seeinactivity:
+        description: Allows to see the claim owner last online
+        default: true

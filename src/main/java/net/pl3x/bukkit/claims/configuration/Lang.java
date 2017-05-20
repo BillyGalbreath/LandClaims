@@ -13,6 +13,9 @@ public class Lang {
     public static String VERSION;
     public static String RELOAD;
 
+    public static String INSPECT_NO_CLAIM = "&4There are no claims here";
+    public static String INSPECT_TOO_FAR = "&4Too far away";
+
     private Lang() {
     }
 
@@ -28,6 +31,8 @@ public class Lang {
         COMMAND_NO_PERMISSION = config.getString("command-no-permission", "&4You do not have permission for that command!");
         VERSION = config.getString("version", "&d{plugin} v{version}.");
         RELOAD = config.getString("reload", "&d{plugin} v{version} reloaded.");
+
+        INSPECT_NO_CLAIM = config.getString("inspect-no-claim", "&4There are no claims here");
     }
 
     public static void send(CommandSender recipient, String message) {

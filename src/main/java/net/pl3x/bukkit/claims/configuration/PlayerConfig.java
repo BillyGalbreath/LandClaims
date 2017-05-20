@@ -8,12 +8,10 @@ import java.util.UUID;
 
 public abstract class PlayerConfig extends YamlConfiguration {
     private final File file;
-    private final UUID uuid;
     private final Object saveLock = new Object();
 
     public PlayerConfig(UUID uuid) {
         super();
-        this.uuid = uuid;
         this.file = new File(Pl3xClaims.getPlugin().getDataFolder(),
                 "userdata" + File.separator + uuid.toString() + ".yml");
         if (!file.exists()) {

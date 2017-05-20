@@ -3,6 +3,7 @@ package net.pl3x.bukkit.claims.claim;
 import net.pl3x.bukkit.claims.Logger;
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.configuration.ClaimConfig;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 
 import java.io.File;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -24,48 +26,78 @@ public class ClaimManager {
     private ClaimManager() {
     }
 
-    private final Map<Long, Claim> claims = new HashMap<>();
+    private final Map<Long, Collection<Claim>> chunks = new HashMap<>();
+    private final Map<Long, Claim> topLevelClaims = new HashMap<>();
     private long nextId = 0;
 
     public long getNextId() {
         return nextId++;
     }
 
-    public Collection<Claim> getClaims() {
-        return claims.values();
+    public Collection<Claim> getTopLevelClaims() {
+        return topLevelClaims.values();
     }
 
     public Claim getClaim(long id) {
-        return claims.get(id);
+        return topLevelClaims.get(id);
     }
 
     public Claim getClaim(Location location) {
-        for (Claim claim : getClaims()) {
+        for (Claim claim : getTopLevelClaims()) {
             if (claim.getCoordinates().contains(location)) {
+                for (Claim child : claim.getChildren()) {
+                    if (child.getCoordinates().contains(location)) {
+                        return child;
+                    }
+                }
                 return claim;
             }
         }
         return null;
     }
 
-    public void addClaim(Claim claim) {
-        claims.put(claim.getId(), claim);
+    public Collection<Claim> getNearbyClaims(Location location) {
+        Collection<Claim> claims = new HashSet<>();
+
+        Chunk minChunk = location.getWorld().getChunkAt(location.subtract(150, 0, 150));
+        Chunk maxChunk = location.getWorld().getChunkAt(location.add(300, 0, 300));
+
+        for (int x = minChunk.getX(); x <= maxChunk.getX(); x++) {
+            for (int z = minChunk.getZ(); z <= maxChunk.getZ(); z++) {
+                Collection<Claim> claimsInChunk = chunks.get(getChunkHash(x, z));
+                if (claimsInChunk != null) {
+                    claims.addAll(claimsInChunk);
+                }
+            }
+        }
+        return claims;
+    }
+
+    public void addTopLevelClaim(Claim claim) {
+        topLevelClaims.put(claim.getId(), claim);
+        claim.getCoordinates().getChunkHashes().forEach(hash ->
+                chunks.computeIfAbsent(hash, k -> new HashSet<>()).add(claim));
+    }
+
+    public void createNewClaim(Claim claim) {
+        if (claim.getParent() == null) {
+            addTopLevelClaim(claim);
+        } else {
+            claim.getParent().addChild(claim);
+        }
+        ClaimConfig config = ClaimConfig.getConfig(claim.getId());
+        config.setId(claim.getId());
+        config.setParent(claim.getParent());
+        config.setOwner(claim.getOwner());
+        config.setCoordinates(claim.getCoordinates());
+        config.save();
     }
 
     public boolean deleteClaim(Claim claim) {
-        return deleteClaim(claim.getId(), false);
-    }
-
-    public boolean deleteClaim(long id) {
-        return deleteClaim(id, false);
+        return deleteClaim(claim, false);
     }
 
     public boolean deleteClaim(Claim claim, boolean deleteChildren) {
-        return deleteClaim(claim.getId(), deleteChildren);
-    }
-
-    public boolean deleteClaim(long id, boolean deleteChildren) {
-        Claim claim = claims.get(id);
         if (claim == null) {
             return false; // nothing to delete
         }
@@ -74,10 +106,12 @@ public class ClaimManager {
             if (!deleteChildren) {
                 return false; // has child claims!
             }
-            children.forEach(this::deleteClaim); // delete all children claims
+            children.forEach(this::deleteClaim); // delete all child claims
         }
+        chunks.forEach((k, v) -> v.removeIf(c -> c.getId() == claim.getId())); // remove claim's chunk hashes
+        chunks.entrySet().removeIf(e -> e.getValue().isEmpty()); // remove empty chunk hashes from memory
         ClaimConfig.getConfig(claim.getId()).delete(); // delete the file
-        claims.remove(id); // remove from memory
+        topLevelClaims.remove(claim.getId()); // remove from memory
         return true;
     }
 
@@ -145,13 +179,19 @@ public class ClaimManager {
             }
 
             // TODO flags
+            //
+            //
 
             // TODO trusts
+            //
+            //
 
             // TODO managers
+            //
+            //
 
             // finally store the claim in the manager
-            claims.put(id, claim);
+            topLevelClaims.put(id, claim);
             nextId = id + 1; // make sure next id is actually the next id...
             Logger.debug("   Claim " + id + " loaded successfully.");
             count++;
@@ -161,7 +201,11 @@ public class ClaimManager {
     }
 
     public void unloadClaims() {
-        claims.clear();
+        topLevelClaims.clear();
         ClaimConfig.removeAll();
+    }
+
+    public long getChunkHash(long x, long z) {
+        return (z ^ (x << 32));
     }
 }

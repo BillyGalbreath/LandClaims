@@ -19,7 +19,7 @@ public class PlayerListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Pl3xPlayer pl3xPlayer = Pl3xPlayer.getPlayer(event.getPlayer()); // load player data
         new BukkitRunnable() {
@@ -51,7 +51,7 @@ public class PlayerListener implements Listener {
         Pl3xPlayer.getPlayer(event.getPlayer()).updateLocation();
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
         Pl3xPlayer.getPlayer(event.getPlayer()).updateLocation();
     }
