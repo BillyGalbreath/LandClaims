@@ -7,8 +7,6 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -87,6 +85,7 @@ public class ClaimManager {
         }
         ClaimConfig config = ClaimConfig.getConfig(claim.getId());
         config.setId(claim.getId());
+        config.setAdminClaim(claim.isAdminClaim());
         config.setParent(claim.getParent());
         config.setOwner(claim.getOwner());
         config.setCoordinates(claim.getCoordinates());
@@ -119,14 +118,16 @@ public class ClaimManager {
         unloadClaims();
 
         // load up all the config files first
-        try {
-            Files.list(new File(Pl3xClaims.getPlugin().getDataFolder(), ClaimConfig.CLAIM_DIRECTORY).toPath())
-                    .filter(path -> path.getFileName().endsWith(".yml"))
-                    .forEach(path -> ClaimConfig.getConfig(Long.parseLong(path.getFileName().toString().split(".yml")[0])));
-        } catch (IOException ignore) {
+        File[] citiesList = new File(Pl3xClaims.getPlugin().getDataFolder(), ClaimConfig.CLAIM_DIRECTORY)
+                .listFiles((dir, name) -> name.endsWith(".yml"));
+        if (citiesList == null) {
+            citiesList = new File[0];
+        }
+        for (File file : citiesList) {
+            ClaimConfig.getConfig(Long.parseLong(file.getName().split(".yml")[0]));
         }
 
-        // iterate all config files and create claims starting from lowest id number
+        // iterate all configs and create claims starting from lowest id number
         TreeMap<Long, ClaimConfig> treeMap = new TreeMap<>(ClaimConfig.getConfigs());
         long count = 0; // lets count how many claims we actually load up
         long total = treeMap.size();
@@ -136,11 +137,13 @@ public class ClaimManager {
             ClaimConfig config = entry.getValue();
 
             // sanity check the id
-            Logger.debug("Loading claim " + id);
             if (config.getId() < 0 || config.getId() != id) {
                 Logger.error("   Claim id mismatch! Skipping.. (file " + id + ".yml)");
                 continue;
             }
+
+            // get if an admin claim or not
+            boolean isAdminClaim = config.isAdminClaim();
 
             // get the owner
             UUID owner = config.getOwner();
@@ -170,7 +173,7 @@ public class ClaimManager {
             }
 
             // everything looks good, make the claim
-            Claim claim = new Claim(id, owner, parent, coordinates);
+            Claim claim = new Claim(id, owner, parent, coordinates, isAdminClaim);
 
             // add to parent as child (if there is a parent)
             if (parent != null) {

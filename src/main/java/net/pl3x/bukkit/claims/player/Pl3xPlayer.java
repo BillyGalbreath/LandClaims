@@ -5,6 +5,7 @@ import net.pl3x.bukkit.claims.claim.ClaimManager;
 import net.pl3x.bukkit.claims.claim.tool.BasicClaimTool;
 import net.pl3x.bukkit.claims.claim.tool.ClaimTool;
 import net.pl3x.bukkit.claims.configuration.PlayerConfig;
+import net.pl3x.bukkit.claims.visualization.Visualization;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -41,6 +42,7 @@ public class Pl3xPlayer extends PlayerConfig {
     private Location lastLocation;
     private ClaimTool claimTool = new BasicClaimTool();
     private Claim inClaim;
+    private Visualization visualization;
 
     private Pl3xPlayer(Player player) {
         super(player.getUniqueId());
@@ -106,5 +108,13 @@ public class Pl3xPlayer extends PlayerConfig {
 
     public void setClaimTool(ClaimTool claimTool) {
         this.claimTool = claimTool;
+    }
+
+    public Visualization getVisualization() {
+        return visualization;
+    }
+
+    public void setVisualization(Visualization visualization) {
+        this.visualization = visualization;
     }
 }

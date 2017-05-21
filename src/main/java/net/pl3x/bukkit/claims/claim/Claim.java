@@ -14,16 +14,18 @@ public class Claim {
     private final UUID owner;
     private final Claim parent;
     private final Coordinates coordinates;
+    private final boolean isAdminClaim;
     private final Map<FlagType, Boolean> flags;
     private final Map<UUID, TrustType> trusts;
     private final Collection<UUID> managers = new HashSet<>();
     private final Collection<Claim> children = new HashSet<>();
 
-    public Claim(long id, UUID owner, Claim parent, Coordinates coordinates) {
+    public Claim(long id, UUID owner, Claim parent, Coordinates coordinates, boolean isAdminClaim) {
         this.id = id;
         this.owner = owner;
         this.parent = parent;
         this.coordinates = coordinates;
+        this.isAdminClaim = isAdminClaim;
         this.flags = new HashMap<>();
         this.trusts = new HashMap<>();
     }
@@ -42,6 +44,10 @@ public class Claim {
 
     public Coordinates getCoordinates() {
         return coordinates;
+    }
+
+    public boolean isAdminClaim() {
+        return isAdminClaim;
     }
 
     public Boolean getFlag(FlagType flag) {
