@@ -6,8 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Collections;
-
 public class VisualizationRevertTask extends BukkitRunnable {
     private final Player player;
     private final Visualization visualization;
@@ -22,9 +20,10 @@ public class VisualizationRevertTask extends BukkitRunnable {
         if (Pl3xPlayer.getPlayer(player).getVisualization() != visualization) {
             return; // visualizing something else already
         }
-
-        Bukkit.getPluginManager().callEvent(new VisualizeClaimsEvent(player, Collections.emptySet()));
-
-        Visualization.revert(player);
+        VisualizeClaimsEvent event = new VisualizeClaimsEvent(player, null, null);
+        Bukkit.getPluginManager().callEvent(event);
+        if (!event.isCancelled()) {
+            visualization.revert(player);
+        }
     }
 }

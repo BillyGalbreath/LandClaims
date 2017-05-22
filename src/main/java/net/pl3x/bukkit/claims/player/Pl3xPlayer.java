@@ -13,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -112,7 +113,7 @@ public class Pl3xPlayer extends PlayerConfig {
 
     public void setClaimTool(ClaimTool claimTool) {
         this.claimTool = claimTool;
-        showVisualization(null, VisualizationType.CLAIM);
+        revertVisualization();
     }
 
     public Visualization getVisualization() {
@@ -123,20 +124,38 @@ public class Pl3xPlayer extends PlayerConfig {
         this.visualization = visualization;
     }
 
-    public void showVisualization(Collection<Claim> claims, VisualizationType visualizationType) {
+    public void revertVisualization() {
+        showVisualization((Collection<Claim>) null, null);
+    }
+
+    public void showVisualization(Claim claim) {
+        showVisualization(Collections.singleton(claim));
+    }
+
+    public void showVisualization(Collection<Claim> claims) {
+        showVisualization(claims, VisualizationType.CLAIM);
+    }
+
+    public void showVisualization(Claim claim, VisualizationType type) {
+        showVisualization(Collections.singleton(claim), type);
+    }
+
+    public void showVisualization(Collection<Claim> claims, VisualizationType type) {
         if (claims == null || claims.isEmpty()) {
+            if (visualization == null) {
+                return; // nothing to revert
+            }
             VisualizeClaimsEvent visualizeClaimsEvent = new VisualizeClaimsEvent(player, null, null);
             Bukkit.getPluginManager().callEvent(visualizeClaimsEvent);
             if (!visualizeClaimsEvent.isCancelled()) {
-                Visualization.revert(player);
+                visualization.revert(player);
             }
         } else {
-            Visualization visualization = Visualization.fromClaims(claims,
-                    player.getEyeLocation().getBlockY(), visualizationType, player.getLocation());
+            Visualization visualization = new Visualization(claims, type, player.getEyeLocation());
             VisualizeClaimsEvent visualizeClaimsEvent = new VisualizeClaimsEvent(player, claims, visualization);
             Bukkit.getPluginManager().callEvent(visualizeClaimsEvent);
             if (!visualizeClaimsEvent.isCancelled()) {
-                Visualization.apply(player, visualization);
+                visualization.apply(player);
             }
         }
     }

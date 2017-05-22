@@ -15,37 +15,41 @@ import java.util.HashSet;
 
 public class Visualization {
     private final Collection<VisualizationElement> elements = new HashSet<>();
-    private final World world;
+    private final Location center;
 
-    public Visualization(World world) {
-        this.world = world;
+    public Visualization(Collection<Claim> claims, VisualizationType type, Location center) {
+        this.center = center;
+        claims.forEach(claim -> addClaimElements(claim, type));
     }
 
     public Collection<VisualizationElement> getElements() {
         return elements;
     }
 
-    public static void apply(Player player, Visualization visualization) {
+    public Location getCenter() {
+        return center;
+    }
+
+    public void apply(Player player) {
         if (!player.isOnline()) {
             return; // sanity check
         }
 
-        if (Pl3xPlayer.getPlayer(player).getVisualization() != null) {
-            Visualization.revert(player);
-        }
+        Pl3xPlayer.getPlayer(player).revertVisualization(); // revert any old visualization first
 
-        if (visualization == null || visualization.getElements().isEmpty()) {
+        if (getElements().isEmpty()) {
             return; // nothing to show
         }
 
-        if (!player.getWorld().equals(visualization.world)) {
+        if (!player.getWorld().equals(getCenter().getWorld())) {
             return; // not in same world
         }
 
-        new VisualizationApplyTask(player, visualization).runTaskLater(Pl3xClaims.getPlugin(), 1L);
+        new VisualizationApplyTask(player, this)
+                .runTaskLater(Pl3xClaims.getPlugin(), 1L);
     }
 
-    public static void revert(Player player) {
+    public void revert(Player player) {
         if (!player.isOnline()) {
             return; // sanity check
         }
@@ -55,7 +59,7 @@ public class Visualization {
             return; // nothing to revert
         }
 
-        if (!player.getWorld().equals(visualization.world)) {
+        if (!player.getWorld().equals(visualization.getCenter().getWorld())) {
             return; // not in same world
         }
 
@@ -73,13 +77,7 @@ public class Visualization {
         Pl3xPlayer.getPlayer(player).setVisualization(null);
     }
 
-    public static Visualization fromClaims(Collection<Claim> claims, int height, VisualizationType visualizationType, Location center) {
-        Visualization visualization = new Visualization(center.getWorld());
-        claims.forEach(claim -> visualization.addClaimElements(claim, height, visualizationType, center));
-        return visualization;
-    }
-
-    private void addClaimElements(Claim claim, int height, VisualizationType visualizationType, Location center) {
+    public void addClaimElements(Claim claim, VisualizationType visualizationType) {
         boolean waterIsTransparent = center.getBlock().getType() == Material.STATIONARY_WATER;
 
         World world = claim.getCoordinates().getWorld();
@@ -90,6 +88,10 @@ public class Visualization {
 
         Material cornerMaterial;
         Material accentMaterial;
+
+        if (visualizationType == VisualizationType.CLAIM && claim.isAdminClaim()) {
+            visualizationType = VisualizationType.ADMIN;
+        }
 
         Collection<VisualizationElement> newElements = new HashSet<>();
 
@@ -163,17 +165,19 @@ public class Visualization {
                 !claim.getCoordinates().contains(e.getLocation()));
 
         //set Y values and real block information for any remaining visualization blocks
+        int height = center.getBlockY();
         for (VisualizationElement element : newElements) {
-            element.setLocation(getVisibleLocation(element.getLocation().getWorld(), element.getLocation().getBlockX(), height, element.getLocation().getBlockZ(), waterIsTransparent));
+            element.setLocation(getVisibleLocation(element.getLocation().getWorld(),
+                    element.getLocation().getBlockX(), height, element.getLocation().getBlockZ(), waterIsTransparent));
             height = element.getLocation().getBlockY();
         }
 
         this.elements.addAll(newElements);
     }
 
-    private static Location getVisibleLocation(World world, int x, int y, int z, boolean waterIsTransparent) {
+    private Location getVisibleLocation(World world, int x, int y, int z, boolean waterIsTransparent) {
         Block block = world.getBlockAt(x, y, z);
-        BlockFace direction = (isTransparent(block, waterIsTransparent)) ? BlockFace.DOWN : BlockFace.UP;
+        BlockFace direction = isTransparent(block, waterIsTransparent) ? BlockFace.DOWN : BlockFace.UP;
         while (block.getY() >= 1 && block.getY() < world.getMaxHeight() - 1 &&
                 (!isTransparent(block.getRelative(BlockFace.UP), waterIsTransparent) || isTransparent(block, waterIsTransparent))) {
             block = block.getRelative(direction);
@@ -181,12 +185,11 @@ public class Visualization {
         return block.getLocation();
     }
 
-    private static boolean isTransparent(Block block, boolean waterIsTransparent) {
+    private boolean isTransparent(Block block, boolean waterIsTransparent) {
         switch (block.getType()) {
             case SNOW:
                 return false;
         }
-
         switch (block.getType()) {
             case FENCE:
             case ACACIA_FENCE:
@@ -206,7 +209,6 @@ public class Visualization {
             case WALL_SIGN:
                 return true;
         }
-
         return (waterIsTransparent && block.getType() == Material.STATIONARY_WATER) || block.getType().isTransparent();
     }
 }

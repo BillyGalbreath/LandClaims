@@ -28,7 +28,6 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 
 public class ClaimToolListener implements Listener {
@@ -62,8 +61,7 @@ public class ClaimToolListener implements Listener {
         if (clickedBlock == null || clickedBlock.getType() == Material.AIR) {
             if (Config.isInspectTool(player.getInventory().getItemInMainHand())) {
                 Lang.send(player, Lang.INSPECT_TOO_FAR);
-
-                pl3xPlayer.showVisualization(Collections.emptySet(), VisualizationType.CLAIM);
+                pl3xPlayer.revertVisualization();
             }
             return; // no block clicked
         }
@@ -84,7 +82,7 @@ public class ClaimToolListener implements Listener {
                 if (nearbyClaims == null || nearbyClaims.isEmpty()) {
                     Lang.send(player, Lang.INSPECT_NO_CLAIM);
 
-                    pl3xPlayer.showVisualization(Collections.emptySet(), VisualizationType.CLAIM);
+                    pl3xPlayer.revertVisualization();
                     return;
                 }
 
@@ -92,7 +90,7 @@ public class ClaimToolListener implements Listener {
                 //
                 //
 
-                pl3xPlayer.showVisualization(nearbyClaims, VisualizationType.CLAIM);
+                pl3xPlayer.showVisualization(nearbyClaims);
                 return;
             }
 
@@ -108,7 +106,7 @@ public class ClaimToolListener implements Listener {
             if (claim == null) {
                 Lang.send(player, Lang.INSPECT_NO_CLAIM);
 
-                pl3xPlayer.showVisualization(null, VisualizationType.CLAIM);
+                pl3xPlayer.revertVisualization();
                 return;
             }
 
@@ -116,7 +114,7 @@ public class ClaimToolListener implements Listener {
             //
             //
 
-            pl3xPlayer.showVisualization(Collections.singleton(claim), VisualizationType.CLAIM);
+            pl3xPlayer.showVisualization(claim);
             return;
         }
 
@@ -151,7 +149,7 @@ public class ClaimToolListener implements Listener {
                         //
                         //
 
-                        pl3xPlayer.showVisualization(Collections.singleton(parent), VisualizationType.ERROR);
+                        pl3xPlayer.showVisualization(parent, VisualizationType.ERROR);
                         return;
                     }
                 }
@@ -169,7 +167,7 @@ public class ClaimToolListener implements Listener {
                             //
                             //
 
-                            pl3xPlayer.showVisualization(Collections.singleton(topLevelClaim), VisualizationType.ERROR);
+                            pl3xPlayer.showVisualization(topLevelClaim, VisualizationType.ERROR);
                             return;
                         }
                     }
@@ -181,7 +179,7 @@ public class ClaimToolListener implements Listener {
                             //
                             //
 
-                            pl3xPlayer.showVisualization(Collections.singleton(childClaim), VisualizationType.ERROR);
+                            pl3xPlayer.showVisualization(childClaim, VisualizationType.ERROR);
                             return;
                         }
                     }
@@ -202,7 +200,7 @@ public class ClaimToolListener implements Listener {
 
                 // TODO tell player about the new claim
 
-                pl3xPlayer.showVisualization(Collections.singleton(claim), VisualizationType.CLAIM);
+                pl3xPlayer.showVisualization(claim);
                 return;
             }
 
@@ -225,7 +223,7 @@ public class ClaimToolListener implements Listener {
                 // TODO tell player about the resized claim
             }
 
-            pl3xPlayer.showVisualization(Collections.singleton(claim), VisualizationType.CLAIM);
+            pl3xPlayer.showVisualization(claim);
         }
     }
 
@@ -241,7 +239,7 @@ public class ClaimToolListener implements Listener {
         }
 
         Pl3xPlayer pl3xPlayer = Pl3xPlayer.getPlayer(player);
-        pl3xPlayer.showVisualization(Collections.emptySet(), VisualizationType.CLAIM);
+        pl3xPlayer.revertVisualization();
 
         ClaimTool claimTool = new BasicClaimTool();
         pl3xPlayer.setClaimTool(claimTool);
@@ -255,7 +253,7 @@ public class ClaimToolListener implements Listener {
         claimTool.setPrimary(claim.getCoordinates().getMinLocation());
         claimTool.setSecondary(claim.getCoordinates().getMaxLocation());
 
-        pl3xPlayer.showVisualization(Collections.singleton(claim), VisualizationType.CLAIM);
+        pl3xPlayer.showVisualization(claim);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
