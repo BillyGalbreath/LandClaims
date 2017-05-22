@@ -25,12 +25,12 @@ public class Config {
     public static String CLAIM_TOOL_MATERIAL = "STICK";
     public static byte CLAIM_TOOL_DATA = (byte) 0;
     public static String CLAIM_TOOL_NAME = "Claim Tool";
-    public static List<String> CLAIM_TOOL_LORE = new ArrayList<>();
+    public final static List<String> CLAIM_TOOL_LORE = new ArrayList<>();
 
     public static String INSPECT_TOOL_MATERIAL = "FEATHER";
     public static byte INSPECT_TOOL_DATA = (byte) 0;
     public static String INSPECT_TOOL_NAME = "Inspect Tool";
-    public static List<String> INSPECT_TOOL_LORE = new ArrayList<>();
+    public final static List<String> INSPECT_TOOL_LORE = new ArrayList<>();
 
     private Config() {
     }
@@ -48,6 +48,8 @@ public class Config {
 
         CLAIM_MIN_WIDTH = config.getInt("claim-min-width", 5);
         CLAIM_MIN_AREA = config.getInt("claim-min-area", 100);
+
+        MAX_CLAIMS_PER_PLAYER = config.getInt("max-claims-per-player", -1);
 
         CLAIM_TOOL_MATERIAL = config.getString("claim-tool.material", "STICK");
         CLAIM_TOOL_DATA = (byte) config.getInt("claim-tool.data", 0);
@@ -67,8 +69,8 @@ public class Config {
 
     }
 
-    public static boolean isWorldEnabled(World world) {
-        return ENABLED_WORLDS.contains(world.getName());
+    public static boolean isWorldDisabled(World world) {
+        return !ENABLED_WORLDS.contains(world.getName());
     }
 
     public static boolean isClaimTool(ItemStack item) {

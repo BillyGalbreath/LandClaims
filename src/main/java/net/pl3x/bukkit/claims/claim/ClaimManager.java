@@ -173,7 +173,7 @@ public class ClaimManager {
 
             // add to parent as child (if there is a parent)
             if (parent != null) {
-                plugin.getLog().debug("   Claim " + id + " is a child of " + parentId);
+                plugin.getLog().debug("   Claim #" + id + " is a child of #" + parentId);
                 parent.addChild(claim);
             }
 
@@ -192,7 +192,7 @@ public class ClaimManager {
             // finally store the claim in the manager
             addTopLevelClaim(claim);
             nextId = id + 1; // make sure next id is actually the next id...
-            plugin.getLog().debug("   Claim " + id + " loaded successfully.");
+            plugin.getLog().debug("   Claim #" + id + " loaded successfully.");
             count++;
         }
 

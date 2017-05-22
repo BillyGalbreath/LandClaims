@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 public class Logger {
-    private Pl3xClaims plugin;
+    private final Pl3xClaims plugin;
 
     public Logger(Pl3xClaims plugin) {
         this.plugin = plugin;

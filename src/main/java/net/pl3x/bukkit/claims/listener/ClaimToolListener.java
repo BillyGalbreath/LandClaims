@@ -43,7 +43,7 @@ public class ClaimToolListener implements Listener {
         }
 
         Player player = event.getPlayer();
-        if (!Config.isWorldEnabled(player.getWorld())) {
+        if (Config.isWorldDisabled(player.getWorld())) {
             return; // claims not enabled in this world
         }
 
@@ -391,7 +391,7 @@ public class ClaimToolListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onItemHeldChange(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
-        if (!Config.isWorldEnabled(player.getWorld())) {
+        if (Config.isWorldDisabled(player.getWorld())) {
             return; // claims not enabled in this world
         }
 

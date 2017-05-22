@@ -19,7 +19,7 @@ public class ProtectionListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockSpread(BlockSpreadEvent event) {
-        if (!Config.isWorldEnabled(event.getBlock().getWorld())) {
+        if (Config.isWorldDisabled(event.getBlock().getWorld())) {
             return; // claims not enabled in this world
         }
 

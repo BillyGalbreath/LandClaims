@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.HashSet;
 
 public class Pl3xPlayer extends PlayerConfig {
-    private Pl3xClaims plugin;
+    private final Pl3xClaims plugin;
     private Player player;
     private Location lastLocation;
     private ToolMode toolMode = ToolMode.BASIC;
