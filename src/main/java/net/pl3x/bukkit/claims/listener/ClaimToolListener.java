@@ -6,7 +6,9 @@ import net.pl3x.bukkit.claims.claim.Coordinates;
 import net.pl3x.bukkit.claims.configuration.ClaimConfig;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
+import net.pl3x.bukkit.claims.event.CreateClaimEvent;
 import net.pl3x.bukkit.claims.event.InspectClaimsEvent;
+import net.pl3x.bukkit.claims.event.ResizeClaimEvent;
 import net.pl3x.bukkit.claims.player.Pl3xPlayer;
 import net.pl3x.bukkit.claims.player.ToolMode;
 import net.pl3x.bukkit.claims.visualization.VisualizationType;
@@ -197,6 +199,12 @@ public class ClaimToolListener implements Listener {
                     }
                 }
 
+                ResizeClaimEvent resizeClaimEvent = new ResizeClaimEvent(player, clickedClaim);
+                Bukkit.getPluginManager().callEvent(resizeClaimEvent);
+                if (resizeClaimEvent.isCancelled()) {
+                    return; // cancelled by plugin
+                }
+
                 // resize the claim
                 coords.resize(minX, maxX, minZ, maxZ);
                 ClaimConfig claimConfig = ClaimConfig.getConfig(plugin, clickedClaim.getId());
@@ -288,6 +296,12 @@ public class ClaimToolListener implements Listener {
                     Claim newChildClaim = new Claim(plugin.getClaimManager().getNextId(), null, // child claims have no owner
                             pl3xPlayer.getParentClaim(), newChildCoords, false);
 
+                    CreateClaimEvent createClaimEvent = new CreateClaimEvent(player, newChildClaim);
+                    Bukkit.getPluginManager().callEvent(createClaimEvent);
+                    if (createClaimEvent.isCancelled()) {
+                        return; // cancelled by plugin
+                    }
+
                     // save the new child
                     pl3xPlayer.getParentClaim().addChild(newChildClaim);
                     ClaimConfig claimConfig = ClaimConfig.getConfig(plugin, newChildClaim.getId());
@@ -378,6 +392,13 @@ public class ClaimToolListener implements Listener {
             Claim newClaim = new Claim(plugin.getClaimManager().getNextId(),
                     (isAdminClaim ? null : player.getUniqueId()),
                     null, newCoords, isAdminClaim);
+
+            CreateClaimEvent createClaimEvent = new CreateClaimEvent(player, newClaim);
+            Bukkit.getPluginManager().callEvent(createClaimEvent);
+            if (createClaimEvent.isCancelled()) {
+                return; // cancelled by plugin
+            }
+
             plugin.getClaimManager().createNewClaim(newClaim);
             Lang.send(player, Lang.CREATE_SUCCESS);
 
