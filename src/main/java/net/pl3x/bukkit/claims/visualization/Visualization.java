@@ -65,6 +65,12 @@ public class Visualization {
         }
 
         //remove any elements which are too far away (+150 blocks away)
+        removeOutOfRange(visualization.getElements(),
+                player.getLocation().getBlockX() - 100,
+                player.getLocation().getBlockZ() - 100,
+                player.getLocation().getBlockX() + 100,
+                player.getLocation().getBlockZ() + 100);
+
         visualization.getElements().removeIf(e ->
                 e.getLocation().distanceSquared(player.getLocation()) > 22500);
 
@@ -161,8 +167,7 @@ public class Visualization {
         newElements.add(new VisualizationElement(new Location(world, maxX, 0, maxZ), cornerMaterial, (byte) 0));
 
         //remove any out of range elements
-        newElements.removeIf(e ->
-                e.getLocation().distanceSquared(center) > 22500);
+        removeOutOfRange(newElements, centerMinX, centerMinZ, centerMaxX, centerMaxZ);
 
         //remove any elements outside the claim
         newElements.removeIf(e ->
@@ -214,5 +219,12 @@ public class Visualization {
                 return true;
         }
         return (waterIsTransparent && block.getType() == Material.STATIONARY_WATER) || block.getType().isTransparent();
+    }
+
+    private void removeOutOfRange(Collection<VisualizationElement> elements, int minX, int minZ, int maxX, int maxZ) {
+        elements.removeIf(element -> {
+            Location location = element.getLocation();
+            return location.getX() < minX || location.getX() > maxX || location.getZ() < minZ || location.getZ() > maxZ;
+        });
     }
 }
