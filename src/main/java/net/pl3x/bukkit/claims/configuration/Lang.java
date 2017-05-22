@@ -43,6 +43,7 @@ public class Lang {
     public static String CREATE_SUCCESS;
     public static String CREATE_FAILED_CHILD;
     public static String CREATE_FAILED_CHILD_OVERLAP;
+    public static String CREATE_FAILED_CHILD_OVERLAP_PARENT;
     public static String CREATE_START_CHILD;
     public static String CREATE_SUCCESS_CHILD;
 
@@ -89,6 +90,7 @@ public class Lang {
         CREATE_SUCCESS = config.getString("create-success", "&dClaim created! {amount} available claim blocks remaining. Use /trust to share it with friends");
         CREATE_FAILED_CHILD = config.getString("create-failed-child", "&4You can't create a child here because it would overlap another child");
         CREATE_FAILED_CHILD_OVERLAP = config.getString("create-failed-child-overlap", "&4Your selected area overlaps another child");
+        CREATE_FAILED_CHILD_OVERLAP_PARENT = config.getString("", "&4Your selected area overlaps the parent claim's border");
         CREATE_START_CHILD = config.getString("create-start-child", "&dChild corner set! Use your tool at the location for the opposite corner of this new child");
         CREATE_SUCCESS_CHILD = config.getString("create-success-child", "&dChild claim created! Use /trust to share it with friends");
     }

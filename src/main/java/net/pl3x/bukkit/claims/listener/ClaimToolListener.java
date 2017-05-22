@@ -190,7 +190,7 @@ public class ClaimToolListener implements Listener {
                     if (topLevelClaim == clickedClaim) {
                         continue;
                     }
-                    if (topLevelClaim.getCoordinates().contains(newCoords)) {
+                    if (topLevelClaim.getCoordinates().overlaps(newCoords)) {
                         Lang.send(player, Lang.RESIZE_FAILED_OVERLAP);
                         pl3xPlayer.showVisualization(topLevelClaim, VisualizationType.ERROR);
                         return;
@@ -265,11 +265,20 @@ public class ClaimToolListener implements Listener {
 
                     // finish creating child
                     Coordinates newChildCoords = new Coordinates(pl3xPlayer.getLastToolLocation(), clickedBlock.getLocation());
+
+                    // check if child fits completely inside parent
+                    if (!pl3xPlayer.getParentClaim().getCoordinates().contains(newChildCoords)) {
+                        Lang.send(player, Lang.CREATE_FAILED_CHILD_OVERLAP_PARENT);
+                        pl3xPlayer.showVisualization(pl3xPlayer.getParentClaim(), VisualizationType.ERROR);
+                        return;
+                    }
+
+                    // check if overlapping other child claims
                     for (Claim siblingClaim : pl3xPlayer.getParentClaim().getChildren()) {
                         if (siblingClaim == clickedClaim) {
                             continue;
                         }
-                        if (siblingClaim.getCoordinates().contains(newChildCoords)) {
+                        if (siblingClaim.getCoordinates().overlaps(newChildCoords)) {
                             Lang.send(player, Lang.CREATE_FAILED_CHILD_OVERLAP);
                             pl3xPlayer.showVisualization(siblingClaim, VisualizationType.ERROR);
                             return;
@@ -290,7 +299,12 @@ public class ClaimToolListener implements Listener {
 
                     pl3xPlayer.setLastToolLocation(null);
                     pl3xPlayer.setParentClaim(null);
+                    return;
                 }
+
+                // overlapping parent claim
+                Lang.send(player, Lang.CREATE_FAILED_OVERLAP);
+                pl3xPlayer.showVisualization(clickedClaim, VisualizationType.ERROR);
                 return;
             }
             // end click inside existing claim
@@ -353,7 +367,7 @@ public class ClaimToolListener implements Listener {
 
             // check for overlaps
             for (Claim topLevelClaim : plugin.getClaimManager().getTopLevelClaims()) {
-                if (topLevelClaim.getCoordinates().contains(newCoords)) {
+                if (topLevelClaim.getCoordinates().overlaps(newCoords)) {
                     Lang.send(player, Lang.CREATE_FAILED_OVERLAP);
                     pl3xPlayer.showVisualization(topLevelClaim, VisualizationType.ERROR);
                     return;
