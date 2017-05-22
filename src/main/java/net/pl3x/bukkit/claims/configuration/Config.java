@@ -17,6 +17,11 @@ public class Config {
 
     public static List<String> ENABLED_WORLDS = new ArrayList<>();
 
+    public static int CLAIM_MIN_WIDTH = 5;
+    public static int CLAIM_MIN_AREA = 100;
+
+    public static int MAX_CLAIMS_PER_PLAYER = -1;
+
     public static String CLAIM_TOOL_MATERIAL = "STICK";
     public static byte CLAIM_TOOL_DATA = (byte) 0;
     public static String CLAIM_TOOL_NAME = "Claim Tool";
@@ -40,6 +45,9 @@ public class Config {
         LANGUAGE_FILE = config.getString("language-file", "lang-en.yml");
 
         ENABLED_WORLDS = config.getStringList("enabled-worlds");
+
+        CLAIM_MIN_WIDTH = config.getInt("claim-min-width", 5);
+        CLAIM_MIN_AREA = config.getInt("claim-min-area", 100);
 
         CLAIM_TOOL_MATERIAL = config.getString("claim-tool.material", "STICK");
         CLAIM_TOOL_DATA = (byte) config.getInt("claim-tool.data", 0);

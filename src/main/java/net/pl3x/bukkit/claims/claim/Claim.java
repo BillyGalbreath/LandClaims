@@ -153,6 +153,24 @@ public class Claim {
         }
     }
 
+    public boolean allowEdit(Player player) {
+        if (player == null) {
+            return false;
+        }
+
+        if (isAdminClaim) {
+            if (player.hasPermission("claims.adminclaims")) {
+                return true;
+            }
+        } else {
+            if (player.hasPermission("claims.deleteclaims")) {
+                return true;
+            }
+        }
+
+        return parent != null ? parent.isOwner(player) : isOwner(player);
+    }
+
     public boolean allowManage(UUID uuid) {
         return owner == uuid || managers.contains(uuid);
     }

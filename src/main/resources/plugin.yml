@@ -15,12 +15,25 @@ permissions:
     command.pl3xclaims:
         description: Allows reload configs
         default: op
+
+    claims.adminclaims:
+        description: Allows to create admin claims
+        default: op
+    claims.deleteclaims:
+        description: Allows to delete any non-admin claims anywhere
+        default: op
+
+    claims.create:
+        description: Allows to create claims
+        default: op
+
     claims.visualize:
         description: Allows to visualize claims
         default: true
     claims.visualize.nearby:
         description: Allows to visualize multiple nearby claims
         default: op
+
     claims.inspect.seeclaimsize:
         description: Allows to see the claim size with inspect tool
         default: true

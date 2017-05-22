@@ -9,10 +9,10 @@ import java.util.HashSet;
 
 public class Coordinates {
     private final World world;
-    private final int minX;
-    private final int minZ;
-    private final int maxX;
-    private final int maxZ;
+    private int minX;
+    private int minZ;
+    private int maxX;
+    private int maxZ;
 
     public Coordinates(Location location1, Location location2) {
         this(location1.getWorld(), (int) location1.getX(), (int) location1.getZ(), (int) location2.getX(), (int) location2.getZ());
@@ -21,6 +21,13 @@ public class Coordinates {
     public Coordinates(World world, int x1, int z1, int x2, int z2) {
         this.world = world;
 
+        minX = Math.min(x1, x2);
+        minZ = Math.min(z1, z2);
+        maxX = Math.max(x1, x2);
+        maxZ = Math.max(z1, z2);
+    }
+
+    public void resize(int x1, int x2, int z1, int z2) {
         minX = Math.min(x1, x2);
         minZ = Math.min(z1, z2);
         maxX = Math.max(x1, x2);
@@ -45,6 +52,18 @@ public class Coordinates {
 
     public int getMaxZ() {
         return maxZ;
+    }
+
+    public int getArea() {
+        return getWidthX() * getWidthZ();
+    }
+
+    public int getWidthX() {
+        return maxX - minX + 1;
+    }
+
+    public int getWidthZ() {
+        return maxZ - minZ + 1;
     }
 
     public Location getMinLocation() {

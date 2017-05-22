@@ -2,8 +2,6 @@ package net.pl3x.bukkit.claims.player;
 
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
-import net.pl3x.bukkit.claims.claim.tool.BasicClaimTool;
-import net.pl3x.bukkit.claims.claim.tool.ClaimTool;
 import net.pl3x.bukkit.claims.configuration.PlayerConfig;
 import net.pl3x.bukkit.claims.event.VisualizeClaimsEvent;
 import net.pl3x.bukkit.claims.visualization.Visualization;
@@ -14,12 +12,16 @@ import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 
 public class Pl3xPlayer extends PlayerConfig {
     private Pl3xClaims plugin;
     private Player player;
     private Location lastLocation;
-    private ClaimTool claimTool = new BasicClaimTool();
+    private ToolMode toolMode = ToolMode.BASIC;
+    private Claim resizingClaim;
+    private Claim parentClaim;
+    private Location lastToolLocation;
     private Claim inClaim;
     private Visualization visualization;
 
@@ -35,8 +37,10 @@ public class Pl3xPlayer extends PlayerConfig {
     void unload() {
         player = null;
         lastLocation = null;
-        claimTool = null;
+        resizingClaim = null;
+        lastToolLocation = null;
         inClaim = null;
+        visualization = null;
     }
 
     public Player getPlayer() {
@@ -61,6 +65,40 @@ public class Pl3xPlayer extends PlayerConfig {
         save();
     }
 
+    public int getRemainingClaimBlocks() {
+        int total = getClaimBlocks() + getBonusBlocks();
+        for (Claim claim : plugin.getClaimManager().getTopLevelClaims()) {
+            if (claim.isOwner(player) && !claim.isAdminClaim()) {
+                total -= claim.getCoordinates().getArea();
+            }
+        }
+        return total;
+    }
+
+    public Claim getResizingClaim() {
+        return resizingClaim;
+    }
+
+    public void setResizingClaim(Claim claim) {
+        this.resizingClaim = claim;
+    }
+
+    public Claim getParentClaim() {
+        return parentClaim;
+    }
+
+    public void setParentClaim(Claim claim) {
+        this.parentClaim = claim;
+    }
+
+    public Location getLastToolLocation() {
+        return lastToolLocation;
+    }
+
+    public void setLastToolLocation(Location location) {
+        this.lastToolLocation = location;
+    }
+
     public Claim inClaim() {
         return inClaim;
     }
@@ -82,13 +120,12 @@ public class Pl3xPlayer extends PlayerConfig {
         inClaim(plugin.getClaimManager().getClaim(lastLocation));
     }
 
-    public ClaimTool getClaimTool() {
-        return claimTool;
+    public ToolMode getToolMode() {
+        return toolMode;
     }
 
-    public void setClaimTool(ClaimTool claimTool) {
-        this.claimTool = claimTool;
-        revertVisualization();
+    public void setToolMode(ToolMode toolMode) {
+        this.toolMode = toolMode;
     }
 
     public Visualization getVisualization() {
@@ -133,5 +170,15 @@ public class Pl3xPlayer extends PlayerConfig {
                 visualization.apply(plugin, player);
             }
         }
+    }
+
+    public Collection<Claim> getClaims() {
+        Collection<Claim> claims = new HashSet<>();
+        for (Claim topLevelClaim : plugin.getClaimManager().getTopLevelClaims()) {
+            if (topLevelClaim.isOwner(player)) {
+                claims.add(topLevelClaim);
+            }
+        }
+        return claims;
     }
 }
