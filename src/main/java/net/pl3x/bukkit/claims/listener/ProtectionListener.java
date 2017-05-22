@@ -2,7 +2,6 @@ package net.pl3x.bukkit.claims.listener;
 
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
-import net.pl3x.bukkit.claims.claim.ClaimManager;
 import net.pl3x.bukkit.claims.claim.flag.FlagType;
 import net.pl3x.bukkit.claims.configuration.Config;
 import org.bukkit.Material;
@@ -28,8 +27,8 @@ public class ProtectionListener implements Listener {
             return; // not fire that is spreading
         }
 
-        Claim fromClaim = ClaimManager.getInstance().getClaim(event.getSource().getLocation());
-        Claim toClaim = ClaimManager.getInstance().getClaim(event.getBlock().getLocation());
+        Claim fromClaim = plugin.getClaimManager().getClaim(event.getSource().getLocation());
+        Claim toClaim = plugin.getClaimManager().getClaim(event.getBlock().getLocation());
 
         // stop fire spread if crossing border OR claim has firespread flag disabled
         if (fromClaim != toClaim || (toClaim != null && !toClaim.getFlag(FlagType.FIRESPREAD))) {

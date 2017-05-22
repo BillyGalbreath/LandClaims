@@ -4,5 +4,6 @@ public enum VisualizationType {
     CLAIM,
     CHILD,
     ADMIN,
-    ERROR
+    ERROR,
+    NEW_POINT
 }

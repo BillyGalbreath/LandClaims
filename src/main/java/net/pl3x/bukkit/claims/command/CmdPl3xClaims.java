@@ -3,7 +3,6 @@ package net.pl3x.bukkit.claims.command;
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
-import net.pl3x.bukkit.claims.player.Pl3xPlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -34,10 +33,10 @@ public class CmdPl3xClaims implements TabExecutor {
         }
 
         if (args.length > 0 && args[0].equalsIgnoreCase("reload")) {
-            Config.reload();
-            Lang.reload();
+            Config.reload(plugin);
+            Lang.reload(plugin);
 
-            Pl3xPlayer.reloadAll();
+            plugin.getPlayerManager().reloadAll();
 
             Lang.send(sender, Lang.RELOAD
                     .replace("{plugin}", plugin.getName())

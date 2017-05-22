@@ -1,6 +1,5 @@
 package net.pl3x.bukkit.claims.configuration;
 
-import net.pl3x.bukkit.claims.Logger;
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.claim.Coordinates;
@@ -22,9 +21,9 @@ public class ClaimConfig extends YamlConfiguration {
         }
     }
 
-    public static ClaimConfig getConfig(long id) {
+    public static ClaimConfig getConfig(Pl3xClaims plugin, long id) {
         synchronized (configs) {
-            return configs.computeIfAbsent(id, k -> new ClaimConfig(id));
+            return configs.computeIfAbsent(id, k -> new ClaimConfig(plugin, id));
         }
     }
 
@@ -40,14 +39,16 @@ public class ClaimConfig extends YamlConfiguration {
         }
     }
 
+    private final Pl3xClaims plugin;
     private final long claimId;
     private final File file;
     private final Object saveLock = new Object();
 
-    private ClaimConfig(long claimId) {
+    private ClaimConfig(Pl3xClaims plugin, long claimId) {
         super();
+        this.plugin = plugin;
         this.claimId = claimId;
-        this.file = new File(Pl3xClaims.getPlugin().getDataFolder(),
+        this.file = new File(plugin.getDataFolder(),
                 CLAIM_DIRECTORY + File.separator + claimId + ".yml");
         if (!file.exists()) {
             save();
@@ -60,8 +61,8 @@ public class ClaimConfig extends YamlConfiguration {
             try {
                 load(file);
             } catch (Exception e) {
-                Logger.error("Could not load claim config file! (" + claimId + ".yml)");
-                Logger.error("Details of why:");
+                plugin.getLog().error("Could not load claim config file! (" + claimId + ".yml)");
+                plugin.getLog().error("Details of why:");
                 e.printStackTrace();
             }
         }
@@ -72,8 +73,8 @@ public class ClaimConfig extends YamlConfiguration {
             try {
                 save(file);
             } catch (Exception e) {
-                Logger.error("Could not save claim config file! (" + claimId + ".yml)");
-                Logger.error("Details of why:");
+                plugin.getLog().error("Could not save claim config file! (" + claimId + ".yml)");
+                plugin.getLog().error("Details of why:");
                 e.printStackTrace();
             }
         }
@@ -82,7 +83,7 @@ public class ClaimConfig extends YamlConfiguration {
     public void delete() {
         synchronized (saveLock) {
             if (!file.delete()) {
-                Logger.error("Could not delete claim file! (" + claimId + ".yml)");
+                plugin.getLog().error("Could not delete claim file! (" + claimId + ".yml)");
             }
         }
     }

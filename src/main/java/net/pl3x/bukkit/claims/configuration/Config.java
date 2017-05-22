@@ -30,8 +30,7 @@ public class Config {
     private Config() {
     }
 
-    public static void reload() {
-        Pl3xClaims plugin = Pl3xClaims.getPlugin();
+    public static void reload(Pl3xClaims plugin) {
         plugin.saveDefaultConfig();
         plugin.reloadConfig();
         FileConfiguration config = plugin.getConfig();

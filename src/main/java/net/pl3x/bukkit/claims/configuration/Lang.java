@@ -9,24 +9,26 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 
 public class Lang {
-    public static String COMMAND_NO_PERMISSION = "&4You do not have permission for that command!";
-    public static String PLAYER_COMMAND = "&4Player only command!";
-    public static String VERSION = "&d{plugin} v{version}.";
-    public static String RELOAD = "&d{plugin} v{version} reloaded.";
+    public static String COMMAND_NO_PERMISSION;
+    public static String PLAYER_COMMAND;
+    public static String VERSION;
+    public static String RELOAD;
 
-    public static String INSPECT_NO_CLAIM = "&4There are no claims here";
-    public static String INSPECT_TOO_FAR = "&4Too far away";
+    public static String INSPECT_NO_CLAIM;
+    public static String INSPECT_TOO_FAR;
+
+    public static String RESIZE_START;
+    public static String RESIZE_SUCCESS;
+
+    public static String CREATE_SUCCESS;
 
     private Lang() {
     }
 
-    public static void reload() {
-        Pl3xClaims plugin = Pl3xClaims.getPlugin();
+    public static void reload(Pl3xClaims plugin) {
         String langFile = Config.LANGUAGE_FILE;
         File configFile = new File(plugin.getDataFolder(), langFile);
-        if (!configFile.exists()) {
-            plugin.saveResource(Config.LANGUAGE_FILE, false);
-        }
+        plugin.saveResource(Config.LANGUAGE_FILE, false);
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
         COMMAND_NO_PERMISSION = config.getString("command-no-permission", "&4You do not have permission for that command!");
@@ -35,6 +37,12 @@ public class Lang {
         RELOAD = config.getString("reload", "&d{plugin} v{version} reloaded.");
 
         INSPECT_NO_CLAIM = config.getString("inspect-no-claim", "&4There are no claims here");
+        INSPECT_TOO_FAR = config.getString("inspect-too-far", "&4That is too far away");
+
+        RESIZE_START = config.getString("resize-start", "&dResizing claim. Use your tool again at the new location for this corner.");
+        RESIZE_SUCCESS = config.getString("resize-success", "&dClaim resized. {amount} available claim blocks remaining.");
+
+        CREATE_SUCCESS = config.getString("create-success", "&dClaim created!  Use /trust to share it with friends.");
     }
 
     public static void send(CommandSender recipient, String message) {

@@ -6,10 +6,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class VisualizationApplyTask extends BukkitRunnable {
+    private final Pl3xClaims plugin;
     private final Player player;
     private final Visualization visualization;
 
-    public VisualizationApplyTask(Player player, Visualization visualization) {
+    public VisualizationApplyTask(Pl3xClaims plugin, Player player, Visualization visualization) {
+        this.plugin = plugin;
         this.player = player;
         this.visualization = visualization;
     }
@@ -24,9 +26,9 @@ public class VisualizationApplyTask extends BukkitRunnable {
             player.sendBlockChange(element.getLocation(), element.getMaterial(), element.getData());
         }
 
-        Pl3xPlayer.getPlayer(player).setVisualization(visualization);
+        plugin.getPlayerManager().getPlayer(player).setVisualization(visualization);
 
         //schedule automatic visualization reversion in 60 seconds.
-        new VisualizationRevertTask(player, visualization).runTaskLater(Pl3xClaims.getPlugin(), 1200L);
+        new VisualizationRevertTask(plugin, player, visualization).runTaskLater(plugin, 1200L);
     }
 }

@@ -1,7 +1,7 @@
 package net.pl3x.bukkit.claims.player;
 
+import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
-import net.pl3x.bukkit.claims.claim.ClaimManager;
 import net.pl3x.bukkit.claims.claim.tool.BasicClaimTool;
 import net.pl3x.bukkit.claims.claim.tool.ClaimTool;
 import net.pl3x.bukkit.claims.configuration.PlayerConfig;
@@ -14,50 +14,25 @@ import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Pl3xPlayer extends PlayerConfig {
-    private static final Map<Player, Pl3xPlayer> players = new HashMap<>();
-
-    public static Pl3xPlayer getPlayer(Player player) {
-        if (!players.containsKey(player)) {
-            players.put(player, new Pl3xPlayer(player));
-        }
-        return players.get(player);
-    }
-
-    public static void unload(Player player) {
-        if (players.containsKey(player)) {
-            players.get(player).unload();
-            players.remove(player);
-        }
-    }
-
-    public static void unloadAll() {
-        players.values().forEach(Pl3xPlayer::unload);
-        players.clear();
-    }
-
-    public static void reloadAll() {
-        players.values().forEach(Pl3xPlayer::reload);
-    }
-
+    private Pl3xClaims plugin;
     private Player player;
     private Location lastLocation;
     private ClaimTool claimTool = new BasicClaimTool();
     private Claim inClaim;
     private Visualization visualization;
 
-    private Pl3xPlayer(Player player) {
-        super(player.getUniqueId());
+    Pl3xPlayer(Pl3xClaims plugin, Player player) {
+        super(plugin, player.getUniqueId());
+        this.plugin = plugin;
         this.player = player;
     }
 
     /**
      * Use Pl3xPlayer#unload(Player) instead
      */
-    private void unload() {
+    void unload() {
         player = null;
         lastLocation = null;
         claimTool = null;
@@ -104,7 +79,7 @@ public class Pl3xPlayer extends PlayerConfig {
 
     public void updateLocation() {
         this.lastLocation = player.getLocation();
-        inClaim(ClaimManager.getInstance().getClaim(lastLocation));
+        inClaim(plugin.getClaimManager().getClaim(lastLocation));
     }
 
     public ClaimTool getClaimTool() {
@@ -151,11 +126,11 @@ public class Pl3xPlayer extends PlayerConfig {
                 visualization.revert(player);
             }
         } else {
-            Visualization visualization = new Visualization(claims, type, player.getEyeLocation());
+            Visualization visualization = new Visualization(plugin, claims, type, player.getEyeLocation());
             VisualizeClaimsEvent visualizeClaimsEvent = new VisualizeClaimsEvent(player, claims, visualization);
             Bukkit.getPluginManager().callEvent(visualizeClaimsEvent);
             if (!visualizeClaimsEvent.isCancelled()) {
-                visualization.apply(player);
+                visualization.apply(plugin, player);
             }
         }
     }

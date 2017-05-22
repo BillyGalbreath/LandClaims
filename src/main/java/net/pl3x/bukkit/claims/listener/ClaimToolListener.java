@@ -2,7 +2,6 @@ package net.pl3x.bukkit.claims.listener;
 
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
-import net.pl3x.bukkit.claims.claim.ClaimManager;
 import net.pl3x.bukkit.claims.claim.Coordinates;
 import net.pl3x.bukkit.claims.claim.tool.AdminClaimTool;
 import net.pl3x.bukkit.claims.claim.tool.BasicClaimTool;
@@ -57,7 +56,7 @@ public class ClaimToolListener implements Listener {
             clickedBlock = event.getClickedBlock();
         }
 
-        Pl3xPlayer pl3xPlayer = Pl3xPlayer.getPlayer(player);
+        Pl3xPlayer pl3xPlayer = plugin.getPlayerManager().getPlayer(player);
         if (clickedBlock == null || clickedBlock.getType() == Material.AIR) {
             if (Config.isInspectTool(player.getInventory().getItemInMainHand())) {
                 Lang.send(player, Lang.INSPECT_TOO_FAR);
@@ -71,7 +70,7 @@ public class ClaimToolListener implements Listener {
             }
             if (player.isSneaking() && player.hasPermission("claims.visualize.nearby")) {
                 // is inspecting all nearby claims
-                Collection<Claim> nearbyClaims = ClaimManager.getInstance().getNearbyClaims(player.getLocation());
+                Collection<Claim> nearbyClaims = plugin.getClaimManager().getNearbyClaims(player.getLocation());
 
                 InspectClaimsEvent inspectClaimsEvent = new InspectClaimsEvent(player, nearbyClaims);
                 Bukkit.getPluginManager().callEvent(inspectClaimsEvent);
@@ -95,7 +94,7 @@ public class ClaimToolListener implements Listener {
             }
 
             // is inspecting a single claim
-            Claim claim = ClaimManager.getInstance().getClaim(clickedBlock.getLocation());
+            Claim claim = plugin.getClaimManager().getClaim(clickedBlock.getLocation());
 
             InspectClaimsEvent inspectClaimsEvent = new InspectClaimsEvent(player, claim);
             Bukkit.getPluginManager().callEvent(inspectClaimsEvent);
@@ -120,16 +119,21 @@ public class ClaimToolListener implements Listener {
 
         if (Config.isClaimTool(player.getInventory().getItemInMainHand())) {
             ClaimTool claimTool = pl3xPlayer.getClaimTool();
-            Claim claim = ClaimManager.getInstance().getClaim(clickedBlock.getLocation());
-            if (claim == null) {
+            Claim claim = plugin.getClaimManager().getClaim(clickedBlock.getLocation());
+            if (claim == null || (claimTool.getClaim() != null && claimTool.getClaim() != claim)) {
                 // is creating claim
-                if (claimTool.getPrimary() == null) {
+                if (claimTool.getPrimary() == null || claimTool.getClaim() != claim) {
+                    pl3xPlayer.revertVisualization();
+
                     // this is first click
+                    claimTool.setClaim(null);
                     claimTool.setPrimary(clickedBlock.getLocation());
+                    claimTool.setSecondary(null);
 
                     // TODO visualize claim creation point
-                    //
-                    //
+                    pl3xPlayer.showVisualization(new Claim(-99, null, null,
+                                    new Coordinates(clickedBlock.getLocation(), clickedBlock.getLocation()), false),
+                            VisualizationType.NEW_POINT);
                     return;
                 }
 
@@ -156,12 +160,12 @@ public class ClaimToolListener implements Listener {
 
                 // make the new claim
                 boolean isAdminClaim = claimTool instanceof AdminClaimTool;
-                claim = new Claim(ClaimManager.getInstance().getNextId(), player.getUniqueId(), parent, coordinates, isAdminClaim);
+                claim = new Claim(plugin.getClaimManager().getNextId(), player.getUniqueId(), parent, coordinates, isAdminClaim);
 
                 // make sure not overlapping other claims
                 if (parent == null) {
                     // check if overlapping other top level claims
-                    for (Claim topLevelClaim : ClaimManager.getInstance().getTopLevelClaims()) {
+                    for (Claim topLevelClaim : plugin.getClaimManager().getTopLevelClaims()) {
                         if (claim.getCoordinates().overlaps(topLevelClaim.getCoordinates())) {
                             // TODO inform player
                             //
@@ -192,7 +196,7 @@ public class ClaimToolListener implements Listener {
                 }
 
                 // register/store the new claim
-                ClaimManager.getInstance().createNewClaim(claim);
+                plugin.getClaimManager().createNewClaim(claim);
 
                 claimTool.setClaim(null);
                 claimTool.setPrimary(null);
@@ -207,10 +211,34 @@ public class ClaimToolListener implements Listener {
             // is resizing claim
             if (claimTool.getPrimary() == null) {
                 // this is first click
-                // TODO check for corner
-                claimTool.setPrimary(clickedBlock.getLocation());
+                claimTool.setClaim(claim);
+
+                if (claim.getCoordinates().isCorner(clickedBlock.getLocation())) {
+                    // Clicked a corner
+                    claimTool.setPrimary(clickedBlock.getLocation());
+                    Lang.send(player, Lang.RESIZE_START);
+
+                    pl3xPlayer.showVisualization(claim);
+                    return;
+                } else {
+
+                }
+
+                //
             } else {
                 // this is second click
+
+                if (claimTool.getClaim() != claim) {
+                    // this is inside a different claim! error
+
+                    // TODO notify player
+
+                    claimTool.setClaim(null);
+                    claimTool.setPrimary(null);
+                    claimTool.setSecondary(null);
+                    pl3xPlayer.showVisualization(claim, VisualizationType.ERROR);
+                    return;
+                }
 
                 // check if claim overlaps other claims (child and top level)
                 //
@@ -238,7 +266,7 @@ public class ClaimToolListener implements Listener {
             return; // not switching to claim tool
         }
 
-        Pl3xPlayer pl3xPlayer = Pl3xPlayer.getPlayer(player);
+        Pl3xPlayer pl3xPlayer = plugin.getPlayerManager().getPlayer(player);
         pl3xPlayer.revertVisualization();
 
         ClaimTool claimTool = new BasicClaimTool();
@@ -259,6 +287,6 @@ public class ClaimToolListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChangeWorld(PlayerChangedWorldEvent event) {
         // ensure a new claim tool when changing worlds
-        Pl3xPlayer.getPlayer(event.getPlayer()).setClaimTool(new BasicClaimTool());
+        plugin.getPlayerManager().getPlayer(event.getPlayer()).setClaimTool(new BasicClaimTool());
     }
 }

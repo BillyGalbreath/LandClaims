@@ -1,5 +1,6 @@
 package net.pl3x.bukkit.claims.claim;
 
+import net.pl3x.bukkit.claims.Pl3xClaims;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -93,11 +94,16 @@ public class Coordinates {
                 z >= minZ && z <= maxZ;
     }
 
-    public Collection<Long> getChunkHashes() {
+    public boolean isCorner(Location location) {
+        return (location.getX() == minX || location.getX() == maxX) &&
+                (location.getZ() == minZ || location.getZ() == maxZ);
+    }
+
+    public Collection<Long> getChunkHashes(Pl3xClaims plugin) {
         Collection<Long> hashes = new HashSet<>();
         for (int x = minX >> 4; x <= maxX >> 4; x++) {
             for (int z = minZ >> 4; z <= maxZ >> 4; z++) {
-                hashes.add(ClaimManager.getInstance().getChunkHash(x, z));
+                hashes.add(plugin.getClaimManager().getChunkHash(x, z));
             }
         }
         return hashes;

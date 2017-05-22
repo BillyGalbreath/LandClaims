@@ -21,7 +21,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Pl3xPlayer pl3xPlayer = Pl3xPlayer.getPlayer(event.getPlayer()); // load player data
+        Pl3xPlayer pl3xPlayer = plugin.getPlayerManager().getPlayer(event.getPlayer()); // load player data
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -32,7 +32,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        Pl3xPlayer.unload(event.getPlayer());
+        plugin.getPlayerManager().unload(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -43,16 +43,16 @@ public class PlayerListener implements Listener {
             return; // did not move a full block
         }
 
-        Pl3xPlayer.getPlayer(event.getPlayer()).updateLocation();
+        plugin.getPlayerManager().getPlayer(event.getPlayer()).updateLocation();
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        Pl3xPlayer.getPlayer(event.getPlayer()).updateLocation();
+        plugin.getPlayerManager().getPlayer(event.getPlayer()).updateLocation();
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
-        Pl3xPlayer.getPlayer(event.getPlayer()).updateLocation();
+        plugin.getPlayerManager().getPlayer(event.getPlayer()).updateLocation();
     }
 }

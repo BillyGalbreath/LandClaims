@@ -1,6 +1,5 @@
 package net.pl3x.bukkit.claims.claim;
 
-import net.pl3x.bukkit.claims.Logger;
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.configuration.ClaimConfig;
 import org.bukkit.Chunk;
@@ -15,13 +14,10 @@ import java.util.TreeMap;
 import java.util.UUID;
 
 public class ClaimManager {
-    private static final ClaimManager instance = new ClaimManager();
+    private final Pl3xClaims plugin;
 
-    public static ClaimManager getInstance() {
-        return instance;
-    }
-
-    private ClaimManager() {
+    public ClaimManager(Pl3xClaims plugin) {
+        this.plugin = plugin;
     }
 
     private final Map<Long, Collection<Claim>> chunks = new HashMap<>();
@@ -73,7 +69,7 @@ public class ClaimManager {
 
     public void addTopLevelClaim(Claim claim) {
         topLevelClaims.put(claim.getId(), claim);
-        claim.getCoordinates().getChunkHashes().forEach(hash ->
+        claim.getCoordinates().getChunkHashes(plugin).forEach(hash ->
                 chunks.computeIfAbsent(hash, k -> new HashSet<>()).add(claim));
     }
 
@@ -83,7 +79,7 @@ public class ClaimManager {
         } else {
             claim.getParent().addChild(claim);
         }
-        ClaimConfig config = ClaimConfig.getConfig(claim.getId());
+        ClaimConfig config = ClaimConfig.getConfig(plugin, claim.getId());
         config.setId(claim.getId());
         config.setAdminClaim(claim.isAdminClaim());
         config.setParent(claim.getParent());
@@ -109,7 +105,7 @@ public class ClaimManager {
         }
         chunks.forEach((k, v) -> v.removeIf(c -> c.getId() == claim.getId())); // remove claim's chunk hashes
         chunks.entrySet().removeIf(e -> e.getValue().isEmpty()); // remove empty chunk hashes from memory
-        ClaimConfig.getConfig(claim.getId()).delete(); // delete the file
+        ClaimConfig.getConfig(plugin, claim.getId()).delete(); // delete the file
         topLevelClaims.remove(claim.getId()); // remove from memory
         return true;
     }
@@ -118,27 +114,27 @@ public class ClaimManager {
         unloadClaims();
 
         // load up all the config files first
-        File[] citiesList = new File(Pl3xClaims.getPlugin().getDataFolder(), ClaimConfig.CLAIM_DIRECTORY)
+        File[] citiesList = new File(plugin.getDataFolder(), ClaimConfig.CLAIM_DIRECTORY)
                 .listFiles((dir, name) -> name.endsWith(".yml"));
         if (citiesList == null) {
             citiesList = new File[0];
         }
         for (File file : citiesList) {
-            ClaimConfig.getConfig(Long.parseLong(file.getName().split(".yml")[0]));
+            ClaimConfig.getConfig(plugin, Long.parseLong(file.getName().split(".yml")[0]));
         }
 
         // iterate all configs and create claims starting from lowest id number
         TreeMap<Long, ClaimConfig> treeMap = new TreeMap<>(ClaimConfig.getConfigs());
         long count = 0; // lets count how many claims we actually load up
         long total = treeMap.size();
-        Logger.info("Loading all claims (total: " + total + ")");
+        plugin.getLog().info("Loading all claims (total: " + total + ")");
         for (Map.Entry<Long, ClaimConfig> entry : treeMap.entrySet()) {
             long id = entry.getKey();
             ClaimConfig config = entry.getValue();
 
             // sanity check the id
             if (config.getId() < 0 || config.getId() != id) {
-                Logger.error("   Claim id mismatch! Skipping.. (file " + id + ".yml)");
+                plugin.getLog().error("   Claim id mismatch! Skipping.. (file " + id + ".yml)");
                 continue;
             }
 
@@ -148,14 +144,14 @@ public class ClaimManager {
             // get the owner
             UUID owner = config.getOwner();
             if (owner == null) {
-                Logger.error("   Could not get owner! Skipping.. (file " + id + ".yml)");
+                plugin.getLog().error("   Could not get owner! Skipping.. (file " + id + ".yml)");
                 continue;
             }
 
             // get the coordinates
             Coordinates coordinates = config.getCoordinates();
             if (coordinates == null) {
-                Logger.error("   Could not get coordinates! Skipping.. (file " + id + ".yml)");
+                plugin.getLog().error("   Could not get coordinates! Skipping.. (file " + id + ".yml)");
                 // most likely the world is not loaded yet
                 continue;
             }
@@ -167,7 +163,7 @@ public class ClaimManager {
                 // there is a parent, lets make sure its already been stored in manager
                 parent = getClaim(parentId);
                 if (parent == null) {
-                    Logger.error("   Could not get parent! Skipping.. (file " + id + ".yml)");
+                    plugin.getLog().error("   Could not get parent! Skipping.. (file " + id + ".yml)");
                     continue;
                 }
             }
@@ -177,7 +173,7 @@ public class ClaimManager {
 
             // add to parent as child (if there is a parent)
             if (parent != null) {
-                Logger.debug("   Claim " + id + " is a child of " + parentId);
+                plugin.getLog().debug("   Claim " + id + " is a child of " + parentId);
                 parent.addChild(claim);
             }
 
@@ -196,11 +192,11 @@ public class ClaimManager {
             // finally store the claim in the manager
             addTopLevelClaim(claim);
             nextId = id + 1; // make sure next id is actually the next id...
-            Logger.debug("   Claim " + id + " loaded successfully.");
+            plugin.getLog().debug("   Claim " + id + " loaded successfully.");
             count++;
         }
 
-        Logger.info("Finished loading all claims! (total: " + count + " / " + total + ")");
+        plugin.getLog().info("Finished loading all claims! (total: " + count + " / " + total + ")");
     }
 
     public void unloadClaims() {

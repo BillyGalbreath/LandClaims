@@ -2,7 +2,6 @@ package net.pl3x.bukkit.claims.visualization;
 
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
-import net.pl3x.bukkit.claims.player.Pl3xPlayer;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -14,10 +13,12 @@ import java.util.Collection;
 import java.util.HashSet;
 
 public class Visualization {
+    private final Pl3xClaims plugin;
     private final Collection<VisualizationElement> elements = new HashSet<>();
     private final Location center;
 
-    public Visualization(Collection<Claim> claims, VisualizationType type, Location center) {
+    public Visualization(Pl3xClaims plugin, Collection<Claim> claims, VisualizationType type, Location center) {
+        this.plugin = plugin;
         this.center = center;
         claims.forEach(claim -> addClaimElements(claim, type));
     }
@@ -30,12 +31,12 @@ public class Visualization {
         return center;
     }
 
-    public void apply(Player player) {
+    public void apply(Pl3xClaims plugin, Player player) {
         if (!player.isOnline()) {
             return; // sanity check
         }
 
-        Pl3xPlayer.getPlayer(player).revertVisualization(); // revert any old visualization first
+        plugin.getPlayerManager().getPlayer(player).revertVisualization(); // revert any old visualization first
 
         if (getElements().isEmpty()) {
             return; // nothing to show
@@ -45,8 +46,8 @@ public class Visualization {
             return; // not in same world
         }
 
-        new VisualizationApplyTask(player, this)
-                .runTaskLater(Pl3xClaims.getPlugin(), 1L);
+        new VisualizationApplyTask(plugin, player, this)
+                .runTaskLater(plugin, 1L);
     }
 
     public void revert(Player player) {
@@ -54,7 +55,7 @@ public class Visualization {
             return; // sanity check
         }
 
-        Visualization visualization = Pl3xPlayer.getPlayer(player).getVisualization();
+        Visualization visualization = plugin.getPlayerManager().getPlayer(player).getVisualization();
         if (visualization == null) {
             return; // nothing to revert
         }
@@ -74,7 +75,7 @@ public class Visualization {
             player.sendBlockChange(element.getLocation(), block.getType(), block.getData());
         }
 
-        Pl3xPlayer.getPlayer(player).setVisualization(null);
+        plugin.getPlayerManager().getPlayer(player).setVisualization(null);
     }
 
     public void addClaimElements(Claim claim, VisualizationType visualizationType) {
@@ -98,12 +99,15 @@ public class Visualization {
         if (visualizationType == VisualizationType.CLAIM) {
             cornerMaterial = Material.GLOWSTONE;
             accentMaterial = Material.GOLD_BLOCK;
-        } else if (visualizationType == VisualizationType.CHILD) {
-            cornerMaterial = Material.IRON_BLOCK;
-            accentMaterial = Material.WOOL;
         } else if (visualizationType == VisualizationType.ADMIN) {
             cornerMaterial = Material.GLOWSTONE;
             accentMaterial = Material.PUMPKIN;
+        } else if (visualizationType == VisualizationType.CHILD) {
+            cornerMaterial = Material.IRON_BLOCK;
+            accentMaterial = Material.WOOL;
+        } else if (visualizationType == VisualizationType.NEW_POINT) {
+            cornerMaterial = Material.DIAMOND_BLOCK;
+            accentMaterial = Material.DIAMOND_BLOCK;
         } else {
             cornerMaterial = Material.GLOWING_REDSTONE_ORE;
             accentMaterial = Material.NETHERRACK;
