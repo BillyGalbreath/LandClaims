@@ -194,7 +194,7 @@ public class ClaimManager {
             //
 
             // finally store the claim in the manager
-            topLevelClaims.put(id, claim);
+            addTopLevelClaim(claim);
             nextId = id + 1; // make sure next id is actually the next id...
             Logger.debug("   Claim " + id + " loaded successfully.");
             count++;

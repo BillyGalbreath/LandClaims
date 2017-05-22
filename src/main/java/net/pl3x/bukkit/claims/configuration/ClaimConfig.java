@@ -49,6 +49,9 @@ public class ClaimConfig extends YamlConfiguration {
         this.claimId = claimId;
         this.file = new File(Pl3xClaims.getPlugin().getDataFolder(),
                 CLAIM_DIRECTORY + File.separator + claimId + ".yml");
+        if (!file.exists()) {
+            save();
+        }
         reload();
     }
 

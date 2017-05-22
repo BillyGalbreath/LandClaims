@@ -38,6 +38,14 @@ public class Claim {
         return owner;
     }
 
+    public boolean isOwner(Player player) {
+        return isOwner(player.getUniqueId());
+    }
+
+    public boolean isOwner(UUID uuid) {
+        return owner != null && owner.equals(uuid);
+    }
+
     public Claim getParent() {
         return parent;
     }

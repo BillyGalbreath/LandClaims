@@ -1,25 +1,23 @@
 package net.pl3x.bukkit.claims.event;
 
 import net.pl3x.bukkit.claims.claim.Claim;
+import net.pl3x.bukkit.claims.visualization.Visualization;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
-import java.util.Collections;
 
 public class VisualizeClaimsEvent extends CancellableEvent {
+    private final Visualization visualization;
     private final Collection<Claim> claims;
     private final boolean showChildren;
 
-    public VisualizeClaimsEvent(Player player, Claim claim) {
-        super(player);
-        this.claims = Collections.singleton(claim);
-        this.showChildren = true;
-    }
-
-    public VisualizeClaimsEvent(Player player, Collection<Claim> claims) {
+    public VisualizeClaimsEvent(Player player, Collection<Claim> claims, Visualization visualization) {
         super(player);
         this.claims = claims;
-        this.showChildren = false;
+        this.visualization = visualization;
+
+        // show child claims if this the only claim
+        this.showChildren = !(claims != null && claims.size() > 0);
     }
 
     /**
@@ -29,6 +27,15 @@ public class VisualizeClaimsEvent extends CancellableEvent {
      */
     public Collection<Claim> getClaims() {
         return claims;
+    }
+
+    /**
+     * Get the visualization about to be shown, or null if reverting a player's current visualization
+     *
+     * @return Visualization to be shown
+     */
+    public Visualization getVisualization() {
+        return visualization;
     }
 
     /**

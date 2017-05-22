@@ -15,8 +15,10 @@ import java.util.HashSet;
 
 public class Visualization {
     private final Collection<VisualizationElement> elements = new HashSet<>();
+    private final World world;
 
-    public Visualization() {
+    public Visualization(World world) {
+        this.world = world;
     }
 
     public Collection<VisualizationElement> getElements() {
@@ -36,13 +38,7 @@ public class Visualization {
             return; // nothing to show
         }
 
-        World world = null;
-        for (VisualizationElement element : visualization.getElements()) {
-            world = element.getLocation().getWorld();
-            break;
-        }
-
-        if (!player.getWorld().equals(world)) {
+        if (!player.getWorld().equals(visualization.world)) {
             return; // not in same world
         }
 
@@ -59,12 +55,7 @@ public class Visualization {
             return; // nothing to revert
         }
 
-        World world = null;
-        for (VisualizationElement element : visualization.getElements()) {
-            world = element.getLocation().getWorld();
-        }
-
-        if (player.getWorld().equals(world)) {
+        if (!player.getWorld().equals(visualization.world)) {
             return; // not in same world
         }
 
@@ -82,37 +73,9 @@ public class Visualization {
         Pl3xPlayer.getPlayer(player).setVisualization(null);
     }
 
-    public static Visualization fromClaim(Claim claim, int height, VisualizationType visualizationType, Location locality) {
-        //visualize only top level claims
-        if (claim.getParent() != null) {
-            return fromClaim(claim.getParent(), height, visualizationType, locality);
-        }
-
-        Visualization visualization = new Visualization();
-
-        //add subdivisions first
-        for (Claim child : claim.getChildren()) {
-            visualization.addClaimElements(child, height, VisualizationType.CHILD, locality);
-        }
-
-        //special visualization for administrative land claims
-        if (claim.isAdminClaim() && visualizationType == VisualizationType.CLAIM) {
-            visualizationType = VisualizationType.ADMIN;
-        }
-
-        //add top level last so that it takes precedence (it shows on top when the child claim boundaries overlap with its boundaries)
-        visualization.addClaimElements(claim, height, visualizationType, locality);
-
-        return visualization;
-    }
-
-    public static Visualization fromClaims(Iterable<Claim> claims, int height, VisualizationType type, Location locality) {
-        Visualization visualization = new Visualization();
-
-        for (Claim claim : claims) {
-            visualization.addClaimElements(claim, height, type, locality);
-        }
-
+    public static Visualization fromClaims(Collection<Claim> claims, int height, VisualizationType visualizationType, Location center) {
+        Visualization visualization = new Visualization(center.getWorld());
+        claims.forEach(claim -> visualization.addClaimElements(claim, height, visualizationType, center));
         return visualization;
     }
 

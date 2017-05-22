@@ -5,10 +5,14 @@ import net.pl3x.bukkit.claims.claim.ClaimManager;
 import net.pl3x.bukkit.claims.claim.tool.BasicClaimTool;
 import net.pl3x.bukkit.claims.claim.tool.ClaimTool;
 import net.pl3x.bukkit.claims.configuration.PlayerConfig;
+import net.pl3x.bukkit.claims.event.VisualizeClaimsEvent;
 import net.pl3x.bukkit.claims.visualization.Visualization;
+import net.pl3x.bukkit.claims.visualization.VisualizationType;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -108,6 +112,7 @@ public class Pl3xPlayer extends PlayerConfig {
 
     public void setClaimTool(ClaimTool claimTool) {
         this.claimTool = claimTool;
+        showVisualization(null, VisualizationType.CLAIM);
     }
 
     public Visualization getVisualization() {
@@ -116,5 +121,23 @@ public class Pl3xPlayer extends PlayerConfig {
 
     public void setVisualization(Visualization visualization) {
         this.visualization = visualization;
+    }
+
+    public void showVisualization(Collection<Claim> claims, VisualizationType visualizationType) {
+        if (claims == null || claims.isEmpty()) {
+            VisualizeClaimsEvent visualizeClaimsEvent = new VisualizeClaimsEvent(player, null, null);
+            Bukkit.getPluginManager().callEvent(visualizeClaimsEvent);
+            if (!visualizeClaimsEvent.isCancelled()) {
+                Visualization.revert(player);
+            }
+        } else {
+            Visualization visualization = Visualization.fromClaims(claims,
+                    player.getEyeLocation().getBlockY(), visualizationType, player.getLocation());
+            VisualizeClaimsEvent visualizeClaimsEvent = new VisualizeClaimsEvent(player, claims, visualization);
+            Bukkit.getPluginManager().callEvent(visualizeClaimsEvent);
+            if (!visualizeClaimsEvent.isCancelled()) {
+                Visualization.apply(player, visualization);
+            }
+        }
     }
 }

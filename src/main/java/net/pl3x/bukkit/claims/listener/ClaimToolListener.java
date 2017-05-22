@@ -12,9 +12,7 @@ import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.event.CreateClaimEvent;
 import net.pl3x.bukkit.claims.event.InspectClaimsEvent;
-import net.pl3x.bukkit.claims.event.VisualizeClaimsEvent;
 import net.pl3x.bukkit.claims.player.Pl3xPlayer;
-import net.pl3x.bukkit.claims.visualization.Visualization;
 import net.pl3x.bukkit.claims.visualization.VisualizationType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -60,17 +58,12 @@ public class ClaimToolListener implements Listener {
             clickedBlock = event.getClickedBlock();
         }
 
+        Pl3xPlayer pl3xPlayer = Pl3xPlayer.getPlayer(player);
         if (clickedBlock == null || clickedBlock.getType() == Material.AIR) {
             if (Config.isInspectTool(player.getInventory().getItemInMainHand())) {
                 Lang.send(player, Lang.INSPECT_TOO_FAR);
 
-                VisualizeClaimsEvent visualizeClaimsEvent = new VisualizeClaimsEvent(player, Collections.emptySet());
-                Bukkit.getPluginManager().callEvent(visualizeClaimsEvent);
-                if (visualizeClaimsEvent.isCancelled()) {
-                    return; // cancelled by plugin
-                }
-
-                Visualization.revert(player);
+                pl3xPlayer.showVisualization(Collections.emptySet(), VisualizationType.CLAIM);
             }
             return; // no block clicked
         }
@@ -91,13 +84,7 @@ public class ClaimToolListener implements Listener {
                 if (nearbyClaims == null || nearbyClaims.isEmpty()) {
                     Lang.send(player, Lang.INSPECT_NO_CLAIM);
 
-                    VisualizeClaimsEvent visualizeClaimsEvent = new VisualizeClaimsEvent(player, Collections.emptySet());
-                    Bukkit.getPluginManager().callEvent(visualizeClaimsEvent);
-                    if (visualizeClaimsEvent.isCancelled()) {
-                        return; // cancelled by plugin
-                    }
-
-                    Visualization.revert(player);
+                    pl3xPlayer.showVisualization(Collections.emptySet(), VisualizationType.CLAIM);
                     return;
                 }
 
@@ -105,14 +92,7 @@ public class ClaimToolListener implements Listener {
                 //
                 //
 
-                VisualizeClaimsEvent visualizeClaimsEvent = new VisualizeClaimsEvent(player, nearbyClaims);
-                Bukkit.getPluginManager().callEvent(visualizeClaimsEvent);
-                if (visualizeClaimsEvent.isCancelled()) {
-                    return; // cancelled by plugin
-                }
-
-                Visualization.apply(player, Visualization.fromClaims(nearbyClaims,
-                        player.getEyeLocation().getBlockY(), VisualizationType.CLAIM, player.getLocation()));
+                pl3xPlayer.showVisualization(nearbyClaims, VisualizationType.CLAIM);
                 return;
             }
 
@@ -127,6 +107,8 @@ public class ClaimToolListener implements Listener {
 
             if (claim == null) {
                 Lang.send(player, Lang.INSPECT_NO_CLAIM);
+
+                pl3xPlayer.showVisualization(null, VisualizationType.CLAIM);
                 return;
             }
 
@@ -134,19 +116,11 @@ public class ClaimToolListener implements Listener {
             //
             //
 
-            VisualizeClaimsEvent visualizeClaimsEvent = new VisualizeClaimsEvent(player, claim);
-            Bukkit.getPluginManager().callEvent(visualizeClaimsEvent);
-            if (visualizeClaimsEvent.isCancelled()) {
-                return; // cancelled by plugin
-            }
-
-            Visualization.apply(player, Visualization.fromClaim(claim,
-                    player.getEyeLocation().getBlockY(), VisualizationType.CLAIM, player.getLocation()));
+            pl3xPlayer.showVisualization(Collections.singleton(claim), VisualizationType.CLAIM);
             return;
         }
 
         if (Config.isClaimTool(player.getInventory().getItemInMainHand())) {
-            Pl3xPlayer pl3xPlayer = Pl3xPlayer.getPlayer(player);
             ClaimTool claimTool = pl3xPlayer.getClaimTool();
             Claim claim = ClaimManager.getInstance().getClaim(clickedBlock.getLocation());
             if (claim == null) {
@@ -177,14 +151,7 @@ public class ClaimToolListener implements Listener {
                         //
                         //
 
-                        VisualizeClaimsEvent visualizeClaimsEvent = new VisualizeClaimsEvent(player, parent);
-                        Bukkit.getPluginManager().callEvent(visualizeClaimsEvent);
-                        if (visualizeClaimsEvent.isCancelled()) {
-                            return; // cancelled by plugin
-                        }
-
-                        Visualization.apply(player, Visualization.fromClaim(parent,
-                                player.getEyeLocation().getBlockY(), VisualizationType.ERROR, player.getLocation()));
+                        pl3xPlayer.showVisualization(Collections.singleton(parent), VisualizationType.ERROR);
                         return;
                     }
                 }
@@ -192,6 +159,33 @@ public class ClaimToolListener implements Listener {
                 // make the new claim
                 boolean isAdminClaim = claimTool instanceof AdminClaimTool;
                 claim = new Claim(ClaimManager.getInstance().getNextId(), player.getUniqueId(), parent, coordinates, isAdminClaim);
+
+                // make sure not overlapping other claims
+                if (parent == null) {
+                    // check if overlapping other top level claims
+                    for (Claim topLevelClaim : ClaimManager.getInstance().getTopLevelClaims()) {
+                        if (claim.getCoordinates().overlaps(topLevelClaim.getCoordinates())) {
+                            // TODO inform player
+                            //
+                            //
+
+                            pl3xPlayer.showVisualization(Collections.singleton(topLevelClaim), VisualizationType.ERROR);
+                            return;
+                        }
+                    }
+                } else {
+                    // check if overlapping other child claims
+                    for (Claim childClaim : parent.getChildren()) {
+                        if (claim.getCoordinates().overlaps(childClaim.getCoordinates())) {
+                            // TODO inform player
+                            //
+                            //
+
+                            pl3xPlayer.showVisualization(Collections.singleton(childClaim), VisualizationType.ERROR);
+                            return;
+                        }
+                    }
+                }
 
                 CreateClaimEvent createClaimEvent = new CreateClaimEvent(player, claim, isAdminClaim);
                 Bukkit.getPluginManager().callEvent(createClaimEvent);
@@ -208,14 +202,7 @@ public class ClaimToolListener implements Listener {
 
                 // TODO tell player about the new claim
 
-                VisualizeClaimsEvent visualizeClaimsEvent = new VisualizeClaimsEvent(player, claim);
-                Bukkit.getPluginManager().callEvent(visualizeClaimsEvent);
-                if (visualizeClaimsEvent.isCancelled()) {
-                    return; // cancelled by plugin
-                }
-
-                Visualization.apply(player, Visualization.fromClaim(claim,
-                        player.getEyeLocation().getBlockY(), VisualizationType.CLAIM, player.getLocation()));
+                pl3xPlayer.showVisualization(Collections.singleton(claim), VisualizationType.CLAIM);
                 return;
             }
 
@@ -238,14 +225,7 @@ public class ClaimToolListener implements Listener {
                 // TODO tell player about the resized claim
             }
 
-            VisualizeClaimsEvent visualizeClaimsEvent = new VisualizeClaimsEvent(player, claim);
-            Bukkit.getPluginManager().callEvent(visualizeClaimsEvent);
-            if (visualizeClaimsEvent.isCancelled()) {
-                return; // cancelled by plugin
-            }
-
-            Visualization.apply(player, Visualization.fromClaim(claim,
-                    player.getEyeLocation().getBlockY(), VisualizationType.CLAIM, player.getLocation()));
+            pl3xPlayer.showVisualization(Collections.singleton(claim), VisualizationType.CLAIM);
         }
     }
 
@@ -256,35 +236,26 @@ public class ClaimToolListener implements Listener {
             return; // claims not enabled in this world
         }
 
-        Pl3xPlayer pl3xPlayer = Pl3xPlayer.getPlayer(player);
-        Claim claim = pl3xPlayer.inClaim();
-        if (claim == null) {
-            return; // not in a claim
-        }
-
-        if (claim.getOwner() != player.getUniqueId()) {
-            return; // not owner of this claim
-        }
-
         if (!Config.isClaimTool(player.getInventory().getItem(event.getNewSlot()))) {
             return; // not switching to claim tool
         }
 
+        Pl3xPlayer pl3xPlayer = Pl3xPlayer.getPlayer(player);
+        pl3xPlayer.showVisualization(Collections.emptySet(), VisualizationType.CLAIM);
+
         ClaimTool claimTool = new BasicClaimTool();
         pl3xPlayer.setClaimTool(claimTool);
+
+        Claim claim = pl3xPlayer.inClaim();
+        if (claim == null || !claim.isOwner(player)) {
+            return; // no claim here or not owner of this claim
+        }
 
         claimTool.setClaim(claim);
         claimTool.setPrimary(claim.getCoordinates().getMinLocation());
         claimTool.setSecondary(claim.getCoordinates().getMaxLocation());
 
-        VisualizeClaimsEvent visualizeClaimsEvent = new VisualizeClaimsEvent(player, claim);
-        Bukkit.getPluginManager().callEvent(visualizeClaimsEvent);
-        if (visualizeClaimsEvent.isCancelled()) {
-            return; // cancelled by plugin
-        }
-
-        Visualization.apply(player, Visualization.fromClaim(claim,
-                player.getEyeLocation().getBlockY(), VisualizationType.CLAIM, player.getLocation()));
+        pl3xPlayer.showVisualization(Collections.singleton(claim), VisualizationType.CLAIM);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
