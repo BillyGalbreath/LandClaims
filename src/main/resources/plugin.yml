@@ -15,15 +15,16 @@ commands:
         - newclaim
 
     abandonclaim:
-        description:
+        description: Deletes a claim
         permission: command.abandonclaim
-        usage: /<command>
-        aliases: []
-    abandontoplevelclaim:
-        description:
-        permission: command.abandontoplevelclaim
-        usage: /<command>
-        aliases: []
+        usage: /<command> (force)
+        aliases:
+        - unclaim
+        - declaim
+        - removeclaim
+        - disclaim
+        - abandontoplevelclaim
+        - abandonparentclaim
     abandonallclaims:
         description:
         permission: command.abandonallclaims

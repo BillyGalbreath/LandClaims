@@ -68,10 +68,8 @@ public class Pl3xPlayer extends PlayerConfig {
 
     public int getRemainingClaimBlocks() {
         int total = getClaimBlocks() + getBonusBlocks();
-        for (Claim claim : plugin.getClaimManager().getTopLevelClaims()) {
-            if (claim.isOwner(player) && !claim.isAdminClaim()) {
-                total -= claim.getCoordinates().getArea();
-            }
+        for (Claim claim : getClaims()) {
+            total -= claim.getCoordinates().getArea();
         }
         return total;
     }

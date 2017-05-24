@@ -37,14 +37,14 @@ public class ClaimManager {
     }
 
     public Claim getClaim(Location location) {
-        for (Claim claim : getTopLevelClaims()) {
-            if (claim.getCoordinates().contains(location)) {
-                for (Claim child : claim.getChildren()) {
+        for (Claim topLevelClaim : getTopLevelClaims()) {
+            if (topLevelClaim.getCoordinates().contains(location)) {
+                for (Claim child : topLevelClaim.getChildren()) {
                     if (child.getCoordinates().contains(location)) {
                         return child;
                     }
                 }
-                return claim;
+                return topLevelClaim;
             }
         }
         return null;

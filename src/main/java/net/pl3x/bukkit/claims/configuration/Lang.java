@@ -22,6 +22,11 @@ public class Lang {
     public static String MUST_HOLD_CLAIM_TOOL;
     public static String MUST_HOLD_CLAIM_TOOL_RADIUS;
     public static String MIN_RADIUS;
+    public static String NOT_YOUR_CLAIM;
+
+    public static String ABANDON_CLAIM_MISSING;
+    public static String ABANDON_TOP_LEVEL_CLAIM;
+    public static String ABANDON_SUCCESS;
 
     public static String INSPECT_NO_CLAIM;
     public static String INSPECT_TOO_FAR;
@@ -75,13 +80,18 @@ public class Lang {
         MUST_HOLD_CLAIM_TOOL = config.getString("must-hold-claim-tool", "&4You must be holding the claim tool to do that");
         MUST_HOLD_CLAIM_TOOL_RADIUS = config.getString("must-hold-claim-tool-radius", "&4You must be holding a golden shovel when specifying a radius");
         MIN_RADIUS = config.getString("min-radius", "&4Minimum radius is {radius}");
+        NOT_YOUR_CLAIM = config.getString("not-your-claim", "&4This isn't your claim");
+
+        ABANDON_CLAIM_MISSING = config.getString("abandon-claim-missing", "&4Stand in the claim you want to delete, or consider /AbandonAllClaims");
+        ABANDON_TOP_LEVEL_CLAIM = config.getString("abandon-top-level-claim", "&4To delete a child claim, stand inside it. Otherwise, use /AbandonClaim force to delete this claim and all it's children");
+        ABANDON_SUCCESS = config.getString("abandon-success", "&dClaim abandoned. You now have {remaining} available claim blocks");
 
         INSPECT_NO_CLAIM = config.getString("inspect-no-claim", "&4There are no claims here");
         INSPECT_TOO_FAR = config.getString("inspect-too-far", "&4That is too far away");
         INSPECT_NEARBY_CLAIMS = config.getString("inspect-nearby-claims", "&dFound {amount} land claims");
         INSPECT_BLOCK_CLAIMED = config.getString("inspect-block-claimed", "&dThat block has been claimed by {owner}");
-        INSPECT_CLAIM_DIMENSIONS = config.getString("inspect-claim-dimensions", "&d  {widthX}x{widthZ}={area}");
-        INSPECT_OWNER_INACTIVITY = config.getString("inspect-owner-inactivity", "&d  Last login: {amount} days ago");
+        INSPECT_CLAIM_DIMENSIONS = config.getString("inspect-claim-dimensions", "&d {widthX}x{widthZ}={area}");
+        INSPECT_OWNER_INACTIVITY = config.getString("inspect-owner-inactivity", "&d Last login: {amount} days ago");
 
         NO_CLAIM_CREATE_PERMISSION = config.getString("no-claim-create-permission", "&You don't have permission to claim land");
 
