@@ -5,8 +5,170 @@ description: ${project.artifactId} Paper Plugin
 author: BillyGalbreath
 
 commands:
+    claim:
+        description: Creates a claim centered around your current location
+        permission: command.claim
+        usage: /<command> (radius)
+        aliases:
+        - makeclaim
+        - createclaim
+        - newclaim
+
+    abandonclaim:
+        description:
+        permission: command.abandonclaim
+        usage: /<command>
+        aliases: []
+    abandontoplevelclaim:
+        description:
+        permission: command.abandontoplevelclaim
+        usage: /<command>
+        aliases: []
+    abandonallclaims:
+        description:
+        permission: command.abandonallclaims
+        usage: /<command>
+        aliases: []
+
+    trust:
+        description:
+        permission: command.trust
+        usage: /<command>
+        aliases: []
+    untrust:
+        description:
+        permission: command.untrust
+        usage: /<command>
+        aliases: []
+    containertrust:
+        description:
+        permission: command.containertrust
+        usage: /<command>
+        aliases: []
+    accesstrust:
+        description:
+        permission: command.accesstrust
+        usage: /<command>
+        aliases: []
+    permissiontrust:
+        description:
+        permission: command.permissiontrust
+        usage: /<command>
+        aliases: []
+
+    childclaims:
+        description:
+        permission: command.childclaims
+        usage: /<command>
+        aliases: []
+
+    adjustbonusclaimblocks:
+        description:
+        permission: command.adjustbonusclaimblocks
+        usage: /<command>
+        aliases: []
+    adjustbonusclaimblocksall:
+        description:
+        permission: command.adjustbonusclaimblocksall
+        usage: /<command>
+        aliases: []
+    setaccruedclaimblocks:
+        description:
+        permission: command.setaccruedclaimblocks
+        usage: /<command>
+        aliases: []
+
+    deleteclaim:
+        description:
+        permission: command.deleteclaims
+        usage: /<command>
+        aliases: []
+    deleteallclaims:
+        description:
+        permission: command.deleteallclaims
+        usage: /<command>
+        aliases: []
+    deleteclaimsinworld:
+        description:
+        permission: command.deleteclaimsinworld
+        usage: /<command>
+        aliases: []
+    deletealladminclaims:
+        description:
+        permission: command.deletealladminclaims
+        usage: /<command>
+        aliases: []
+
+    adminclaims:
+        description:
+        permission: command.adminclaims
+        usage: /<command>
+        aliases: []
+    basicclaims:
+        description:
+        permission: command.basicclaims
+        usage: /<command>
+        aliases: []
+    extendclaim:
+        description:
+        permission: command.extendclaim
+        usage: /<command>
+        aliases: []
+
+    buyclaimblocks:
+        description:
+        permission: command.buyclaimblocks
+        usage: /<command>
+        aliases: []
+    sellclaimblocks:
+        description:
+        permission: command.sellclaimblocks
+        usage: /<command>
+        aliases: []
+
+    trapped:
+        description:
+        permission: command.trapped
+        usage: /<command>
+        aliases: []
+
+    ignoreclaims:
+        description:
+        permission: command.ignoreclaims
+        usage: /<command>
+        aliases: []
+
+    claimslist:
+        description:
+        permission: command.claimslist
+        usage: /<command>
+        aliases: []
+    adminclaimslist:
+        description:
+        permission: command.adminclaimslist
+        usage: /<command>
+        aliases: []
+
+    transferclaim:
+        description:
+        permission: command.transferclaim
+        usage: /<command>
+        aliases: []
+
+    claimbook:
+        description:
+        permission: command.claimbook
+        usage: /<command>
+        aliases: []
+    claimkit:
+        description:
+        permission: command.claimkit
+        usage: /<command>
+        aliases: []
+
     pl3xclaims:
         description: Reload configs
+        permission: command.pl3xclaims
         usage: /<command> (reload)
         aliases:
         - claims
@@ -14,6 +176,10 @@ commands:
 permissions:
     command.pl3xclaims:
         description: Allows reload configs
+        default: op
+
+    claims.overridelimits:
+        description: Allows to override configured limits
         default: op
 
     claims.adminclaims:

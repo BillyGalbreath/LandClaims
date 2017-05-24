@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 public class Pl3xPlayer extends PlayerConfig {
     private final Pl3xClaims plugin;
@@ -173,12 +174,8 @@ public class Pl3xPlayer extends PlayerConfig {
     }
 
     public Collection<Claim> getClaims() {
-        Collection<Claim> claims = new HashSet<>();
-        for (Claim topLevelClaim : plugin.getClaimManager().getTopLevelClaims()) {
-            if (topLevelClaim.isOwner(player)) {
-                claims.add(topLevelClaim);
-            }
-        }
-        return claims;
+        return plugin.getClaimManager().getTopLevelClaims().stream()
+                .filter(topLevelClaim -> topLevelClaim.isOwner(player))
+                .collect(Collectors.toCollection(HashSet::new));
     }
 }

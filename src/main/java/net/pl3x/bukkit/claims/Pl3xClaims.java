@@ -1,6 +1,7 @@
 package net.pl3x.bukkit.claims;
 
 import net.pl3x.bukkit.claims.claim.ClaimManager;
+import net.pl3x.bukkit.claims.command.CmdClaim;
 import net.pl3x.bukkit.claims.command.CmdPl3xClaims;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
@@ -60,6 +61,7 @@ public class Pl3xClaims extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         getServer().getPluginManager().registerEvents(new ProtectionListener(this), this);
 
+        getCommand("claim").setExecutor(new CmdClaim(this));
         getCommand("pl3xclaims").setExecutor(new CmdPl3xClaims(this));
 
         getClaimManager().loadClaims();

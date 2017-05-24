@@ -14,8 +14,14 @@ public class Lang {
     public static String VERSION;
     public static String RELOAD;
 
+    public static String WORLD_DISABLED;
+
     public static String TOOLMODE_BASIC;
     public static String REMAINING_CLAIM_BLOCKS;
+
+    public static String MUST_HOLD_CLAIM_TOOL;
+    public static String MUST_HOLD_CLAIM_TOOL_RADIUS;
+    public static String MIN_RADIUS;
 
     public static String INSPECT_NO_CLAIM;
     public static String INSPECT_TOO_FAR;
@@ -61,8 +67,14 @@ public class Lang {
         VERSION = config.getString("version", "&d{plugin} v{version}");
         RELOAD = config.getString("reload", "&d{plugin} v{version} reloaded");
 
+        WORLD_DISABLED = config.getString("world-disabled", "&4Claims are disabled in this world");
+
         TOOLMODE_BASIC = config.getString("toolmode-basic", "&dTool returned to basic claims mode");
         REMAINING_CLAIM_BLOCKS = config.getString("remaining-claim-blocks", "&dYou may claim up to {amount} more blocks");
+
+        MUST_HOLD_CLAIM_TOOL = config.getString("must-hold-claim-tool", "&4You must be holding the claim tool to do that");
+        MUST_HOLD_CLAIM_TOOL_RADIUS = config.getString("must-hold-claim-tool-radius", "&4You must be holding a golden shovel when specifying a radius");
+        MIN_RADIUS = config.getString("min-radius", "&4Minimum radius is {radius}");
 
         INSPECT_NO_CLAIM = config.getString("inspect-no-claim", "&4There are no claims here");
         INSPECT_TOO_FAR = config.getString("inspect-too-far", "&4That is too far away");
@@ -75,7 +87,7 @@ public class Lang {
 
         RESIZE_FAILED_OVERLAP = config.getString("resize-failed-overlap", "&4You can't resize the claim here because it will overlap another claim");
         RESIZE_FAILED_NEED_MORE_BLOCKS = config.getString("resize-failed-need-more-blocks", "&4You don't have enough blocks for this size. You need {amount} more");
-        RESIZE_FAILED_TOO_NARROW = config.getString("resize-failed-too-narrow", "&4This new size would be too small. Claims must be at least {minimum} blocks wide");
+        RESIZE_FAILED_TOO_NARROW = config.getString("resize-failed-too-narrow", "&4This new size would be too s`ll. Claims must be at least {minimum} blocks wide");
         RESIZE_FAILED_TOO_SMALL = config.getString("resize-failed-too-small", "&4This claim would be too small. Any claim must use at least {minimum} total claim blocks");
         RESIZE_START = config.getString("resize-start", "&dResizing claim. Use your tool again at the new location for this corner");
         RESIZE_SUCCESS = config.getString("resize-success", "&dClaim resized. {amount} available claim blocks remaining");
