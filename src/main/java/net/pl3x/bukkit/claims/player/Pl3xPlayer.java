@@ -26,6 +26,7 @@ public class Pl3xPlayer extends PlayerConfig {
     private Claim parentClaim;
     private Location lastToolLocation;
     private Claim inClaim;
+    private boolean pendingRescue = false;
     private Visualization visualization;
     private AccrueClaimBlocksTask accrueClaimBlocksTask;
 
@@ -154,6 +155,14 @@ public class Pl3xPlayer extends PlayerConfig {
 
     public void setToolMode(ToolMode toolMode) {
         this.toolMode = toolMode;
+    }
+
+    public boolean hasPendingRescue() {
+        return pendingRescue;
+    }
+
+    public void setPendingRescue(boolean pendingRescue) {
+        this.pendingRescue = pendingRescue;
     }
 
     public Visualization getVisualization() {

@@ -23,8 +23,6 @@ public class Lang {
     public static String TOOLMODE_ADMIN;
     public static String REMAINING_CLAIM_BLOCKS;
 
-    public static String MUST_HOLD_CLAIM_TOOL;
-    public static String MUST_HOLD_CLAIM_TOOL_RADIUS;
     public static String MIN_RADIUS;
     public static String NOT_YOUR_CLAIM;
     public static String YOU_HAVE_NO_CLAIMS;
@@ -74,6 +72,7 @@ public class Lang {
     public static String TRUST_ALL_CLAIMS;
     public static String TRUST_SUCCESS;
     public static String UNTRUST_SUCCESS;
+
     public static String TRUSTLIST_NO_CLAIM;
     public static String TRUSTLIST_NO_PERMISSION;
     public static String TRUSTLIST_HEADER;
@@ -81,6 +80,11 @@ public class Lang {
     public static String TRUSTLIST_BUILDERS;
     public static String TRUSTLIST_CONTAINERS;
     public static String TRUSTLIST_ACCESSORS;
+
+    public static String TRAPPED_CAN_BUILD;
+    public static String TRAPPED_WONT_WORK_HERE;
+    public static String TRAPPED_MOVED_ABORTED;
+    public static String TRAPPED_RESCUE_PENDING;
 
     private Lang() {
     }
@@ -105,8 +109,6 @@ public class Lang {
         TOOLMODE_ADMIN = config.getString("toolmode-admin", "&dTool changed to admin claims mode");
         REMAINING_CLAIM_BLOCKS = config.getString("remaining-claim-blocks", "&dYou may claim up to {amount} more blocks");
 
-        MUST_HOLD_CLAIM_TOOL = config.getString("must-hold-claim-tool", "&4You must be holding the claim tool to do that");
-        MUST_HOLD_CLAIM_TOOL_RADIUS = config.getString("must-hold-claim-tool-radius", "&4You must be holding a golden shovel when specifying a radius");
         MIN_RADIUS = config.getString("min-radius", "&4Minimum radius is {radius}");
         NOT_YOUR_CLAIM = config.getString("not-your-claim", "&4This isn't your claim");
         YOU_HAVE_NO_CLAIMS = config.getString("you-have-no-claims", "&4You don't have any land claims");
@@ -164,6 +166,11 @@ public class Lang {
         TRUSTLIST_BUILDERS = config.getString("trustlist-builders", "build");
         TRUSTLIST_CONTAINERS = config.getString("trustlist-containers", "containers");
         TRUSTLIST_ACCESSORS = config.getString("trustlist-accessors", "access");
+
+        TRAPPED_CAN_BUILD = config.getString("trapped-can-build", "&4You can build here. Save yourself");
+        TRAPPED_WONT_WORK_HERE = config.getString("trapped-wont-work-here", "&4Sorry, unable to find a safe location to teleport you to. Contact an admin");
+        TRAPPED_MOVED_ABORTED = config.getString("trapped-aborted", "&4You moved! Rescue cancelled");
+        TRAPPED_RESCUE_PENDING = config.getString("trapped-rescue-pending", "&dIf you stay put for 10 seconds, you'll be teleported out. Please wait");
     }
 
     public static void send(CommandSender recipient, String message) {

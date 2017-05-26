@@ -132,10 +132,12 @@ commands:
         aliases: []
 
     trapped:
-        description:
+        description: Rescues you to nearby unclaimed land
         permission: command.trapped
         usage: /<command>
-        aliases: []
+        aliases:
+        - rescue
+        - unstuck
 
     ignoreclaims:
         description:
@@ -188,22 +190,31 @@ permissions:
     command.abandonallclaims:
         description: Allows to abandon all claims
         default: op
+    command.adminclaims:
+        description: Allows to change to admin claims mode
+        default: op
+    command.basicclaims:
+        description: Allows to change to basic claims mode
+        default: op
     command.childclaims:
-        description: Allows to create child claims
+        description: Allows to change to child claims mode
+        default: op
+    command.trapped:
+        description: Allows to be rescued to nearby unclaimed land
+        default: true
+    command.trust:
+        description: Allows to manage claim trust list
         default: op
     command.pl3xclaims:
         description: Allows reload configs
         default: op
 
-    claims.overridelimits:
-        description: Allows to override configured limits
+    commands.deleteclaims:
+        description: Allows to delete any non-admin claims anywhere
         default: op
 
-    claims.adminclaims:
-        description: Allows to create admin claims
-        default: op
-    claims.deleteclaims:
-        description: Allows to delete any non-admin claims anywhere
+    claims.overridelimits:
+        description: Allows to override configured limits
         default: op
 
     claims.visualize:

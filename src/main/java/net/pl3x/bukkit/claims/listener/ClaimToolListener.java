@@ -121,7 +121,7 @@ public class ClaimToolListener implements Listener {
             }
 
             if (!claim.isAdminClaim() &&
-                    (player.hasPermission("claims.deleteclaims") ||
+                    (player.hasPermission("command.deleteclaims") ||
                             player.hasPermission("claims.inspect.seeinactivity"))) {
                 Lang.send(player, Lang.INSPECT_OWNER_INACTIVITY
                         .replace("{amount}", Long.toString((new Date().getTime() -
@@ -162,7 +162,7 @@ public class ClaimToolListener implements Listener {
                 if (pl3xPlayer.getResizingClaim().getParent() == null && !pl3xPlayer.getResizingClaim().isAdminClaim()) {
                     // check minimum size requirements if shrinking
                     // players with "adminclaims" permissions bypass this check
-                    if (!player.hasPermission("claims.adminclaims") &&
+                    if (!player.hasPermission("command.adminclaims") &&
                             (newWidthX < coords.getWidthX() || newWidthZ < coords.getWidthZ())) {
                         if (newWidthX < Config.CLAIM_MIN_WIDTH || newWidthZ < Config.CLAIM_MIN_WIDTH) {
                             Lang.send(player, Lang.RESIZE_FAILED_TOO_NARROW

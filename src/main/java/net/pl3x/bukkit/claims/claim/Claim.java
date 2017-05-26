@@ -162,11 +162,11 @@ public class Claim {
         }
 
         if (isAdminClaim) {
-            if (player.hasPermission("claims.adminclaims")) {
+            if (player.hasPermission("command.adminclaims")) {
                 return true;
             }
         } else {
-            if (player.hasPermission("claims.deleteclaims")) {
+            if (player.hasPermission("command.deleteclaims")) {
                 return true;
             }
         }
