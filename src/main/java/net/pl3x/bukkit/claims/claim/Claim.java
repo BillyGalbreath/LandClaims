@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Claim {
@@ -15,8 +16,8 @@ public class Claim {
     private final Claim parent;
     private final Coordinates coordinates;
     private final boolean isAdminClaim;
-    private final Map<FlagType, Boolean> flags;
-    private final Map<UUID, TrustType> trusts;
+    private final Map<FlagType, Boolean> flags = new HashMap<>();
+    private final Map<UUID, TrustType> trusts = new HashMap<>();
     private final Collection<UUID> managers = new HashSet<>();
     private final Collection<Claim> children = new HashSet<>();
 
@@ -26,8 +27,6 @@ public class Claim {
         this.parent = parent;
         this.coordinates = coordinates;
         this.isAdminClaim = isAdminClaim;
-        this.flags = new HashMap<>();
-        this.trusts = new HashMap<>();
     }
 
     public long getId() {
@@ -43,7 +42,7 @@ public class Claim {
     }
 
     public boolean isOwner(UUID uuid) {
-        return owner != null && owner.equals(uuid);
+        return Objects.equals(owner, uuid);
     }
 
     public Claim getParent() {
@@ -68,6 +67,10 @@ public class Claim {
             return;
         }
         flags.put(flag, value);
+    }
+
+    public Map<UUID, TrustType> getTrusts() {
+        return trusts;
     }
 
     public TrustType getTrust(Player player) {

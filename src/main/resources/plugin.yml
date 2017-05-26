@@ -36,30 +36,22 @@ commands:
         - removeallclaims
 
     trust:
-        description:
+        description: Manage your claim(s) trustlist
+        permission: command.trust
+        usage: /<command> [player | public]
+        aliases:
+        - containertrust
+        - accesstrust
+        - permissiontrust
+        - untrust
+    trustlist:
+        description: List permissions for the claim you're standing in
         permission: command.trust
         usage: /<command>
-        aliases: []
-    untrust:
-        description:
-        permission: command.untrust
-        usage: /<command>
-        aliases: []
-    containertrust:
-        description:
-        permission: command.containertrust
-        usage: /<command>
-        aliases: []
-    accesstrust:
-        description:
-        permission: command.accesstrust
-        usage: /<command>
-        aliases: []
-    permissiontrust:
-        description:
-        permission: command.permissiontrust
-        usage: /<command>
-        aliases: []
+        aliases:
+        - trustslist
+        - listtrust
+        - listtrusts
 
     adminclaims: Switches the claim tool to admin mode, used to create admin claims
         description:

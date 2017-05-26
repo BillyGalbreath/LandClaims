@@ -8,6 +8,8 @@ import net.pl3x.bukkit.claims.command.CmdBasicClaims;
 import net.pl3x.bukkit.claims.command.CmdChildClaims;
 import net.pl3x.bukkit.claims.command.CmdClaim;
 import net.pl3x.bukkit.claims.command.CmdPl3xClaims;
+import net.pl3x.bukkit.claims.command.CmdTrust;
+import net.pl3x.bukkit.claims.command.CmdTrustList;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.listener.ClaimToolListener;
@@ -72,6 +74,8 @@ public class Pl3xClaims extends JavaPlugin {
         getCommand("adminclaims").setExecutor(new CmdAdminClaims(this));
         getCommand("basicclaims").setExecutor(new CmdBasicClaims(this));
         getCommand("childclaims").setExecutor(new CmdChildClaims(this));
+        getCommand("trust").setExecutor(new CmdTrust(this));
+        getCommand("trustlist").setExecutor(new CmdTrustList(this));
         getCommand("pl3xclaims").setExecutor(new CmdPl3xClaims(this));
 
         getClaimManager().loadClaims();

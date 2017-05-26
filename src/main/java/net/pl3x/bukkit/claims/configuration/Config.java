@@ -106,11 +106,9 @@ public class Config {
             if (!item.hasItemMeta()) {
                 return false; // no item meta
             }
-            for (String lore : Config.CLAIM_TOOL_LORE) {
-                if (!item.getItemMeta().getLore().contains(lore)) {
-                    return false; // lore mismatch
-                }
-            }
+            // lore mismatch
+            return Config.CLAIM_TOOL_LORE.stream()
+                    .allMatch(lore -> item.getItemMeta().getLore().contains(lore));
         }
         return true;
     }
@@ -138,11 +136,9 @@ public class Config {
             if (!item.hasItemMeta()) {
                 return false; // no item meta
             }
-            for (String lore : Config.INSPECT_TOOL_LORE) {
-                if (!item.getItemMeta().getLore().contains(lore)) {
-                    return false; // lore mismatch
-                }
-            }
+            // lore mismatch
+            return Config.INSPECT_TOOL_LORE.stream()
+                    .allMatch(lore -> item.getItemMeta().getLore().contains(lore));
         }
         return true;
     }

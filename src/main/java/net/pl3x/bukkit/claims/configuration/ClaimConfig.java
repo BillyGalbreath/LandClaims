@@ -3,16 +3,20 @@ package net.pl3x.bukkit.claims.configuration;
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.claim.Coordinates;
+import net.pl3x.bukkit.claims.claim.TrustType;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class ClaimConfig extends YamlConfiguration {
     public static final String CLAIM_DIRECTORY = "claimdata";
+    public static final UUID UUID_ZERO = new UUID(0, 0);
     private static final Map<Long, ClaimConfig> configs = new HashMap<>();
 
     public static Map<Long, ClaimConfig> getConfigs() {
@@ -116,6 +120,27 @@ public class ClaimConfig extends YamlConfiguration {
         set("coordinates.max.z", coordinates.getMaxZ());
     }
 
+    public void setTrusts(Map<UUID, TrustType> trusts) {
+        set("trusts.builders", trusts.entrySet().stream()
+                .filter(entry -> entry.getValue() == TrustType.BUILDER)
+                .map(entry -> uuidToString(entry.getKey()))
+                .collect(Collectors.toList()));
+        set("trusts.containers", trusts.entrySet().stream()
+                .filter(entry -> entry.getValue() == TrustType.CONTAINER)
+                .map(entry -> uuidToString(entry.getKey()))
+                .collect(Collectors.toList()));
+        set("trusts.accessors", trusts.entrySet().stream()
+                .filter(entry -> entry.getValue() == TrustType.ACCESS)
+                .map(entry -> uuidToString(entry.getKey()))
+                .collect(Collectors.toList()));
+    }
+
+    public void setManagers(Collection<UUID> managers) {
+        set("trusts.managers", managers.stream()
+                .map(uuid -> uuid == null ? "null" : uuid.toString())
+                .collect(Collectors.toList()));
+    }
+
     public long getId() {
         return (long) getInt("id", -1);
     }
@@ -144,5 +169,33 @@ public class ClaimConfig extends YamlConfiguration {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public Map<UUID, TrustType> getTrusts() {
+        Map<UUID, TrustType> trusts = new HashMap<>();
+        getStringList("trusts.builders").stream()
+                .map(this::stringToUUID)
+                .forEach(uuid -> trusts.put(uuid, TrustType.BUILDER));
+        getStringList("trusts.containers").stream()
+                .map(this::stringToUUID)
+                .forEach(uuid -> trusts.put(uuid, TrustType.CONTAINER));
+        getStringList("trusts.accessors").stream()
+                .map(this::stringToUUID)
+                .forEach(uuid -> trusts.put(uuid, TrustType.ACCESS));
+        return trusts;
+    }
+
+    public Collection<UUID> getManagers() {
+        return getStringList("trusts.managers").stream()
+                .map(this::stringToUUID)
+                .collect(Collectors.toSet());
+    }
+
+    private String uuidToString(UUID uuid) {
+        return (uuid == null ? UUID_ZERO : uuid).toString();
+    }
+
+    private UUID stringToUUID(String s) {
+        return s == null || s.isEmpty() || s.equals(UUID_ZERO.toString()) ? null : UUID.fromString(s);
     }
 }

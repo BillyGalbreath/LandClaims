@@ -10,6 +10,8 @@ import java.io.File;
 
 public class Lang {
     public static String COMMAND_NO_PERMISSION;
+    public static String COMMAND_MISSING_PLAYER_NAME;
+    public static String PLAYER_NOT_FOUND;
     public static String PLAYER_COMMAND;
     public static String VERSION;
     public static String RELOAD;
@@ -61,6 +63,25 @@ public class Lang {
     public static String CREATE_START_CHILD;
     public static String CREATE_SUCCESS_CHILD;
 
+    public static String TRUST_ERROR_NO_PERMISSION;
+    public static String TRUST_ERROR_NO_CLAIM;
+    public static String TRUST_PUBLIC;
+    public static String TRUST_BUILD;
+    public static String TRUST_CONTAINER;
+    public static String TRUST_ACCESS;
+    public static String TRUST_PERMISSION;
+    public static String TRUST_CURRENT_CLAIM;
+    public static String TRUST_ALL_CLAIMS;
+    public static String TRUST_SUCCESS;
+    public static String UNTRUST_SUCCESS;
+    public static String TRUSTLIST_NO_CLAIM;
+    public static String TRUSTLIST_NO_PERMISSION;
+    public static String TRUSTLIST_HEADER;
+    public static String TRUSTLIST_MANAGERS;
+    public static String TRUSTLIST_BUILDERS;
+    public static String TRUSTLIST_CONTAINERS;
+    public static String TRUSTLIST_ACCESSORS;
+
     private Lang() {
     }
 
@@ -71,6 +92,8 @@ public class Lang {
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
         COMMAND_NO_PERMISSION = config.getString("command-no-permission", "&4You do not have permission for that command");
+        COMMAND_MISSING_PLAYER_NAME = config.getString("command-missing-player-name", "&4Missing player name in command");
+        PLAYER_NOT_FOUND = config.getString("player-not-found", "&4Player not found");
         PLAYER_COMMAND = config.getString("player-command", "&4Player only command");
         VERSION = config.getString("version", "&d{plugin} v{version}");
         RELOAD = config.getString("reload", "&d{plugin} v{version} reloaded");
@@ -121,6 +144,26 @@ public class Lang {
         CREATE_FAILED_CHILD_OVERLAP_PARENT = config.getString("", "&4Your selected area overlaps the parent claim's border");
         CREATE_START_CHILD = config.getString("create-start-child", "&dChild corner set! Use your tool at the location for the opposite corner of this new child");
         CREATE_SUCCESS_CHILD = config.getString("create-success-child", "&dChild claim created! Use /trust to share it with friends");
+
+        TRUST_ERROR_NO_PERMISSION = config.getString("trust-error-no-permission", "&4You can't grant a permission you don't have yourself");
+        TRUST_ERROR_NO_CLAIM = config.getString("trust-error-no-claim", "&4Stand inside the claim where you want to grant permission");
+        TRUST_PUBLIC = config.getString("trust-public", "public");
+        TRUST_BUILD = config.getString("trust-build", "build");
+        TRUST_CONTAINER = config.getString("trust-container", "access containers and animals");
+        TRUST_ACCESS = config.getString("trust-access", "use buttons and levers");
+        TRUST_PERMISSION = config.getString("trust-permission", "manage permissions");
+        TRUST_CURRENT_CLAIM = config.getString("trust-current-claim", "in this claim");
+        TRUST_ALL_CLAIMS = config.getString("trust-all-claims", "in all your claims");
+        TRUST_SUCCESS = config.getString("trust-success", "&dGranted {target} permission to {desc} {location}");
+        UNTRUST_SUCCESS = config.getString("trust-success", "&dRevoked {target}'s trust {location}");
+
+        TRUSTLIST_NO_CLAIM = config.getString("trustlist-no-claim", "&4Stand inside the claim you're curious about");
+        TRUSTLIST_NO_PERMISSION = config.getString("trustlist-no-permission", "&4You don't have access to manage permissions here");
+        TRUSTLIST_HEADER = config.getString("trustlist-header", "&dExplicit permissions here:");
+        TRUSTLIST_MANAGERS = config.getString("trustlist-managers", "manage");
+        TRUSTLIST_BUILDERS = config.getString("trustlist-builders", "build");
+        TRUSTLIST_CONTAINERS = config.getString("trustlist-containers", "containers");
+        TRUSTLIST_ACCESSORS = config.getString("trustlist-accessors", "access");
     }
 
     public static void send(CommandSender recipient, String message) {

@@ -37,17 +37,11 @@ public class ClaimManager {
     }
 
     public Claim getClaim(Location location) {
-        for (Claim topLevelClaim : getTopLevelClaims()) {
-            if (topLevelClaim.getCoordinates().contains(location)) {
-                for (Claim child : topLevelClaim.getChildren()) {
-                    if (child.getCoordinates().contains(location)) {
-                        return child;
-                    }
-                }
-                return topLevelClaim;
-            }
-        }
-        return null;
+        return getTopLevelClaims().stream()
+                .filter(topLevelClaim -> topLevelClaim.getCoordinates().contains(location))
+                .findFirst().map(topLevelClaim -> topLevelClaim.getChildren().stream()
+                        .filter(child -> child.getCoordinates().contains(location))
+                        .findFirst().orElse(topLevelClaim)).orElse(null);
     }
 
     public Collection<Claim> getNearbyClaims(Location location) {
@@ -181,13 +175,8 @@ public class ClaimManager {
             //
             //
 
-            // TODO trusts
-            //
-            //
-
-            // TODO managers
-            //
-            //
+            claim.getTrusts().putAll(config.getTrusts());
+            claim.getManagers().addAll(config.getManagers());
 
             // finally store the claim in the manager
             addTopLevelClaim(claim);
