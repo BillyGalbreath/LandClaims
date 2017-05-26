@@ -2,6 +2,7 @@ package net.pl3x.bukkit.claims.visualization;
 
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
+import net.pl3x.bukkit.claims.visualization.task.VisualizationApplyTask;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;

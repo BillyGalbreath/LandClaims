@@ -35,6 +35,11 @@ public class CmdClaim implements TabExecutor {
             return true;
         }
 
+        if (!sender.hasPermission("command.claim")) {
+            Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
+            return true;
+        }
+
         Player player = (Player) sender;
         if (Config.isWorldDisabled(player.getWorld())) {
             Lang.send(sender, Lang.WORLD_DISABLED);
@@ -115,7 +120,8 @@ public class CmdClaim implements TabExecutor {
 
         // store new claim
         plugin.getClaimManager().createNewClaim(newClaim);
-        Lang.send(player, Lang.CREATE_SUCCESS);
+        Lang.send(player, Lang.CREATE_SUCCESS
+                .replace("{amount}", Integer.toString(pl3xPlayer.getRemainingClaimBlocks())));
 
         pl3xPlayer.showVisualization(newClaim);
 

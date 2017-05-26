@@ -33,6 +33,11 @@ public class Config {
     public static String INSPECT_TOOL_NAME = "Inspect Tool";
     public final static List<String> INSPECT_TOOL_LORE = new ArrayList<>();
 
+    public static int STARTING_BLOCKS;
+    public static int IDLE_THRESHOLD;
+    public static int ACCRUED_PER_HOUR;
+    public static int ACCRUED_IDLE_PERCENT;
+
     private Config() {
     }
 
@@ -47,11 +52,10 @@ public class Config {
 
         ENABLED_WORLDS = config.getStringList("enabled-worlds");
 
-        CLAIM_MIN_WIDTH = config.getInt("claim-min-width", 5);
-        CLAIM_MIN_AREA = config.getInt("claim-min-area", 100);
-
-        MAX_CLAIMS_PER_PLAYER = config.getInt("max-claims-per-player", -1);
-        AUTO_CLAIM_RADIUS = config.getInt("auto-claim-radius", 5);
+        CLAIM_MIN_WIDTH = config.getInt("claims.minimum-width", 5);
+        CLAIM_MIN_AREA = config.getInt("claims.minimum-area", 100);
+        MAX_CLAIMS_PER_PLAYER = config.getInt("claims.maximum-per-player", -1);
+        AUTO_CLAIM_RADIUS = config.getInt("claims.auto-radius", 5);
 
         CLAIM_TOOL_MATERIAL = config.getString("claim-tool.material", "STICK");
         CLAIM_TOOL_DATA = (byte) config.getInt("claim-tool.data", 0);
@@ -69,6 +73,10 @@ public class Config {
         config.getStringList("inspect-tool.lore").forEach(lore ->
                 INSPECT_TOOL_LORE.add(ChatColor.translateAlternateColorCodes('&', lore)));
 
+        STARTING_BLOCKS = config.getInt("claim-blocks.starting-amount", 100);
+        IDLE_THRESHOLD = config.getInt("claim-blocks.idle-threshold", 3);
+        ACCRUED_PER_HOUR = config.getInt("claim-blocks.accrued-per-hour", 100);
+        ACCRUED_IDLE_PERCENT = config.getInt("claim-blocks.accrued-idle-percent", 50);
     }
 
     public static boolean isWorldDisabled(World world) {

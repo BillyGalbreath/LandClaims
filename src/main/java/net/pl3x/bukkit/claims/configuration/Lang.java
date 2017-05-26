@@ -17,12 +17,15 @@ public class Lang {
     public static String WORLD_DISABLED;
 
     public static String TOOLMODE_BASIC;
+    public static String TOOLMODE_CHILD;
+    public static String TOOLMODE_ADMIN;
     public static String REMAINING_CLAIM_BLOCKS;
 
     public static String MUST_HOLD_CLAIM_TOOL;
     public static String MUST_HOLD_CLAIM_TOOL_RADIUS;
     public static String MIN_RADIUS;
     public static String NOT_YOUR_CLAIM;
+    public static String YOU_HAVE_NO_CLAIMS;
 
     public static String ABANDON_CLAIM_MISSING;
     public static String ABANDON_TOP_LEVEL_CLAIM;
@@ -75,12 +78,15 @@ public class Lang {
         WORLD_DISABLED = config.getString("world-disabled", "&4Claims are disabled in this world");
 
         TOOLMODE_BASIC = config.getString("toolmode-basic", "&dTool returned to basic claims mode");
+        TOOLMODE_CHILD = config.getString("toolmode-child", "&dTool changed to child claims mode");
+        TOOLMODE_ADMIN = config.getString("toolmode-admin", "&dTool changed to admin claims mode");
         REMAINING_CLAIM_BLOCKS = config.getString("remaining-claim-blocks", "&dYou may claim up to {amount} more blocks");
 
         MUST_HOLD_CLAIM_TOOL = config.getString("must-hold-claim-tool", "&4You must be holding the claim tool to do that");
         MUST_HOLD_CLAIM_TOOL_RADIUS = config.getString("must-hold-claim-tool-radius", "&4You must be holding a golden shovel when specifying a radius");
         MIN_RADIUS = config.getString("min-radius", "&4Minimum radius is {radius}");
         NOT_YOUR_CLAIM = config.getString("not-your-claim", "&4This isn't your claim");
+        YOU_HAVE_NO_CLAIMS = config.getString("you-have-no-claims", "&4You don't have any land claims");
 
         ABANDON_CLAIM_MISSING = config.getString("abandon-claim-missing", "&4Stand in the claim you want to delete, or consider /AbandonAllClaims");
         ABANDON_TOP_LEVEL_CLAIM = config.getString("abandon-top-level-claim", "&4To delete a child claim, stand inside it. Otherwise, use /AbandonClaim force to delete this claim and all it's children");

@@ -7,8 +7,28 @@ debug-mode: false
 # Language file (for translations)
 language-file: lang-en.yml
 
-# Title timings (in ticks)
-title:
-    fade-in: 10
-    stay: 30
-    fade-out: 20
+enabled-worlds:
+- world
+
+claims:
+    minimum-width: 5
+    minimum-area: 100
+    maximum-per-player: -1
+    auto-radius: 5
+
+claim-blocks:
+    accrued-per-hour: 100
+    accrued-idle-percent: 50
+    idle-threshold: 3
+
+claim-tool:
+    material: STICK
+    data: 0
+    name: ""
+    lore: []
+
+inspect-tool:
+    material: FEATHER
+    data: 0
+    name: ""
+    lore: []

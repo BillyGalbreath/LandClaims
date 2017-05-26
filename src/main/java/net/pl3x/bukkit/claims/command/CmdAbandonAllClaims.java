@@ -10,21 +10,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 
-public class CmdAbandonClaim implements TabExecutor {
+public class CmdAbandonAllClaims implements TabExecutor {
     private final Pl3xClaims plugin;
 
-    public CmdAbandonClaim(Pl3xClaims plugin) {
+    public CmdAbandonAllClaims(Pl3xClaims plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length == 1 && "force".startsWith(args[0].toLowerCase())) {
-            return Collections.singletonList("force");
-        }
         return null;
     }
 
@@ -35,7 +32,7 @@ public class CmdAbandonClaim implements TabExecutor {
             return true;
         }
 
-        if (!sender.hasPermission("command.abandonclaim")) {
+        if (!sender.hasPermission("command.abandonallclaims")) {
             Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
             return true;
         }
@@ -48,35 +45,17 @@ public class CmdAbandonClaim implements TabExecutor {
 
         Pl3xPlayer pl3xPlayer = plugin.getPlayerManager().getPlayer(player);
 
-        // which claim is being abandoned?
-        Claim claim = plugin.getClaimManager().getClaim(player.getLocation());
-        if (claim == null) {
-            Lang.send(sender, Lang.ABANDON_CLAIM_MISSING);
+        Collection<Claim> claims = pl3xPlayer.getClaims();
+        if (claims == null || claims.isEmpty()) {
+            Lang.send(sender, Lang.YOU_HAVE_NO_CLAIMS);
             return true;
         }
 
-        // verify ownership
-        if (!claim.allowEdit(player)) {
-            Lang.send(sender, Lang.NOT_YOUR_CLAIM);
-            return true;
-        }
+        claims.forEach(claim -> plugin.getClaimManager().deleteClaim(claim, true));
 
-        // warn if has children and we're not force deleting a top level claim
-        boolean forceDelete = label.equalsIgnoreCase("abandontoplevelclaim") ||
-                (args.length > 0 && "force".startsWith(args[0].toLowerCase()));
-        if (claim.getChildren().size() > 0 && !forceDelete) {
-            Lang.send(sender, Lang.ABANDON_TOP_LEVEL_CLAIM);
-            return false; // show usage
-        }
-
-        // delete it
-        plugin.getClaimManager().deleteClaim(claim, forceDelete);
-
-        // tell the player how many claim blocks he has left
         Lang.send(sender, Lang.ABANDON_SUCCESS
                 .replace("{remaining}", Integer.toString(pl3xPlayer.getRemainingClaimBlocks())));
 
-        //revert any current visualization
         pl3xPlayer.revertVisualization();
 
         return true;

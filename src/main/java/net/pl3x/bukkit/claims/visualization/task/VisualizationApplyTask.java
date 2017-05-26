@@ -1,6 +1,8 @@
-package net.pl3x.bukkit.claims.visualization;
+package net.pl3x.bukkit.claims.visualization.task;
 
 import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.visualization.Visualization;
+import net.pl3x.bukkit.claims.visualization.VisualizationElement;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 

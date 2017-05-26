@@ -1,7 +1,9 @@
 package net.pl3x.bukkit.claims.listener;
 
 import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.player.Pl3xPlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -21,13 +23,18 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Pl3xPlayer pl3xPlayer = plugin.getPlayerManager().getPlayer(event.getPlayer()); // load player data
+        Player player = event.getPlayer();
+        Pl3xPlayer pl3xPlayer = plugin.getPlayerManager().getPlayer(player); // load player data
         new BukkitRunnable() {
             @Override
             public void run() {
                 pl3xPlayer.updateLocation(); // wait 20 ticks to update location for spawn relocation
             }
         }.runTaskLater(plugin, 20);
+
+        if (!player.hasPlayedBefore()) {
+            pl3xPlayer.setClaimBlocks(Config.STARTING_BLOCKS);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

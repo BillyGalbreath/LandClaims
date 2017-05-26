@@ -21,15 +21,19 @@ commands:
         aliases:
         - unclaim
         - declaim
-        - removeclaim
         - disclaim
+        - removeclaim
         - abandontoplevelclaim
         - abandonparentclaim
     abandonallclaims:
-        description:
+        description: Deletes ALL your claims
         permission: command.abandonallclaims
         usage: /<command>
-        aliases: []
+        aliases:
+        - unclaimall
+        - declaimall
+        - disclaimall
+        - removeallclaims
 
     trust:
         description:
@@ -57,11 +61,29 @@ commands:
         usage: /<command>
         aliases: []
 
-    childclaims:
+    adminclaims: Switches the claim tool to admin mode, used to create admin claims
         description:
+        permission: command.adminclaims
+        usage: /<command>
+        aliases:
+        - adminclaim
+        - adminmode
+    basicclaims: Switches the claim tool to basic mode, used to create top level claims
+        description:
+        permission: command.basicclaims
+        usage: /<command>
+        aliases:
+        - basicclaim
+        - basicmode
+    childclaims:
+        description: Switches the claim tool to child mode, used to create child claims
         permission: command.childclaims
         usage: /<command>
-        aliases: []
+        aliases:
+        - childclaim
+        - childmode
+        - subdivideclaims
+        - subdivideclaim
 
     adjustbonusclaimblocks:
         description:
@@ -100,16 +122,6 @@ commands:
         usage: /<command>
         aliases: []
 
-    adminclaims:
-        description:
-        permission: command.adminclaims
-        usage: /<command>
-        aliases: []
-    basicclaims:
-        description:
-        permission: command.basicclaims
-        usage: /<command>
-        aliases: []
     extendclaim:
         description:
         permission: command.extendclaim
@@ -175,6 +187,18 @@ commands:
         - claims
 
 permissions:
+    command.claim:
+        description: Allows to create claims
+        default: op
+    command.abandonclaim:
+        description: Allows to abandon claims
+        default: op
+    command.abandonallclaims:
+        description: Allows to abandon all claims
+        default: op
+    command.childclaims:
+        description: Allows to create child claims
+        default: op
     command.pl3xclaims:
         description: Allows reload configs
         default: op
@@ -188,10 +212,6 @@ permissions:
         default: op
     claims.deleteclaims:
         description: Allows to delete any non-admin claims anywhere
-        default: op
-
-    claims.create:
-        description: Allows to create claims
         default: op
 
     claims.visualize:

@@ -124,7 +124,7 @@ public class ClaimToolListener implements Listener {
                     (player.hasPermission("claims.deleteclaims") ||
                             player.hasPermission("claims.inspect.seeinactivity"))) {
                 Lang.send(player, Lang.INSPECT_OWNER_INACTIVITY
-                        .replace("{}", Long.toString((new Date().getTime() -
+                        .replace("{amount}", Long.toString((new Date().getTime() -
                                 new Date(Bukkit.getOfflinePlayer(claim.getParent() != null ?
                                         claim.getParent().getOwner() :
                                         claim.getOwner()).getLastPlayed())
@@ -134,7 +134,7 @@ public class ClaimToolListener implements Listener {
         }
 
         if (Config.isClaimTool(player.getInventory().getItemInMainHand())) {
-            if (!player.hasPermission("claims.create")) {
+            if (!player.hasPermission("command.claim")) {
                 Lang.send(player, Lang.NO_CLAIM_CREATE_PERMISSION);
                 return; // no permission to create/resize claims
             }
@@ -158,10 +158,11 @@ public class ClaimToolListener implements Listener {
                 int newArea = newWidthX * newWidthZ;
 
                 // check top level claim size rules and permissions
-                if (clickedClaim.getParent() == null) {
+                // admin claims bypass this check
+                if (pl3xPlayer.getResizingClaim().getParent() == null && !pl3xPlayer.getResizingClaim().isAdminClaim()) {
                     // check minimum size requirements if shrinking
-                    // admin claims and players with "adminclaims" permissions bypass this check
-                    if (!player.hasPermission("claims.adminclaims") && !clickedClaim.isAdminClaim() &&
+                    // players with "adminclaims" permissions bypass this check
+                    if (!player.hasPermission("claims.adminclaims") &&
                             (newWidthX < coords.getWidthX() || newWidthZ < coords.getWidthZ())) {
                         if (newWidthX < Config.CLAIM_MIN_WIDTH || newWidthZ < Config.CLAIM_MIN_WIDTH) {
                             Lang.send(player, Lang.RESIZE_FAILED_TOO_NARROW
@@ -176,12 +177,11 @@ public class ClaimToolListener implements Listener {
                     }
 
                     // check if player has enough claim blocks
-                    // admin claims bypass this check
-                    if (!clickedClaim.isAdminClaim() && clickedClaim.isOwner(player)) {
+                    if (pl3xPlayer.getResizingClaim().isOwner(player)) {
                         int remaining = pl3xPlayer.getRemainingClaimBlocks() + coords.getArea() - newArea;
                         if (remaining < 0) {
                             Lang.send(player, Lang.RESIZE_FAILED_NEED_MORE_BLOCKS
-                                    .replace("{amount}", Integer.toString(remaining)));
+                                    .replace("{amount}", Integer.toString(-remaining)));
                             return;
                         }
                     }
@@ -189,7 +189,7 @@ public class ClaimToolListener implements Listener {
 
                 Coordinates newCoords = new Coordinates(coords.getWorld(), minX, maxX, minZ, maxZ);
                 for (Claim topLevelClaim : plugin.getClaimManager().getTopLevelClaims()) {
-                    if (topLevelClaim == clickedClaim) {
+                    if (topLevelClaim == pl3xPlayer.getResizingClaim()) {
                         continue;
                     }
                     if (topLevelClaim.getCoordinates().overlaps(newCoords)) {
@@ -199,7 +199,7 @@ public class ClaimToolListener implements Listener {
                     }
                 }
 
-                ResizeClaimEvent resizeClaimEvent = new ResizeClaimEvent(player, clickedClaim);
+                ResizeClaimEvent resizeClaimEvent = new ResizeClaimEvent(player, pl3xPlayer.getResizingClaim());
                 Bukkit.getPluginManager().callEvent(resizeClaimEvent);
                 if (resizeClaimEvent.isCancelled()) {
                     return; // cancelled by plugin
@@ -207,13 +207,13 @@ public class ClaimToolListener implements Listener {
 
                 // resize the claim
                 coords.resize(minX, maxX, minZ, maxZ);
-                ClaimConfig claimConfig = ClaimConfig.getConfig(plugin, clickedClaim.getId());
+                ClaimConfig claimConfig = ClaimConfig.getConfig(plugin, pl3xPlayer.getResizingClaim().getId());
                 claimConfig.setCoordinates(coords);
                 claimConfig.save();
 
                 // calculate remaining claim blocks (for display purposes)
                 int remainingClaimBlocks = pl3xPlayer.getRemainingClaimBlocks();
-                UUID owner = clickedClaim.getParent() != null ? clickedClaim.getParent().getOwner() : clickedClaim.getOwner();
+                UUID owner = pl3xPlayer.getResizingClaim().getParent() != null ? pl3xPlayer.getResizingClaim().getParent().getOwner() : pl3xPlayer.getResizingClaim().getOwner();
                 if (!player.getUniqueId().equals(owner)) {
                     plugin.getPlayerManager().getPlayer(owner).getRemainingClaimBlocks();
                     if (!Bukkit.getOfflinePlayer(owner).isOnline()) {
@@ -223,7 +223,7 @@ public class ClaimToolListener implements Listener {
 
                 Lang.send(player, Lang.RESIZE_SUCCESS
                         .replace("{amount}", Integer.toString(remainingClaimBlocks)));
-                pl3xPlayer.showVisualization(clickedClaim);
+                pl3xPlayer.showVisualization(pl3xPlayer.getResizingClaim());
 
                 pl3xPlayer.setLastToolLocation(null);
                 pl3xPlayer.setResizingClaim(null);
@@ -273,6 +273,8 @@ public class ClaimToolListener implements Listener {
 
                     // finish creating child
                     Coordinates newChildCoords = new Coordinates(pl3xPlayer.getLastToolLocation(), clickedBlock.getLocation());
+
+                    // check if enough claim blocks
 
                     // check if child fits completely inside parent
                     if (!pl3xPlayer.getParentClaim().getCoordinates().contains(newChildCoords)) {
@@ -358,7 +360,7 @@ public class ClaimToolListener implements Listener {
             // check dimensions and if player has enough claim blocks
             boolean isAdminClaim = pl3xPlayer.getToolMode() == ToolMode.ADMIN;
             Coordinates newCoords = new Coordinates(pl3xPlayer.getLastToolLocation(), clickedBlock.getLocation());
-            if (isAdminClaim) {
+            if (!isAdminClaim) {
                 if (newCoords.getWidthX() < Config.CLAIM_MIN_WIDTH ||
                         newCoords.getWidthZ() < Config.CLAIM_MIN_WIDTH) {
                     Lang.send(player, Lang.CREATE_FAILED_TOO_NARROW
@@ -372,7 +374,7 @@ public class ClaimToolListener implements Listener {
                 }
 
                 int remainingBlocks = pl3xPlayer.getRemainingClaimBlocks();
-                if (newCoords.getArea() < remainingBlocks) {
+                if (newCoords.getArea() > remainingBlocks) {
                     Lang.send(player, Lang.CREATE_FAILED_NEED_MORE_BLOCKS
                             .replace("{required}", Integer.toString(newCoords.getArea() - remainingBlocks)));
                     return;
@@ -400,7 +402,8 @@ public class ClaimToolListener implements Listener {
             }
 
             plugin.getClaimManager().createNewClaim(newClaim);
-            Lang.send(player, Lang.CREATE_SUCCESS);
+            Lang.send(player, Lang.CREATE_SUCCESS
+                    .replace("{amount}", Integer.toString(pl3xPlayer.getRemainingClaimBlocks())));
 
             pl3xPlayer.showVisualization(newClaim);
 
