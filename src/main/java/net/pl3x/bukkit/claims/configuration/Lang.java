@@ -67,6 +67,8 @@ public class Lang {
     public static String NO_CLAIM_CREATE_PERMISSION;
 
     public static String RESIZE_FAILED_OVERLAP;
+    public static String RESIZE_FAILED_CHILD_OVERLAP;
+    public static String RESIZE_FAILED_CHILD_OVERLAP_PARENT;
     public static String RESIZE_FAILED_NEED_MORE_BLOCKS;
     public static String RESIZE_FAILED_TOO_NARROW;
     public static String RESIZE_FAILED_TOO_SMALL;
@@ -194,6 +196,8 @@ public class Lang {
         NO_CLAIM_CREATE_PERMISSION = config.getString("no-claim-create-permission", "&You don't have permission to claim land");
 
         RESIZE_FAILED_OVERLAP = config.getString("resize-failed-overlap", "&4You can't resize the claim here because it will overlap another claim");
+        RESIZE_FAILED_CHILD_OVERLAP = config.getString("resize-failed-child-overlap", "&4Your selected area overlaps another child");
+        RESIZE_FAILED_CHILD_OVERLAP_PARENT = config.getString("resize-failed-child-overlap-parent", "&4Your selected area overlaps the parent claim's border");
         RESIZE_FAILED_NEED_MORE_BLOCKS = config.getString("resize-failed-need-more-blocks", "&4You don't have enough blocks for this size. You need {amount} more");
         RESIZE_FAILED_TOO_NARROW = config.getString("resize-failed-too-narrow", "&4This new size would be too s`ll. Claims must be at least {minimum} blocks wide");
         RESIZE_FAILED_TOO_SMALL = config.getString("resize-failed-too-small", "&4This claim would be too small. Any claim must use at least {minimum} total claim blocks");
@@ -210,7 +214,7 @@ public class Lang {
         CREATE_SUCCESS = config.getString("create-success", "&dClaim created! {amount} available claim blocks remaining. Use /trust to share it with friends");
         CREATE_FAILED_CHILD = config.getString("create-failed-child", "&4You can't create a child here because it would overlap another child");
         CREATE_FAILED_CHILD_OVERLAP = config.getString("create-failed-child-overlap", "&4Your selected area overlaps another child");
-        CREATE_FAILED_CHILD_OVERLAP_PARENT = config.getString("", "&4Your selected area overlaps the parent claim's border");
+        CREATE_FAILED_CHILD_OVERLAP_PARENT = config.getString("create-failed-child-overlap-parent", "&4Your selected area overlaps the parent claim's border");
         CREATE_START_CHILD = config.getString("create-start-child", "&dChild corner set! Use your tool at the location for the opposite corner of this new child");
         CREATE_SUCCESS_CHILD = config.getString("create-success-child", "&dChild claim created! Use /trust to share it with friends");
 

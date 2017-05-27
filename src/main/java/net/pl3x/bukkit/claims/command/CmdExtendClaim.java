@@ -3,13 +3,8 @@ package net.pl3x.bukkit.claims.command;
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.claim.Coordinates;
-import net.pl3x.bukkit.claims.configuration.ClaimConfig;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
-import net.pl3x.bukkit.claims.event.ResizeClaimEvent;
-import net.pl3x.bukkit.claims.player.Pl3xPlayer;
-import net.pl3x.bukkit.claims.visualization.VisualizationType;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -18,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.List;
-import java.util.UUID;
 
 public class CmdExtendClaim implements TabExecutor {
     private final Pl3xClaims plugin;
@@ -125,81 +119,8 @@ public class CmdExtendClaim implements TabExecutor {
             }
         }
 
-        Pl3xPlayer pl3xPlayer = plugin.getPlayerManager().getPlayer(player);
-        pl3xPlayer.setResizingClaim(claim);
-
-        Coordinates newCoords = new Coordinates(min.getWorld(), newMinX, newMinZ, newMaxX, newMaxZ);
-
-        // check size rules
-        // admin claims bypass this check
-        if (claim.getParent() == null && !claim.isAdminClaim()) {
-            // check minimum size requirements if shrinking
-            if (!player.hasPermission("command.adminclaims") &&
-                    (newCoords.getWidthX() < claim.getCoordinates().getWidthX() ||
-                            newCoords.getWidthZ() < claim.getCoordinates().getWidthZ())) {
-                if (newCoords.getWidthX() < Config.CLAIMS_MIN_WIDTH || newCoords.getWidthZ() < Config.CLAIMS_MIN_WIDTH) {
-                    Lang.send(sender, Lang.RESIZE_FAILED_TOO_NARROW
-                            .replace("{minimum}", Integer.toString(Config.CLAIMS_MIN_WIDTH)));
-                    return true;
-                }
-                if (newCoords.getArea() < Config.CLAIMS_MIN_AREA) {
-                    Lang.send(sender, Lang.RESIZE_FAILED_TOO_SMALL
-                            .replace("{minimum}", Integer.toString(Config.CLAIMS_MIN_AREA)));
-                    return true;
-                }
-
-            }
-
-            // check if player has enough claim blocks
-            int remaining = pl3xPlayer.getRemainingClaimBlocks() + claim.getCoordinates().getArea() - newCoords.getArea();
-            if (remaining < 0) {
-                Lang.send(sender, Lang.RESIZE_FAILED_NEED_MORE_BLOCKS
-                        .replace("{amount}", Integer.toString(-remaining)));
-                return true;
-            }
-        }
-
-        // check for overlapping other claims
-        for (Claim topLevelClaim : plugin.getClaimManager().getTopLevelClaims()) {
-            if (topLevelClaim == claim) {
-                continue;
-            }
-            if (topLevelClaim.getCoordinates().overlaps(newCoords)) {
-                Lang.send(sender, Lang.RESIZE_FAILED_OVERLAP);
-                pl3xPlayer.showVisualization(topLevelClaim, VisualizationType.ERROR);
-                return true;
-            }
-        }
-
-        ResizeClaimEvent resizeClaimEvent = new ResizeClaimEvent(player, claim);
-        Bukkit.getPluginManager().callEvent(resizeClaimEvent);
-        if (resizeClaimEvent.isCancelled()) {
-            return true; // cancelled by another plugin
-        }
-
-        // resize the claim
-        claim.getCoordinates().resize(newCoords);
-        ClaimConfig claimConfig = ClaimConfig.getConfig(plugin, claim.getId());
-        claimConfig.setCoordinates(newCoords);
-        claimConfig.save();
-
-        int remaining = pl3xPlayer.getRemainingClaimBlocks();
-        UUID owner = claim.getParent() != null ? claim.getParent().getOwner() : claim.getOwner();
-        if (!player.getUniqueId().equals(owner)) {
-            remaining = plugin.getPlayerManager().getPlayer(owner).getRemainingClaimBlocks();
-            if (!Bukkit.getOfflinePlayer(owner).isOnline()) {
-                plugin.getPlayerManager().unload(owner);
-            }
-        }
-
-        Lang.send(player, Lang.RESIZE_SUCCESS
-                .replace("{amount}", Integer.toString(remaining)));
-        pl3xPlayer.showVisualization(claim);
-
-        pl3xPlayer.setLastToolLocation(null);
-        pl3xPlayer.setResizingClaim(null);
-        pl3xPlayer.setParentClaim(null);
-
+        plugin.getClaimManager().resizeClaim(player, claim,
+                new Coordinates(min.getWorld(), newMinX, newMinZ, newMaxX, newMaxZ));
         return true;
     }
 }

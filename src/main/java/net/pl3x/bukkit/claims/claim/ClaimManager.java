@@ -2,8 +2,15 @@ package net.pl3x.bukkit.claims.claim;
 
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.configuration.ClaimConfig;
+import net.pl3x.bukkit.claims.configuration.Config;
+import net.pl3x.bukkit.claims.configuration.Lang;
+import net.pl3x.bukkit.claims.event.ResizeClaimEvent;
+import net.pl3x.bukkit.claims.player.Pl3xPlayer;
+import net.pl3x.bukkit.claims.visualization.VisualizationType;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.Collection;
@@ -63,11 +70,14 @@ public class ClaimManager {
 
     public void addTopLevelClaim(Claim claim) {
         topLevelClaims.put(claim.getId(), claim);
-        claim.getCoordinates().getChunkHashes(plugin).forEach(hash ->
-                chunks.computeIfAbsent(hash, k -> new HashSet<>()).add(claim));
+        calculateChunkHashes(claim);
     }
 
     public void createNewClaim(Claim claim) {
+
+
+
+
         if (claim.getParent() == null) {
             addTopLevelClaim(claim);
         } else {
@@ -80,6 +90,100 @@ public class ClaimManager {
         config.setOwner(claim.getOwner());
         config.setCoordinates(claim.getCoordinates());
         config.save();
+    }
+
+    public void resizeClaim(Player player, Claim claim, Coordinates newCoords) {
+        Pl3xPlayer pl3xPlayer = plugin.getPlayerManager().getPlayer(player);
+        Coordinates oldCoords = claim.getCoordinates();
+
+        // check top level claim size rules and permissions
+        // admin claims bypass this check
+        if (claim.getParent() == null && !claim.isAdminClaim()) {
+            // check minimum size requirements if shrinking
+            // players with "adminclaims" permissions bypass this check
+            if (!player.hasPermission("command.adminclaims") &&
+                    (newCoords.getWidthX() < oldCoords.getWidthX() || newCoords.getWidthZ() < oldCoords.getWidthZ())) {
+                if (newCoords.getWidthX() < Config.CLAIMS_MIN_WIDTH || newCoords.getWidthZ() < Config.CLAIMS_MIN_WIDTH) {
+                    Lang.send(player, Lang.RESIZE_FAILED_TOO_NARROW
+                            .replace("{minimum}", Integer.toString(Config.CLAIMS_MIN_WIDTH)));
+                    return;
+                }
+                if (newCoords.getArea() < Config.CLAIMS_MIN_AREA) {
+                    Lang.send(player, Lang.RESIZE_FAILED_TOO_SMALL
+                            .replace("{minimum}", Integer.toString(Config.CLAIMS_MIN_AREA)));
+                    return;
+                }
+            }
+
+            // check if player has enough claim blocks
+            if (claim.isOwner(player)) {
+                int remaining = pl3xPlayer.getRemainingClaimBlocks() + oldCoords.getArea() - newCoords.getArea();
+                if (remaining < 0) {
+                    Lang.send(player, Lang.RESIZE_FAILED_NEED_MORE_BLOCKS
+                            .replace("{amount}", Integer.toString(-remaining)));
+                    return;
+                }
+            }
+        }
+
+        // check for overlaps
+        if (claim.getParent() == null) {
+            // check for overlapping other top claims
+            for (Claim topLevelClaim : plugin.getClaimManager().getTopLevelClaims()) {
+                if (topLevelClaim == claim) {
+                    continue;
+                }
+                if (topLevelClaim.getCoordinates().overlaps(newCoords)) {
+                    Lang.send(player, Lang.RESIZE_FAILED_OVERLAP);
+                    pl3xPlayer.showVisualization(topLevelClaim, VisualizationType.ERROR);
+                    return;
+                }
+            }
+        } else {
+            // check if overlapping parent boundary
+            if (!claim.getParent().getCoordinates().contains(newCoords)) {
+                Lang.send(player, Lang.RESIZE_FAILED_CHILD_OVERLAP_PARENT);
+                return;
+            }
+
+            // check for overlapping other children
+            for (Claim child : claim.getParent().getChildren()) {
+                if (child.getCoordinates().overlaps(newCoords)) {
+                    Lang.send(player, Lang.RESIZE_FAILED_CHILD_OVERLAP);
+                    return;
+                }
+            }
+        }
+
+        ResizeClaimEvent resizeClaimEvent = new ResizeClaimEvent(player, claim, newCoords);
+        Bukkit.getPluginManager().callEvent(resizeClaimEvent);
+        if (resizeClaimEvent.isCancelled()) {
+            return; // cancelled by plugin
+        }
+
+        // resize the claim
+        oldCoords.resize(newCoords);
+        calculateChunkHashes(claim);
+        ClaimConfig claimConfig = ClaimConfig.getConfig(plugin, claim.getId());
+        claimConfig.setCoordinates(oldCoords);
+        claimConfig.save();
+
+        int remaining = pl3xPlayer.getRemainingClaimBlocks();
+        UUID owner = claim.getParent() != null ? claim.getParent().getOwner() : claim.getOwner();
+        if (!player.getUniqueId().equals(owner)) {
+            remaining = plugin.getPlayerManager().getPlayer(owner).getRemainingClaimBlocks();
+            if (!Bukkit.getOfflinePlayer(owner).isOnline()) {
+                plugin.getPlayerManager().unload(owner);
+            }
+        }
+
+        Lang.send(player, Lang.RESIZE_SUCCESS
+                .replace("{amount}", Integer.toString(remaining)));
+        pl3xPlayer.showVisualization(claim);
+
+        pl3xPlayer.setLastToolLocation(null);
+        pl3xPlayer.setResizingClaim(null);
+        pl3xPlayer.setParentClaim(null);
     }
 
     public boolean deleteClaim(Claim claim) {
@@ -97,8 +201,7 @@ public class ClaimManager {
             }
             children.forEach(this::deleteClaim); // delete all child claims
         }
-        chunks.forEach((k, v) -> v.removeIf(c -> c.getId() == claim.getId())); // remove claim's chunk hashes
-        chunks.entrySet().removeIf(e -> e.getValue().isEmpty()); // remove empty chunk hashes from memory
+        removeChunkHashes(claim);
         ClaimConfig.getConfig(plugin, claim.getId()).delete(); // delete the file
         topLevelClaims.remove(claim.getId()); // remove from memory
         return true;
@@ -191,6 +294,17 @@ public class ClaimManager {
     public void unloadClaims() {
         topLevelClaims.clear();
         ClaimConfig.removeAll();
+    }
+
+    public void removeChunkHashes(Claim claim) {
+        chunks.forEach((k, v) -> v.removeIf(c -> c.getId() == claim.getId())); // remove claim's chunk hashes
+        chunks.entrySet().removeIf(e -> e.getValue().isEmpty()); // remove empty chunk hashes from memory
+    }
+
+    public void calculateChunkHashes(Claim claim) {
+        removeChunkHashes(claim);
+        claim.getCoordinates().getChunkHashes(plugin).forEach(hash ->
+                chunks.computeIfAbsent(hash, k -> new HashSet<>()).add(claim));
     }
 
     public long getChunkHash(long x, long z) {
