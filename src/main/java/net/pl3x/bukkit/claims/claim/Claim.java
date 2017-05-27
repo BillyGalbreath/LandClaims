@@ -12,10 +12,10 @@ import java.util.UUID;
 
 public class Claim {
     private final long id;
-    private final UUID owner;
+    private UUID owner;
     private final Claim parent;
     private final Coordinates coordinates;
-    private final boolean isAdminClaim;
+    private boolean isAdminClaim;
     private final Map<FlagType, Boolean> flags = new HashMap<>();
     private final Map<UUID, TrustType> trusts = new HashMap<>();
     private final Collection<UUID> managers = new HashSet<>();
@@ -37,6 +37,10 @@ public class Claim {
         return owner;
     }
 
+    public void setOwner(UUID owner) {
+        this.owner = owner;
+    }
+
     public boolean isOwner(Player player) {
         return isOwner(player.getUniqueId());
     }
@@ -55,6 +59,10 @@ public class Claim {
 
     public boolean isAdminClaim() {
         return isAdminClaim;
+    }
+
+    public void setAdminClaim(boolean isAdminClaim) {
+        this.isAdminClaim = isAdminClaim;
     }
 
     public Boolean getFlag(FlagType flag) {

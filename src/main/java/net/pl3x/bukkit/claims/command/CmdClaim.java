@@ -49,18 +49,18 @@ public class CmdClaim implements TabExecutor {
         Pl3xPlayer pl3xPlayer = plugin.getPlayerManager().getPlayer(player);
 
         // check max claims per player limit
-        if (Config.MAX_CLAIMS_PER_PLAYER > 0 &&
+        if (Config.CLAIMS_MAX_PER_PLAYER > 0 &&
                 !player.hasPermission("claims.overridelimits") &&
-                pl3xPlayer.getClaims().size() >= Config.MAX_CLAIMS_PER_PLAYER) {
+                pl3xPlayer.getClaims().size() >= Config.CLAIMS_MAX_PER_PLAYER) {
             Lang.send(sender, Lang.CREATE_FAILED_CLAIM_LIMIT
-                    .replace("{limit}", Integer.toString(Config.MAX_CLAIMS_PER_PLAYER)));
+                    .replace("{limit}", Integer.toString(Config.CLAIMS_MAX_PER_PLAYER)));
             return true;
         }
 
         // default is chest claim radius, unless -1
-        int radius = Config.AUTO_CLAIM_RADIUS;
+        int radius = Config.CLAIMS_AUTO_RADIUS;
         if (radius < 0) {
-            radius = (int) Math.ceil(Math.sqrt(Config.CLAIM_MIN_AREA) / 2);
+            radius = (int) Math.ceil(Math.sqrt(Config.CLAIMS_MIN_AREA) / 2);
         }
 
         // allow for specifying the radius

@@ -10,6 +10,8 @@ language-file: lang-en.yml
 enabled-worlds:
 - world
 
+supply-claimbook: true
+
 claims:
     minimum-width: 5
     minimum-area: 100

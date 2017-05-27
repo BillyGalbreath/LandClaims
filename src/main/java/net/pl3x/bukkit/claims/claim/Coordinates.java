@@ -27,6 +27,11 @@ public class Coordinates {
         maxZ = Math.max(z1, z2);
     }
 
+    public void resize(Coordinates coords) {
+        resize(coords.getMinX(), coords.getMinZ(),
+                coords.getMaxX(), coords.getMaxZ());
+    }
+
     public void resize(int x1, int x2, int z1, int z2) {
         minX = Math.min(x1, x2);
         minZ = Math.min(z1, z2);

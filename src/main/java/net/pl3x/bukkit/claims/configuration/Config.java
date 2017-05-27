@@ -17,11 +17,12 @@ public class Config {
 
     public static List<String> ENABLED_WORLDS = new ArrayList<>();
 
-    public static int CLAIM_MIN_WIDTH = 5;
-    public static int CLAIM_MIN_AREA = 100;
+    public static boolean SUPPLY_CLAIMBOOK = true;
 
-    public static int MAX_CLAIMS_PER_PLAYER = -1;
-    public static int AUTO_CLAIM_RADIUS = 5;
+    public static int CLAIMS_MIN_WIDTH = 5;
+    public static int CLAIMS_MIN_AREA = 100;
+    public static int CLAIMS_MAX_PER_PLAYER = -1;
+    public static int CLAIMS_AUTO_RADIUS = 5;
 
     public static String CLAIM_TOOL_MATERIAL = "STICK";
     public static byte CLAIM_TOOL_DATA = (byte) 0;
@@ -52,10 +53,12 @@ public class Config {
 
         ENABLED_WORLDS = config.getStringList("enabled-worlds");
 
-        CLAIM_MIN_WIDTH = config.getInt("claims.minimum-width", 5);
-        CLAIM_MIN_AREA = config.getInt("claims.minimum-area", 100);
-        MAX_CLAIMS_PER_PLAYER = config.getInt("claims.maximum-per-player", -1);
-        AUTO_CLAIM_RADIUS = config.getInt("claims.auto-radius", 5);
+        SUPPLY_CLAIMBOOK = config.getBoolean("supply-claimbook", true);
+
+        CLAIMS_MIN_WIDTH = config.getInt("claims.minimum-width", 5);
+        CLAIMS_MIN_AREA = config.getInt("claims.minimum-area", 100);
+        CLAIMS_MAX_PER_PLAYER = config.getInt("claims.maximum-per-player", -1);
+        CLAIMS_AUTO_RADIUS = config.getInt("claims.auto-radius", 5);
 
         CLAIM_TOOL_MATERIAL = config.getString("claim-tool.material", "STICK");
         CLAIM_TOOL_DATA = (byte) config.getInt("claim-tool.data", 0);

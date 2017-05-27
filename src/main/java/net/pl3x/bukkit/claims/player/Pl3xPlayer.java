@@ -27,6 +27,7 @@ public class Pl3xPlayer extends PlayerConfig {
     private Location lastToolLocation;
     private Claim inClaim;
     private boolean pendingRescue = false;
+    private boolean ignoreClaims = false;
     private Visualization visualization;
     private AccrueClaimBlocksTask accrueClaimBlocksTask;
 
@@ -163,6 +164,14 @@ public class Pl3xPlayer extends PlayerConfig {
 
     public void setPendingRescue(boolean pendingRescue) {
         this.pendingRescue = pendingRescue;
+    }
+
+    public boolean isIgnoringClaims() {
+        return ignoreClaims;
+    }
+
+    public void setIgnoreClaims(boolean ignoreClaims) {
+        this.ignoreClaims = ignoreClaims;
     }
 
     public Visualization getVisualization() {

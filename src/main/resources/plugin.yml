@@ -5,15 +5,15 @@ description: ${project.artifactId} Paper Plugin
 author: BillyGalbreath
 
 commands:
-    claim:
-        description: Creates a claim centered around your current location
-        permission: command.claim
-        usage: /<command> (radius)
+    abandonallclaims:
+        description: Deletes ALL your claims
+        permission: command.abandonallclaims
+        usage: /<command>
         aliases:
-        - makeclaim
-        - createclaim
-        - newclaim
-
+        - unclaimall
+        - declaimall
+        - disclaimall
+        - removeallclaims
     abandonclaim:
         description: Deletes a claim
         permission: command.abandonclaim
@@ -25,16 +25,96 @@ commands:
         - removeclaim
         - abandontoplevelclaim
         - abandonparentclaim
-    abandonallclaims:
-        description: Deletes ALL your claims
-        permission: command.abandonallclaims
+    adjustaccruedblocks:
+        description: Manage players' accrued claim blocks
+        permission: command.adjustaccruedblocks
+        usage: /<command> [player] [amount]
+        aliases:
+        - acb
+        - adjustclaimblocks
+    adjustbonusblocks:
+        description: Manage players' bonus claim blocks
+        permission: command.adjustbonusblocks
+        usage: /<command> [player] [amount]
+        aliases:
+        - abb
+        - adjustbonusclaimblocks
+    adminclaims:
+        description: Switches the claim tool to admin mode, used to create admin claims
+        permission: command.adminclaims
         usage: /<command>
         aliases:
-        - unclaimall
-        - declaimall
-        - disclaimall
-        - removeallclaims
-
+        - adminclaim
+        - adminmode
+    basicclaims:
+        description: Switches the claim tool to basic mode, used to create top level claims
+        permission: command.basicclaims
+        usage: /<command>
+        aliases:
+        - basicclaim
+        - basicmode
+    childclaims:
+        description: Switches the claim tool to child mode, used to create child claims
+        permission: command.childclaims
+        usage: /<command>
+        aliases:
+        - childclaim
+        - childmode
+        - subdivideclaims
+        - subdivideclaim
+    claim:
+        description: Creates a claim centered around your current location
+        permission: command.claim
+        usage: /<command> (radius)
+        aliases:
+        - makeclaim
+        - createclaim
+        - newclaim
+    claimbook:
+        description: Gives a player a manual about claiming land
+        permission: command.claimbook
+        usage: /<command> (player)
+        aliases:
+        - giveclaimbook
+    claimslist:
+        description: List information about a player's claim blocks and claims
+        permission: command.claimslist
+        usage: /<command> (player)
+        aliases:
+        - claimlist
+        - listclaims
+        - adminclaimslist
+    extendclaim:
+        description: Resizes the land claim you're standing in by pushing or pulling its boundary in the direction you're facing
+        permission: command.extendclaim
+        usage: /<command> [amount]
+        aliases:
+        - expandclaim
+        - resizeclaim
+    ignoreclaims:
+        description: Toggle ignore claims mode
+        permission: command.ignoreclaims
+        usage: /<command>
+        aliases: []
+    pl3xclaims:
+        description: Reload configs
+        permission: command.pl3xclaims
+        usage: /<command> (reload)
+        aliases:
+        - claims
+    transferclaim:
+        description: Transfer a claim's owner
+        permission: command.transferclaim
+        usage: /<command>
+        aliases:
+        - giveclaim
+    trapped:
+        description: Rescues you to nearby unclaimed land
+        permission: command.trapped
+        usage: /<command>
+        aliases:
+        - rescue
+        - unstuck
     trust:
         description: Manage your claim(s) trustlist
         permission: command.trust
@@ -53,45 +133,8 @@ commands:
         - listtrust
         - listtrusts
 
-    adminclaims: Switches the claim tool to admin mode, used to create admin claims
-        description:
-        permission: command.adminclaims
-        usage: /<command>
-        aliases:
-        - adminclaim
-        - adminmode
-    basicclaims: Switches the claim tool to basic mode, used to create top level claims
-        description:
-        permission: command.basicclaims
-        usage: /<command>
-        aliases:
-        - basicclaim
-        - basicmode
-    childclaims:
-        description: Switches the claim tool to child mode, used to create child claims
-        permission: command.childclaims
-        usage: /<command>
-        aliases:
-        - childclaim
-        - childmode
-        - subdivideclaims
-        - subdivideclaim
 
-    adjustbonusclaimblocks:
-        description:
-        permission: command.adjustbonusclaimblocks
-        usage: /<command>
-        aliases: []
-    adjustbonusclaimblocksall:
-        description:
-        permission: command.adjustbonusclaimblocksall
-        usage: /<command>
-        aliases: []
-    setaccruedclaimblocks:
-        description:
-        permission: command.setaccruedclaimblocks
-        usage: /<command>
-        aliases: []
+
 
     deleteclaim:
         description:
@@ -114,72 +157,6 @@ commands:
         usage: /<command>
         aliases: []
 
-    extendclaim:
-        description:
-        permission: command.extendclaim
-        usage: /<command>
-        aliases: []
-
-    buyclaimblocks:
-        description:
-        permission: command.buyclaimblocks
-        usage: /<command>
-        aliases: []
-    sellclaimblocks:
-        description:
-        permission: command.sellclaimblocks
-        usage: /<command>
-        aliases: []
-
-    trapped:
-        description: Rescues you to nearby unclaimed land
-        permission: command.trapped
-        usage: /<command>
-        aliases:
-        - rescue
-        - unstuck
-
-    ignoreclaims:
-        description:
-        permission: command.ignoreclaims
-        usage: /<command>
-        aliases: []
-
-    claimslist:
-        description:
-        permission: command.claimslist
-        usage: /<command>
-        aliases: []
-    adminclaimslist:
-        description:
-        permission: command.adminclaimslist
-        usage: /<command>
-        aliases: []
-
-    transferclaim:
-        description:
-        permission: command.transferclaim
-        usage: /<command>
-        aliases: []
-
-    claimbook:
-        description:
-        permission: command.claimbook
-        usage: /<command>
-        aliases: []
-    claimkit:
-        description:
-        permission: command.claimkit
-        usage: /<command>
-        aliases: []
-
-    pl3xclaims:
-        description: Reload configs
-        permission: command.pl3xclaims
-        usage: /<command> (reload)
-        aliases:
-        - claims
-
 permissions:
     command.claim:
         description: Allows to create claims
@@ -198,6 +175,12 @@ permissions:
         default: op
     command.childclaims:
         description: Allows to change to child claims mode
+        default: op
+    command.extendclaim:
+        description: Allows to resize claims
+        default: op
+    command.ignoreclaims:
+        description: Allows to toggle ignore claims mode
         default: op
     command.trapped:
         description: Allows to be rescued to nearby unclaimed land

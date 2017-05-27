@@ -22,7 +22,7 @@ public class PlayerManager {
 
     public Pl3xPlayer getPlayer(UUID uuid) {
         if (!players.containsKey(uuid)) {
-            players.put(uuid, new Pl3xPlayer(plugin, Bukkit.getPlayer(uuid)));
+            players.put(uuid, new Pl3xPlayer(plugin, Bukkit.getOfflinePlayer(uuid)));
         }
         return players.get(uuid);
     }

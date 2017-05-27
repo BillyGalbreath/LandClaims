@@ -164,14 +164,14 @@ public class ClaimToolListener implements Listener {
                     // players with "adminclaims" permissions bypass this check
                     if (!player.hasPermission("command.adminclaims") &&
                             (newWidthX < coords.getWidthX() || newWidthZ < coords.getWidthZ())) {
-                        if (newWidthX < Config.CLAIM_MIN_WIDTH || newWidthZ < Config.CLAIM_MIN_WIDTH) {
+                        if (newWidthX < Config.CLAIMS_MIN_WIDTH || newWidthZ < Config.CLAIMS_MIN_WIDTH) {
                             Lang.send(player, Lang.RESIZE_FAILED_TOO_NARROW
-                                    .replace("{minimum}", Integer.toString(Config.CLAIM_MIN_WIDTH)));
+                                    .replace("{minimum}", Integer.toString(Config.CLAIMS_MIN_WIDTH)));
                             return;
                         }
-                        if (newArea < Config.CLAIM_MIN_AREA) {
+                        if (newArea < Config.CLAIMS_MIN_AREA) {
                             Lang.send(player, Lang.RESIZE_FAILED_TOO_SMALL
-                                    .replace("{minimum}", Integer.toString(Config.CLAIM_MIN_AREA)));
+                                    .replace("{minimum}", Integer.toString(Config.CLAIMS_MIN_AREA)));
                             return;
                         }
                     }
@@ -215,7 +215,7 @@ public class ClaimToolListener implements Listener {
                 int remainingClaimBlocks = pl3xPlayer.getRemainingClaimBlocks();
                 UUID owner = pl3xPlayer.getResizingClaim().getParent() != null ? pl3xPlayer.getResizingClaim().getParent().getOwner() : pl3xPlayer.getResizingClaim().getOwner();
                 if (!player.getUniqueId().equals(owner)) {
-                    plugin.getPlayerManager().getPlayer(owner).getRemainingClaimBlocks();
+                    remainingClaimBlocks = plugin.getPlayerManager().getPlayer(owner).getRemainingClaimBlocks();
                     if (!Bukkit.getOfflinePlayer(owner).isOnline()) {
                         plugin.getPlayerManager().unload(owner);
                     }
@@ -330,11 +330,11 @@ public class ClaimToolListener implements Listener {
             // start first click
             Location toolLocation = pl3xPlayer.getLastToolLocation();
             if (toolLocation == null) {
-                if (Config.MAX_CLAIMS_PER_PLAYER > 0 &&
+                if (Config.CLAIMS_MAX_PER_PLAYER > 0 &&
                         !player.hasPermission("claims.overridelimits") &&
-                        pl3xPlayer.getClaims().size() > Config.MAX_CLAIMS_PER_PLAYER) {
+                        pl3xPlayer.getClaims().size() > Config.CLAIMS_MAX_PER_PLAYER) {
                     Lang.send(player, Lang.CREATE_FAILED_CLAIM_LIMIT
-                            .replace("{limit}", Integer.toString(Config.MAX_CLAIMS_PER_PLAYER)));
+                            .replace("{limit}", Integer.toString(Config.CLAIMS_MAX_PER_PLAYER)));
                     return;
                 }
 
@@ -361,15 +361,15 @@ public class ClaimToolListener implements Listener {
             boolean isAdminClaim = pl3xPlayer.getToolMode() == ToolMode.ADMIN;
             Coordinates newCoords = new Coordinates(pl3xPlayer.getLastToolLocation(), clickedBlock.getLocation());
             if (!isAdminClaim) {
-                if (newCoords.getWidthX() < Config.CLAIM_MIN_WIDTH ||
-                        newCoords.getWidthZ() < Config.CLAIM_MIN_WIDTH) {
+                if (newCoords.getWidthX() < Config.CLAIMS_MIN_WIDTH ||
+                        newCoords.getWidthZ() < Config.CLAIMS_MIN_WIDTH) {
                     Lang.send(player, Lang.CREATE_FAILED_TOO_NARROW
-                            .replace("{minimum}", Integer.toString(Config.CLAIM_MIN_WIDTH)));
+                            .replace("{minimum}", Integer.toString(Config.CLAIMS_MIN_WIDTH)));
                     return;
                 }
-                if (newCoords.getArea() < Config.CLAIM_MIN_AREA) {
+                if (newCoords.getArea() < Config.CLAIMS_MIN_AREA) {
                     Lang.send(player, Lang.CREATE_FAILED_TOO_SMALL
-                            .replace("{minimum}", Integer.toString(Config.CLAIM_MIN_AREA)));
+                            .replace("{minimum}", Integer.toString(Config.CLAIMS_MIN_AREA)));
                     return;
                 }
 
