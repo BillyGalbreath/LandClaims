@@ -1,6 +1,7 @@
-package net.pl3x.bukkit.claims.event;
+package net.pl3x.bukkit.claims.event.claim;
 
 import net.pl3x.bukkit.claims.claim.Claim;
+import net.pl3x.bukkit.claims.event.CancellableEvent;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;

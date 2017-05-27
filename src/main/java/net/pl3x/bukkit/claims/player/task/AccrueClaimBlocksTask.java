@@ -2,7 +2,7 @@ package net.pl3x.bukkit.claims.player.task;
 
 import net.pl3x.bukkit.claims.Logger;
 import net.pl3x.bukkit.claims.configuration.Config;
-import net.pl3x.bukkit.claims.event.AccrueClaimBlocksEvent;
+import net.pl3x.bukkit.claims.event.player.AccrueClaimBlocksEvent;
 import net.pl3x.bukkit.claims.player.Pl3xPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

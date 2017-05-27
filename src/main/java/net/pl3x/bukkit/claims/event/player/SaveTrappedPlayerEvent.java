@@ -1,6 +1,7 @@
-package net.pl3x.bukkit.claims.event;
+package net.pl3x.bukkit.claims.event.player;
 
 import net.pl3x.bukkit.claims.claim.Claim;
+import net.pl3x.bukkit.claims.event.ClaimEvent;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

@@ -4,7 +4,7 @@ import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
-import net.pl3x.bukkit.claims.event.SaveTrappedPlayerEvent;
+import net.pl3x.bukkit.claims.event.player.SaveTrappedPlayerEvent;
 import net.pl3x.bukkit.claims.player.Pl3xPlayer;
 import net.pl3x.bukkit.claims.player.task.SaveTrappedPlayerTask;
 import org.bukkit.Bukkit;

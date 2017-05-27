@@ -4,7 +4,7 @@ import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.configuration.ClaimConfig;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
-import net.pl3x.bukkit.claims.event.ResizeClaimEvent;
+import net.pl3x.bukkit.claims.event.claim.ResizeClaimEvent;
 import net.pl3x.bukkit.claims.player.Pl3xPlayer;
 import net.pl3x.bukkit.claims.visualization.VisualizationType;
 import org.bukkit.Bukkit;

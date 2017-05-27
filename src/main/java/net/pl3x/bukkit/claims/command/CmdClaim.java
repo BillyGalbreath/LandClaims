@@ -5,7 +5,7 @@ import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.claim.Coordinates;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
-import net.pl3x.bukkit.claims.event.CreateClaimEvent;
+import net.pl3x.bukkit.claims.event.claim.CreateClaimEvent;
 import net.pl3x.bukkit.claims.player.Pl3xPlayer;
 import net.pl3x.bukkit.claims.visualization.VisualizationType;
 import org.bukkit.Bukkit;

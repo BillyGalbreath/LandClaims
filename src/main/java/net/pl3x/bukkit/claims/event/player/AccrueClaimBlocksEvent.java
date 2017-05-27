@@ -1,5 +1,6 @@
-package net.pl3x.bukkit.claims.event;
+package net.pl3x.bukkit.claims.event.player;
 
+import net.pl3x.bukkit.claims.event.CancellableEvent;
 import org.bukkit.entity.Player;
 
 public class AccrueClaimBlocksEvent extends CancellableEvent {

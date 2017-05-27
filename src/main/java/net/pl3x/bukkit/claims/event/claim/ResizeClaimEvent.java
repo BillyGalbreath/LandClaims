@@ -1,7 +1,8 @@
-package net.pl3x.bukkit.claims.event;
+package net.pl3x.bukkit.claims.event.claim;
 
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.claim.Coordinates;
+import net.pl3x.bukkit.claims.event.ClaimEvent;
 import org.bukkit.entity.Player;
 
 public class ResizeClaimEvent extends ClaimEvent {

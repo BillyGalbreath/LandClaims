@@ -3,7 +3,7 @@ package net.pl3x.bukkit.claims.player;
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.configuration.PlayerConfig;
-import net.pl3x.bukkit.claims.event.VisualizeClaimsEvent;
+import net.pl3x.bukkit.claims.event.claim.VisualizeClaimsEvent;
 import net.pl3x.bukkit.claims.player.task.AccrueClaimBlocksTask;
 import net.pl3x.bukkit.claims.visualization.Visualization;
 import net.pl3x.bukkit.claims.visualization.VisualizationType;
