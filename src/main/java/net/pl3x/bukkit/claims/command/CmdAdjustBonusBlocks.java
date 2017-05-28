@@ -45,7 +45,7 @@ public class CmdAdjustBonusBlocks implements TabExecutor {
         }
 
         if (args.length < 1) {
-            Lang.send(sender, Lang.COMMAND_MISSING_PLAYER_NAME);
+            Lang.send(sender, Lang.COMMAND_MISSING_PLAYER);
             return false;
         }
         if (args.length < 2) {
@@ -58,7 +58,7 @@ public class CmdAdjustBonusBlocks implements TabExecutor {
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
             if (!"all".equalsIgnoreCase(args[0])) {
-                Lang.send(sender, Lang.PLAYER_NOT_FOUND);
+                Lang.send(sender, Lang.COMMAND_PLAYER_NOT_FOUND);
                 return true;
             }
             targetPlayers.addAll(Bukkit.getOnlinePlayers());

@@ -121,7 +121,7 @@ public class ClaimToolListener implements Listener {
         }
 
         if (!claim.isAdminClaim() &&
-                (player.hasPermission("command.deleteclaims") ||
+                (player.hasPermission("command.deleteclaim") ||
                         player.hasPermission("claims.inspect.seeinactivity"))) {
             Lang.send(player, Lang.INSPECT_OWNER_INACTIVITY
                     .replace("{amount}", Long.toString((new Date().getTime() -

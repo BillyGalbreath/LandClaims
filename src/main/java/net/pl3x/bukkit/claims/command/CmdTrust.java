@@ -87,14 +87,14 @@ public class CmdTrust implements TabExecutor {
         }
 
         if (args.length == 0) {
-            Lang.send(sender, Lang.COMMAND_MISSING_PLAYER_NAME);
+            Lang.send(sender, Lang.COMMAND_MISSING_PLAYER);
             return false;
         }
 
         //noinspection deprecation
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
         if (target == null && !(args[0].equalsIgnoreCase("all") || args[0].equalsIgnoreCase("public"))) {
-            Lang.send(sender, Lang.PLAYER_NOT_FOUND);
+            Lang.send(sender, Lang.COMMAND_PLAYER_NOT_FOUND);
             return true;
         }
 

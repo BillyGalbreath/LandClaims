@@ -84,6 +84,31 @@ commands:
         - claimlist
         - listclaims
         - adminclaimslist
+    deleteclaim:
+        description: Deletes the claim you're stnading in, even if it's not your claim
+        permission: command.deleteclaim
+        usage: /<command> (force)
+        aliases: []
+    deleteallclaims:
+        description: Deletes all of a player's claims
+        permission: command.deleteallclaims
+        usage: /<command> [player]
+        aliases: []
+    deleteallclaimsinworld:
+        description: Deletes all admin and non-admin claims in a world. Only usable from console
+        permission: command.deleteallclaimsinworld
+        usage: /<command> [world]
+        aliases: []
+    deletealladminclaimsinworld:
+        description: Deletes all admin claims in a world. Only usable from console
+        permission: command.deletealladminclaimsinworld
+        usage: /<command> [world]
+        aliases: []
+    deletealluserclaimsinworld:
+        description: Deletes all non-admin claims in a world. Only usable from console
+        permission: command.deletealluserclaimsinworld
+        usage: /<command> [world]
+        aliases: []
     extendclaim:
         description: Resizes the land claim you're standing in by pushing or pulling its boundary in the direction you're facing
         permission: command.extendclaim
@@ -133,30 +158,6 @@ commands:
         - listtrust
         - listtrusts
 
-
-
-
-    deleteclaim:
-        description:
-        permission: command.deleteclaims
-        usage: /<command>
-        aliases: []
-    deleteallclaims:
-        description:
-        permission: command.deleteallclaims
-        usage: /<command>
-        aliases: []
-    deleteclaimsinworld:
-        description:
-        permission: command.deleteclaimsinworld
-        usage: /<command>
-        aliases: []
-    deletealladminclaims:
-        description:
-        permission: command.deletealladminclaims
-        usage: /<command>
-        aliases: []
-
 permissions:
     command.abandonallclaims:
         description: Allows to abandon all claims
@@ -197,6 +198,21 @@ permissions:
     command.claimslist.others:
         description: Allows to list information about other players' claims and claim blocks
         default: op
+    command.deleteclaim:
+        description: Allows to delete any claim
+        default: op
+    command.deleteallclaims:
+        description: Allows to delete all of a player's claims
+        default: op
+    command.deleteallclaimsinworld:
+        description: Allows to delete all admin and non-admin claims in a world
+        default: op
+    command.deletealladminclaimsinworld:
+        description: Allows to delete all admin claims in a world
+        default: op
+    command.deletealluserclaimsinworld:
+        description: Allows to delete all non-admin claims in a world
+        default: op
     command.extendclaim:
         description: Allows to resize claims
         default: op
@@ -218,16 +234,6 @@ permissions:
     command.trustlist:
         description: Allows to list a claim's trusts
         default: op
-
-
-
-
-    command.deleteclaims:
-        description: Allows to delete any non-admin claims anywhere
-        default: op
-
-
-
 
     claims.overridelimits:
         description: Allows to override configured limits

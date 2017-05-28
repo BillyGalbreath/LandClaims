@@ -67,7 +67,7 @@ public class CmdClaimsList implements TabExecutor {
             //noinspection deprecation
             target = Bukkit.getOfflinePlayer(args[0]);
             if (target == null) {
-                Lang.send(sender, Lang.PLAYER_NOT_FOUND);
+                Lang.send(sender, Lang.COMMAND_PLAYER_NOT_FOUND);
                 return true;
             }
         } else {

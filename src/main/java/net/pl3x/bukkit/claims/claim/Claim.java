@@ -174,7 +174,7 @@ public class Claim {
                 return true;
             }
         } else {
-            if (player.hasPermission("command.deleteclaims")) {
+            if (player.hasPermission("command.deleteclaim")) {
                 return true;
             }
         }

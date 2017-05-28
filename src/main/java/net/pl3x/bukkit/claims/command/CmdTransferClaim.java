@@ -81,7 +81,7 @@ public class CmdTransferClaim implements TabExecutor {
             //noinspection deprecation
             OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
             if (target == null) {
-                Lang.send(sender, Lang.PLAYER_NOT_FOUND);
+                Lang.send(sender, Lang.COMMAND_PLAYER_NOT_FOUND);
                 return true;
             }
             owner = target.getUniqueId();

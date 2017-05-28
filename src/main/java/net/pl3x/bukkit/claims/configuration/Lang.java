@@ -12,7 +12,13 @@ import java.util.List;
 
 public class Lang {
     public static String COMMAND_NO_PERMISSION;
-    public static String PLAYER_NOT_FOUND;
+    public static String COMMAND_MISSING_WORLD;
+    public static String COMMAND_WORLD_NOT_FOUND;
+    public static String COMMAND_MISSING_PLAYER;
+    public static String COMMAND_PLAYER_NOT_FOUND;
+    public static String COMMAND_MISSING_AMOUNT;
+    public static String COMMAND_NOT_A_NUMBER;
+    public static String CONSOLE_COMMAND;
     public static String PLAYER_COMMAND;
     public static String VERSION;
     public static String RELOAD;
@@ -23,10 +29,6 @@ public class Lang {
 
     public static String CLAIM_BLOCK_COUNTS;
     public static String CLEAN_LOCATION;
-
-    public static String COMMAND_MISSING_PLAYER_NAME;
-    public static String COMMAND_MISSING_AMOUNT;
-    public static String COMMAND_NOT_A_NUMBER;
 
     public static String TOOLMODE_BASIC;
     public static String TOOLMODE_CHILD;
@@ -89,6 +91,22 @@ public class Lang {
     public static String CREATE_START_CHILD;
     public static String CREATE_SUCCESS_CHILD;
 
+    public static String DELETE_NO_CLAIM;
+    public static String DELETE_NO_PERMISSION;
+    public static String DELETE_HAS_CHILDREN;
+    public static String DELETE_SUCCESS;
+
+    public static String DELETE_ALL_CLAIMS_SUCCESS;
+
+    public static String DELETE_ALL_CLAIMS_IN_WORLD_NO_CLAIMS;
+    public static String DELETE_ALL_CLAIMS_IN_WORLD_SUCCESS;
+
+    public static String DELETE_ALL_ADMIN_CLAIMS_IN_WORLD_NO_CLAIMS;
+    public static String DELETE_ALL_ADMIN_CLAIMS_IN_WORLD_SUCCESS;
+
+    public static String DELETE_ALL_USER_CLAIMS_IN_WORLD_NO_CLAIMS;
+    public static String DELETE_ALL_USER_CLAIMS_IN_WORLD_SUCCESS;
+
     public static String EXTEND_NO_CLAIM;
     public static String EXTEND_TO_SKY;
     public static String EXTEND_DOWNWARD;
@@ -136,7 +154,13 @@ public class Lang {
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
         COMMAND_NO_PERMISSION = config.getString("command-no-permission", "&4You do not have permission for that command");
-        PLAYER_NOT_FOUND = config.getString("player-not-found", "&4Player not found");
+        COMMAND_MISSING_WORLD = config.getString("command-missing-world", "&4Missing world in command");
+        COMMAND_WORLD_NOT_FOUND = config.getString("command-world-not-found", "&4World not found");
+        COMMAND_MISSING_PLAYER = config.getString("command-missing-player-name", "&4Missing player name in command");
+        COMMAND_PLAYER_NOT_FOUND = config.getString("player-not-found", "&4Player not found");
+        COMMAND_MISSING_AMOUNT = config.getString("command-missing-amount", "&4Missing amount in command");
+        COMMAND_NOT_A_NUMBER = config.getString("command-not-a-number", "&4Invalid number specified");
+        CONSOLE_COMMAND = config.getString("console-command", "&4Console only command");
         PLAYER_COMMAND = config.getString("player-command", "&4Player only command");
         VERSION = config.getString("version", "&d{plugin} v{version}");
         RELOAD = config.getString("reload", "&d{plugin} v{version} reloaded");
@@ -147,10 +171,6 @@ public class Lang {
 
         CLAIM_BLOCK_COUNTS = config.getString("claim-blocks-count", "&d{accrued} from play + {bonus} bonus = {total} total");
         CLEAN_LOCATION = config.getString("clean-location", "{world} {x}, {z}");
-
-        COMMAND_MISSING_PLAYER_NAME = config.getString("command-missing-player-name", "&4Missing player name in command");
-        COMMAND_MISSING_AMOUNT = config.getString("command-missing-amount", "&4Missing amount in command");
-        COMMAND_NOT_A_NUMBER = config.getString("command-not-a-number", "&4Invalid number specified");
 
         TOOLMODE_BASIC = config.getString("toolmode-basic", "&dTool returned to basic claims mode");
         TOOLMODE_CHILD = config.getString("toolmode-child", "&dTool changed to child claims mode");
@@ -217,6 +237,22 @@ public class Lang {
         CREATE_FAILED_CHILD_OVERLAP_PARENT = config.getString("create-failed-child-overlap-parent", "&4Your selected area overlaps the parent claim's border");
         CREATE_START_CHILD = config.getString("create-start-child", "&dChild corner set! Use your tool at the location for the opposite corner of this new child");
         CREATE_SUCCESS_CHILD = config.getString("create-success-child", "&dChild claim created! Use /trust to share it with friends");
+
+        DELETE_NO_CLAIM = config.getString("delete-no-claim", "&4Stand inside the claim you want to delete");
+        DELETE_NO_PERMISSION = config.getString("delete-no-permission", "&4You can't delete admin claims");
+        DELETE_HAS_CHILDREN = config.getString("delete-has-children", "&4This claim has children. Use /DelteClaim force to override");
+        DELETE_SUCCESS = config.getString("delete-success", "&d");
+
+        DELETE_ALL_CLAIMS_SUCCESS = config.getString("delete-all-claims-success", "&dDeleted all {target}'s claims");
+
+        DELETE_ALL_CLAIMS_IN_WORLD_NO_CLAIMS = config.getString("delete-all-claims-in-world-no-claims", "&4No claims to delete in {world}");
+        DELETE_ALL_CLAIMS_IN_WORLD_SUCCESS = config.getString("delete-all-claims-in-world-success", "&dDeleted all claims in {world}");
+
+        DELETE_ALL_ADMIN_CLAIMS_IN_WORLD_NO_CLAIMS = config.getString("delete-all-admin-claims-in-world-no-claims", "&4No admin claims to delete in {world}");
+        DELETE_ALL_ADMIN_CLAIMS_IN_WORLD_SUCCESS = config.getString("delete-all-admin-claims-in-world-success", "&dDeleted all admin claims in {world}");
+
+        DELETE_ALL_USER_CLAIMS_IN_WORLD_NO_CLAIMS = config.getString("delete-all-user-claims-in-world-no-claims", "&4No non-admin claims to delete in {world}");
+        DELETE_ALL_USER_CLAIMS_IN_WORLD_SUCCESS = config.getString("delete-all-user-claims-in-world-success", "&dDeleted all non-admin claims in {world}");
 
         EXTEND_NO_CLAIM = config.getString("extend-no-claim", "&4Stand inside the land claim you want to resize");
         EXTEND_TO_SKY = config.getString("extend-to-sky", "&4Land claims always extend to max build height");
