@@ -65,8 +65,16 @@ public class Claim {
         this.isAdminClaim = isAdminClaim;
     }
 
+    public Map<FlagType, Boolean> getFlags() {
+        return flags;
+    }
+
     public Boolean getFlag(FlagType flag) {
-        return flags.get(flag);
+        Boolean value = flags.get(flag);
+        if (value == null) {
+            value = parent == null ? flag.getDefault() : parent.getFlag(flag);
+        }
+        return value;
     }
 
     public void setFlag(FlagType flag, Boolean value) {
@@ -182,7 +190,8 @@ public class Claim {
         return parent != null ? parent.isOwner(player) : isOwner(player);
     }
 
-    public boolean allowManage(UUID uuid) {
-        return owner == uuid || managers.contains(uuid);
+    public boolean allowManage(Player player) {
+        return owner == player.getUniqueId() || managers.contains(player.getUniqueId()) ||
+                (isAdminClaim() && player.hasPermission("command.adminclaims"));
     }
 }

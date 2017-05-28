@@ -74,10 +74,6 @@ public class ClaimManager {
     }
 
     public void createNewClaim(Claim claim) {
-
-
-
-
         if (claim.getParent() == null) {
             addTopLevelClaim(claim);
         } else {
@@ -274,12 +270,12 @@ public class ClaimManager {
                 parent.addChild(claim);
             }
 
-            // TODO flags
-            //
-            //
-
+            // trusts
             claim.getTrusts().putAll(config.getTrusts());
             claim.getManagers().addAll(config.getManagers());
+
+            // flags
+            config.getFlags().forEach(claim::setFlag);
 
             // finally store the claim in the manager
             addTopLevelClaim(claim);

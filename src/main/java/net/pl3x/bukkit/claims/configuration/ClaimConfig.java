@@ -4,7 +4,9 @@ import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.claim.Coordinates;
 import net.pl3x.bukkit.claims.claim.TrustType;
+import net.pl3x.bukkit.claims.claim.flag.FlagType;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -141,6 +143,11 @@ public class ClaimConfig extends YamlConfiguration {
                 .collect(Collectors.toList()));
     }
 
+    public void setFlags(Map<FlagType, Boolean> flags) {
+        set("flags", null);
+        flags.forEach((flag, value) -> set("flags." + flag.name().toLowerCase(), value));
+    }
+
     public long getId() {
         return (long) getInt("id", -1);
     }
@@ -189,6 +196,15 @@ public class ClaimConfig extends YamlConfiguration {
         return getStringList("trusts.managers").stream()
                 .map(this::stringToUUID)
                 .collect(Collectors.toSet());
+    }
+
+    public Map<FlagType, Boolean> getFlags() {
+        Map<FlagType, Boolean> flags = new HashMap<>();
+        ConfigurationSection section = getConfigurationSection("flags");
+        section.getKeys(false).stream()
+                .filter(flag -> FlagType.getType(flag) != null)
+                .forEach(flag -> flags.put(FlagType.getType(flag), section.getBoolean(flag)));
+        return flags;
     }
 
     private String uuidToString(UUID uuid) {

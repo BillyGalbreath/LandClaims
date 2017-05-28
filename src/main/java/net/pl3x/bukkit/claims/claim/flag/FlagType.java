@@ -1,5 +1,7 @@
 package net.pl3x.bukkit.claims.claim.flag;
 
+import java.util.Arrays;
+
 public enum FlagType {
     PVP(false),
     EXPLOSIONS(false),
@@ -17,5 +19,11 @@ public enum FlagType {
 
     public boolean getDefault() {
         return def;
+    }
+
+    public static FlagType getType(String name) {
+        return Arrays.stream(FlagType.values())
+                .filter(type -> type.name().equalsIgnoreCase(name))
+                .findFirst().orElse(null);
     }
 }

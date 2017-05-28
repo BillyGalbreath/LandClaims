@@ -18,6 +18,8 @@ public class Lang {
     public static String COMMAND_PLAYER_NOT_FOUND;
     public static String COMMAND_MISSING_AMOUNT;
     public static String COMMAND_NOT_A_NUMBER;
+    public static String COMMAND_MISSING_FLAG;
+    public static String COMMAND_FLAG_NOT_FOUND;
     public static String CONSOLE_COMMAND;
     public static String PLAYER_COMMAND;
     public static String VERSION;
@@ -114,6 +116,11 @@ public class Lang {
     public static String IGNORE_CLAIMS;
     public static String RESPECT_CLAIMS;
 
+    public static String SETFLAG_NO_CLAIM;
+    public static String SETFLAG_NO_PERMISSION;
+    public static String SETFLAG_REMOVED;
+    public static String SETFLAG_SUCCESS;
+
     public static String TRANSFER_NO_CLAIM;
     public static String TRANSFER_CHILD;
     public static String TRANSFER_NO_PERMISSION;
@@ -160,6 +167,8 @@ public class Lang {
         COMMAND_PLAYER_NOT_FOUND = config.getString("player-not-found", "&4Player not found");
         COMMAND_MISSING_AMOUNT = config.getString("command-missing-amount", "&4Missing amount in command");
         COMMAND_NOT_A_NUMBER = config.getString("command-not-a-number", "&4Invalid number specified");
+        COMMAND_MISSING_FLAG = config.getString("command-missing-flag", "&4Missing flag in command");
+        COMMAND_FLAG_NOT_FOUND = config.getString("command-flag-not-found", "&4Flag not found");
         CONSOLE_COMMAND = config.getString("console-command", "&4Console only command");
         PLAYER_COMMAND = config.getString("player-command", "&4Player only command");
         VERSION = config.getString("version", "&d{plugin} v{version}");
@@ -260,6 +269,11 @@ public class Lang {
 
         IGNORE_CLAIMS = config.getString("ignore-claims", "&dNow ignoring claims");
         RESPECT_CLAIMS = config.getString("respect-claims", "&dNow respecting claims");
+
+        SETFLAG_NO_CLAIM = config.getString("setflag-no-claim", "&4Stand inside the claim you want to set a flag for");
+        SETFLAG_NO_PERMISSION = config.getString("setflag-no-permission", "&4You do not have permission to edit this claim's flags");
+        SETFLAG_REMOVED = config.getString("setflag-removed", "&dFlag {flag} removed");
+        SETFLAG_SUCCESS = config.getString("setflag-allow", "&dFlag {flag} set to {value}");
 
         TRANSFER_NO_CLAIM = config.getString("transfer-no-claim", "&4There's no claim here. Stand in the claim you want to transfer");
         TRANSFER_CHILD = config.getString("transfer-child", "&4Only top level claims can be transferred. Stand outside the child claim and try again");

@@ -127,6 +127,12 @@ commands:
         usage: /<command> (reload)
         aliases:
         - claims
+    setflag:
+        description: Set or remove a flag for a claim you manage
+        permission: command.setflag
+        usage: /<command> [flag] (allow | deny | none)
+        aliases:
+        - flagset
     transferclaim:
         description: Transfer a claim's owner
         permission: command.transferclaim
@@ -221,6 +227,9 @@ permissions:
         default: op
     command.pl3xclaims:
         description: Allows reload configs
+        default: op
+    command.setflag:
+        description: Allows to set flags to claims
         default: op
     command.transferclaim:
         description: Allows transfer claim ownership
