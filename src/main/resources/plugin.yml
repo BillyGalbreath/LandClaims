@@ -105,7 +105,7 @@ commands:
     transferclaim:
         description: Transfer a claim's owner
         permission: command.transferclaim
-        usage: /<command>
+        usage: /<command> (player)
         aliases:
         - giveclaim
     trapped:
@@ -126,7 +126,7 @@ commands:
         - untrust
     trustlist:
         description: List permissions for the claim you're standing in
-        permission: command.trust
+        permission: command.trustlist
         usage: /<command>
         aliases:
         - trustslist
@@ -158,14 +158,17 @@ commands:
         aliases: []
 
 permissions:
-    command.claim:
-        description: Allows to create claims
+    command.abandonallclaims:
+        description: Allows to abandon all claims
         default: op
     command.abandonclaim:
         description: Allows to abandon claims
         default: op
-    command.abandonallclaims:
-        description: Allows to abandon all claims
+    command.adjustaccruedblocks:
+        description: Allows to adjust accrued claim blocks for online players
+        default: op
+    command.adjustbonusblocks:
+        description: Allows to adjust bonus claim blocks for online players
         default: op
     command.adminclaims:
         description: Allows to change to admin claims mode
@@ -176,11 +179,35 @@ permissions:
     command.childclaims:
         description: Allows to change to child claims mode
         default: op
+    command.claim:
+        description: Allows to create claims
+        default: op
+    command.claimbook:
+        description: Allows to get the claim book
+        default: op
+    command.claimbook.others:
+        description: Allows to give other players the claim book
+        default: op
+    command.claimslist:
+        description: Allows to list information about your claims and claim blocks
+        default: op
+    command.claimslist.admin:
+        description: Allows to list information about all admin claims
+        default: op
+    command.claimslist.others:
+        description: Allows to list information about other players' claims and claim blocks
+        default: op
     command.extendclaim:
         description: Allows to resize claims
         default: op
     command.ignoreclaims:
         description: Allows to toggle ignore claims mode
+        default: op
+    command.pl3xclaims:
+        description: Allows reload configs
+        default: op
+    command.transferclaim:
+        description: Allows transfer claim ownership
         default: op
     command.trapped:
         description: Allows to be rescued to nearby unclaimed land
@@ -188,13 +215,19 @@ permissions:
     command.trust:
         description: Allows to manage claim trust list
         default: op
-    command.pl3xclaims:
-        description: Allows reload configs
+    command.trustlist:
+        description: Allows to list a claim's trusts
         default: op
 
-    commands.deleteclaims:
+
+
+
+    command.deleteclaims:
         description: Allows to delete any non-admin claims anywhere
         default: op
+
+
+
 
     claims.overridelimits:
         description: Allows to override configured limits

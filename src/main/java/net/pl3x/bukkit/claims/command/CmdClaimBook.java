@@ -11,6 +11,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CmdClaimBook implements TabExecutor {
     private final Pl3xClaims plugin;
@@ -21,6 +22,12 @@ public class CmdClaimBook implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length == 1) {
+            return Bukkit.getOnlinePlayers().stream()
+                    .filter(target -> target.getName().toLowerCase().startsWith(args[0].toLowerCase()))
+                    .map(Player::getName)
+                    .collect(Collectors.toList());
+        }
         return null;
     }
 
@@ -38,7 +45,7 @@ public class CmdClaimBook implements TabExecutor {
 
         Player target;
         if (args.length > 0) {
-            if (!sender.hasPermission("command.claimbook.other")) {
+            if (!sender.hasPermission("command.claimbook.others")) {
                 Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
                 return true;
             }

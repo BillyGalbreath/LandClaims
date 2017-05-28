@@ -36,7 +36,7 @@ public class CmdTrustList implements TabExecutor {
             return true;
         }
 
-        if (!sender.hasPermission("command.trust")) {
+        if (!sender.hasPermission("command.trustlist")) {
             Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
             return true;
         }

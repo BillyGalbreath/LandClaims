@@ -12,8 +12,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class CmdTransferClaim implements TabExecutor {
     private final Pl3xClaims plugin;
@@ -24,6 +26,12 @@ public class CmdTransferClaim implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length == 1) {
+            return Arrays.stream(Bukkit.getOfflinePlayers())
+                    .filter(target -> target.getName().toLowerCase().startsWith(args[0].toLowerCase()))
+                    .map(OfflinePlayer::getName)
+                    .collect(Collectors.toList());
+        }
         return null;
     }
 
@@ -77,6 +85,11 @@ public class CmdTransferClaim implements TabExecutor {
                 return true;
             }
             owner = target.getUniqueId();
+        }
+
+        if (owner == null && !sender.hasPermission("command.adminclaims")) {
+            Lang.send(sender, Lang.TRANSFER_NO_PERMISSION);
+            return true;
         }
 
         claim.setOwner(owner);
