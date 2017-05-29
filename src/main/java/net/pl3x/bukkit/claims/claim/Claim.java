@@ -141,7 +141,11 @@ public class Claim {
         if (owner == uuid) {
             return true;
         }
-        switch (trusts.get(uuid)) {
+        TrustType trust = trusts.get(uuid);
+        if (trust == null) {
+            return false;
+        }
+        switch (trust) {
             case ACCESS:
             case CONTAINER:
             case BUILDER:
@@ -159,7 +163,11 @@ public class Claim {
         if (owner == uuid) {
             return true;
         }
-        switch (trusts.get(uuid)) {
+        TrustType trust = trusts.get(uuid);
+        if (trust == null) {
+            return false;
+        }
+        switch (trust) {
             case CONTAINER:
             case BUILDER:
                 return true;
@@ -176,7 +184,11 @@ public class Claim {
         if (owner == uuid) {
             return true;
         }
-        switch (trusts.get(uuid)) {
+        TrustType trust = trusts.get(uuid);
+        if (trust == null) {
+            return false;
+        }
+        switch (trust) {
             case BUILDER:
                 return true;
             default:
