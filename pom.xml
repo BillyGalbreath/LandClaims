@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.pl3x.bukkit.claims</groupId>
     <artifactId>Pl3xClaims</artifactId>
-    <version>1.12-b${build-number}</version>
+    <version>1.12-b${build}</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
