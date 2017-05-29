@@ -103,7 +103,7 @@ public class CmdTrust implements TabExecutor {
         if (currentClaim == null) {
             targetClaims.addAll(plugin.getPlayerManager().getPlayer(player).getClaims());
         } else {
-            if (!currentClaim.allowManage(player.getUniqueId())) {
+            if (!currentClaim.allowManage(player)) {
                 Lang.send(sender, Lang.TRUST_ERROR_NO_PERMISSION);
                 return true;
             }

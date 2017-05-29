@@ -53,7 +53,7 @@ public class CmdTrustList implements TabExecutor {
             return true;
         }
 
-        if (!claim.allowManage(player.getUniqueId())) {
+        if (!claim.allowManage(player)) {
             Lang.send(sender, Lang.TRUSTLIST_NO_PERMISSION);
             return true;
         }

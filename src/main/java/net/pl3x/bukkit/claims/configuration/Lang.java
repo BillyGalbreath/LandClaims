@@ -41,6 +41,11 @@ public class Lang {
     public static String NOT_YOUR_CLAIM;
     public static String YOU_HAVE_NO_CLAIMS;
 
+    public static String BUILD_DENY;
+    public static String PVP_DENY;
+    public static String CONTAINER_DENY;
+    public static String ACCESS_DENY;
+
     public static String ABANDON_CLAIM_MISSING;
     public static String ABANDON_TOP_LEVEL_CLAIM;
     public static String ABANDON_SUCCESS;
@@ -189,6 +194,11 @@ public class Lang {
         MIN_RADIUS = config.getString("min-radius", "&4Minimum radius is {radius}");
         NOT_YOUR_CLAIM = config.getString("not-your-claim", "&4This isn't your claim");
         YOU_HAVE_NO_CLAIMS = config.getString("you-have-no-claims", "&4You don't have any land claims");
+
+        BUILD_DENY = config.getString("build-deny", "&4You can't build here");
+        PVP_DENY = config.getString("pvp-deny", "&4PvP is disabled here");
+        CONTAINER_DENY = config.getString("container-deny", "&4You don't have permission to use that");
+        ACCESS_DENY = config.getString("container-deny", "&4You don't have permission to use that");
 
         ABANDON_CLAIM_MISSING = config.getString("abandon-claim-missing", "&4Stand in the claim you want to delete, or consider /AbandonAllClaims");
         ABANDON_TOP_LEVEL_CLAIM = config.getString("abandon-top-level-claim", "&4To delete a child claim, stand inside it. Otherwise, use /AbandonClaim force to delete this claim and all it's children");

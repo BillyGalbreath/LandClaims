@@ -133,6 +133,10 @@ public class Claim {
         children.remove(claim);
     }
 
+    public boolean allowAccess(Player player) {
+        return allowAccess(player.getUniqueId());
+    }
+
     public boolean allowAccess(UUID uuid) {
         if (owner == uuid) {
             return true;
@@ -147,6 +151,10 @@ public class Claim {
         }
     }
 
+    public boolean allowContainers(Player player) {
+        return allowContainers(player.getUniqueId());
+    }
+
     public boolean allowContainers(UUID uuid) {
         if (owner == uuid) {
             return true;
@@ -158,6 +166,10 @@ public class Claim {
             default:
                 return false;
         }
+    }
+
+    public boolean allowBuild(Player player) {
+        return allowBuild(player.getUniqueId());
     }
 
     public boolean allowBuild(UUID uuid) {

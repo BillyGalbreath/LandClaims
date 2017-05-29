@@ -20,6 +20,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
@@ -402,5 +403,12 @@ public class ClaimToolListener implements Listener {
         pl3xPlayer.setToolMode(ToolMode.BASIC);
         pl3xPlayer.setVisualization(null);
         pl3xPlayer.setResizingClaim(null);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerPlacedBlockOutsideClaim(BlockPlaceEvent event) {
+        //
+        // TODO
+        //
     }
 }

@@ -27,8 +27,10 @@ import net.pl3x.bukkit.claims.command.CmdTrustList;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.listener.ClaimToolListener;
+import net.pl3x.bukkit.claims.listener.FlagListener;
 import net.pl3x.bukkit.claims.listener.PlayerListener;
 import net.pl3x.bukkit.claims.listener.ProtectionListener;
+import net.pl3x.bukkit.claims.listener.TrustListener;
 import net.pl3x.bukkit.claims.player.PlayerManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -81,6 +83,8 @@ public class Pl3xClaims extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ClaimToolListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         getServer().getPluginManager().registerEvents(new ProtectionListener(this), this);
+        getServer().getPluginManager().registerEvents(new FlagListener(this), this);
+        getServer().getPluginManager().registerEvents(new TrustListener(this), this);
 
         getCommand("abandonallclaims").setExecutor(new CmdAbandonAllClaims(this));
         getCommand("abandonclaim").setExecutor(new CmdAbandonClaim(this));

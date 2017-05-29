@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -28,7 +29,8 @@ public class PlayerListener implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                pl3xPlayer.updateLocation(); // wait 20 ticks to update location for spawn relocation
+                // wait 20 ticks to update location for spawn relocation
+                pl3xPlayer.updateLocation();
             }
         }.runTaskLater(plugin, 20);
 
@@ -61,5 +63,12 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
         plugin.getPlayerManager().getPlayer(event.getPlayer()).updateLocation();
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerPlaceFirstChest(BlockPlaceEvent event) {
+        //
+        // TODO
+        //
     }
 }
