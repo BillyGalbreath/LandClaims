@@ -79,6 +79,10 @@ public class FlagListener implements Listener {
             return; // claims not enabled in this world
         }
 
+        if (event.getIgnitingBlock() == null) {
+            return;
+        }
+
         Claim claim = plugin.getClaimManager().getClaim(event.getIgnitingBlock().getLocation());
         if (claim == null) {
             return;
