@@ -101,7 +101,7 @@ public class Pl3xClaims extends JavaPlugin {
         getCommand("deleteallclaimsinworld").setExecutor(new CmdDeleteAllClaimsInWorld(this));
         getCommand("deletealladminclaimsinworld").setExecutor(new CmdDeleteAllAdminClaimsInWorld(this));
         getCommand("deletealluserclaimsinworld").setExecutor(new CmdDeleteAllUserClaimsInWorld(this));
-        getCommand("extend").setExecutor(new CmdExtendClaim(this));
+        getCommand("extendclaim").setExecutor(new CmdExtendClaim(this));
         getCommand("ignoreclaims").setExecutor(new CmdIgnoreClaims(this));
         getCommand("pl3xclaims").setExecutor(new CmdPl3xClaims(this));
         getCommand("setflag").setExecutor(new CmdSetFlag(this));
