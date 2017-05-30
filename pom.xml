@@ -23,7 +23,7 @@
         </repository>
     </repositories>
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>${project.artifactId}-${project.version}</finalName>
         <defaultGoal>clean package install javadoc:javadoc</defaultGoal>
         <plugins>
             <plugin>
