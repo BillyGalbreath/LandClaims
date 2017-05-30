@@ -12,7 +12,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -193,7 +196,8 @@ public class ClaimConfig extends YamlConfiguration {
     }
 
     public Collection<UUID> getManagers() {
-        return getStringList("trusts.managers").stream()
+        List<String> managers = getStringList("trusts.managers");
+        return managers == null ? new HashSet<>() : managers.stream()
                 .map(this::stringToUUID)
                 .collect(Collectors.toSet());
     }
@@ -201,7 +205,14 @@ public class ClaimConfig extends YamlConfiguration {
     public Map<FlagType, Boolean> getFlags() {
         Map<FlagType, Boolean> flags = new HashMap<>();
         ConfigurationSection section = getConfigurationSection("flags");
-        section.getKeys(false).stream()
+        if (section == null) {
+            return flags;
+        }
+        Set<String> keys = section.getKeys(false);
+        if (keys == null) {
+            return flags;
+        }
+        keys.stream()
                 .filter(flag -> FlagType.getType(flag) != null)
                 .forEach(flag -> flags.put(FlagType.getType(flag), section.getBoolean(flag)));
         return flags;

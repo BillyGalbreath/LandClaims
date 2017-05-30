@@ -108,7 +108,7 @@ public class CmdClaim implements TabExecutor {
         }
 
         // create new claim
-        Claim newClaim = new Claim(plugin.getClaimManager().getNextId(),
+        Claim newClaim = new Claim(plugin, plugin.getClaimManager().getNextId(),
                 player.getUniqueId(),
                 null, newCoords, false);
 

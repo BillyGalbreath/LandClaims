@@ -1,5 +1,6 @@
 package net.pl3x.bukkit.claims.claim;
 
+import net.pl3x.bukkit.claims.Logger;
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.configuration.ClaimConfig;
 import net.pl3x.bukkit.claims.configuration.Config;
@@ -262,7 +263,7 @@ public class ClaimManager {
             }
 
             // everything looks good, make the claim
-            Claim claim = new Claim(id, owner, parent, coordinates, isAdminClaim);
+            Claim claim = new Claim(plugin, id, owner, parent, coordinates, isAdminClaim);
 
             // add to parent as child (if there is a parent)
             if (parent != null) {
@@ -276,6 +277,15 @@ public class ClaimManager {
 
             // flags
             config.getFlags().forEach(claim::setFlag);
+
+            Logger logger = plugin.getLog();
+            logger.debug("  id: " + id);
+            logger.debug("  owner: " + owner);
+            logger.debug("  parent: " + (parent == null ? "null" : parent.getId()));
+            logger.debug("  coords: " + coordinates.toString());
+            logger.debug("  isAdminClaim: " + isAdminClaim);
+            logger.debug("  trusts: " + claim.getTrusts());
+            logger.debug("  flags: " + claim.getFlags());
 
             // finally store the claim in the manager
             addTopLevelClaim(claim);

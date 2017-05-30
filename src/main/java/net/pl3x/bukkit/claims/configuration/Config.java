@@ -1,11 +1,11 @@
 package net.pl3x.bukkit.claims.configuration;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class Config {
     private Config() {
     }
 
-    public static void reload(Pl3xClaims plugin) {
+    public static void reload(JavaPlugin plugin) {
         plugin.saveDefaultConfig();
         plugin.reloadConfig();
         FileConfiguration config = plugin.getConfig();

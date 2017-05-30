@@ -250,7 +250,7 @@ public class ClaimToolListener implements Listener {
                     }
                 }
 
-                Claim newChildClaim = new Claim(plugin.getClaimManager().getNextId(), null, // child claims have no owner
+                Claim newChildClaim = new Claim(plugin, plugin.getClaimManager().getNextId(), null, // child claims have no owner
                         pl3xPlayer.getParentClaim(), newChildCoords, false);
 
                 CreateClaimEvent createClaimEvent = new CreateClaimEvent(player, newChildClaim);
@@ -296,7 +296,7 @@ public class ClaimToolListener implements Listener {
             pl3xPlayer.setLastToolLocation(clickedBlock.getLocation());
             Lang.send(player, Lang.CREATE_START);
 
-            pl3xPlayer.showVisualization(new Claim(-99, null, null,
+            pl3xPlayer.showVisualization(new Claim(plugin, -99, null, null,
                             new Coordinates(pl3xPlayer.getLastToolLocation(), clickedBlock.getLocation()), false),
                     VisualizationType.NEW_POINT);
             return;
@@ -346,7 +346,7 @@ public class ClaimToolListener implements Listener {
         }
 
         // create new claim
-        Claim newClaim = new Claim(plugin.getClaimManager().getNextId(),
+        Claim newClaim = new Claim(plugin, plugin.getClaimManager().getNextId(),
                 (isAdminClaim ? null : player.getUniqueId()),
                 null, newCoords, isAdminClaim);
 

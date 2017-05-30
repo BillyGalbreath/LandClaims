@@ -3,11 +3,12 @@ package net.pl3x.bukkit.claims;
 import net.pl3x.bukkit.claims.configuration.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class Logger {
-    private final Pl3xClaims plugin;
+    private final JavaPlugin plugin;
 
-    public Logger(Pl3xClaims plugin) {
+    public Logger(JavaPlugin plugin) {
         this.plugin = plugin;
     }
 

@@ -1,10 +1,10 @@
 package net.pl3x.bukkit.claims.configuration;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -159,7 +159,7 @@ public class Lang {
     private Lang() {
     }
 
-    public static void reload(Pl3xClaims plugin) {
+    public static void reload(JavaPlugin plugin) {
         String langFile = Config.LANGUAGE_FILE;
         File configFile = new File(plugin.getDataFolder(), langFile);
         plugin.saveResource(Config.LANGUAGE_FILE, false);

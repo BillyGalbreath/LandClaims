@@ -1,5 +1,7 @@
 package net.pl3x.bukkit.claims.claim;
 
+import net.pl3x.bukkit.claims.Logger;
+import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.claim.flag.FlagType;
 import org.bukkit.entity.Player;
 
@@ -7,10 +9,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 public class Claim {
+    private final Pl3xClaims plugin;
+    private final Logger logger;
     private final long id;
     private UUID owner;
     private final Claim parent;
@@ -21,7 +24,9 @@ public class Claim {
     private final Collection<UUID> managers = new HashSet<>();
     private final Collection<Claim> children = new HashSet<>();
 
-    public Claim(long id, UUID owner, Claim parent, Coordinates coordinates, boolean isAdminClaim) {
+    public Claim(Pl3xClaims plugin, long id, UUID owner, Claim parent, Coordinates coordinates, boolean isAdminClaim) {
+        this.plugin = plugin;
+        this.logger = plugin.getLog();
         this.id = id;
         this.owner = owner;
         this.parent = parent;
@@ -46,7 +51,7 @@ public class Claim {
     }
 
     public boolean isOwner(UUID uuid) {
-        return Objects.equals(owner, uuid);
+        return owner != null && owner.equals(uuid);
     }
 
     public Claim getParent() {
@@ -138,11 +143,12 @@ public class Claim {
     }
 
     public boolean allowAccess(UUID uuid) {
-        if (owner == uuid) {
+        if (isOwner(uuid)) {
             return true;
         }
         TrustType trust = trusts.get(uuid);
         if (trust == null) {
+            logger.debug("allowAccess: trusts empty (" + id + ")");
             return false;
         }
         switch (trust) {
@@ -151,6 +157,7 @@ public class Claim {
             case BUILDER:
                 return true;
             default:
+                logger.debug("allowAccess: not trusted (" + uuid + " " + id + ")");
                 return false;
         }
     }
@@ -160,11 +167,12 @@ public class Claim {
     }
 
     public boolean allowContainers(UUID uuid) {
-        if (owner == uuid) {
+        if (isOwner(uuid)) {
             return true;
         }
         TrustType trust = trusts.get(uuid);
         if (trust == null) {
+            logger.debug("allowContainers: trusts empty (" + id + ")");
             return false;
         }
         switch (trust) {
@@ -172,6 +180,7 @@ public class Claim {
             case BUILDER:
                 return true;
             default:
+                logger.debug("allowContainers: not trusted (" + uuid + " " + id + ")");
                 return false;
         }
     }
@@ -181,23 +190,26 @@ public class Claim {
     }
 
     public boolean allowBuild(UUID uuid) {
-        if (owner == uuid) {
+        if (isOwner(uuid)) {
             return true;
         }
         TrustType trust = trusts.get(uuid);
         if (trust == null) {
+            logger.debug("allowBuild: trusts empty (" + id + ")");
             return false;
         }
         switch (trust) {
             case BUILDER:
                 return true;
             default:
+                logger.debug("allowBuild: not trusted (" + uuid + " " + id + ")");
                 return false;
         }
     }
 
     public boolean allowEdit(Player player) {
         if (player == null) {
+            logger.debug("allowEdit: null player (" + id + ")");
             return false;
         }
 
