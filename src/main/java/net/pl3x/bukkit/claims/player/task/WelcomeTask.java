@@ -32,8 +32,8 @@ public class WelcomeTask extends BukkitRunnable {
         BookMeta meta = (BookMeta) Bukkit.getItemFactory().getItemMeta(Material.WRITTEN_BOOK);
         meta.setAuthor(Lang.CLAIMBOOK_AUTHOR);
         meta.setTitle(Lang.CLAIMBOOK_TITLE);
-        for (int i = 0; i < Lang.CLAIMBOOK_PAGES.size(); i++) {
-            meta.setPage(i + 1, Lang.CLAIMBOOK_PAGES.get(i)
+        for (String page : Lang.CLAIMBOOK_PAGES) {
+            meta.addPage(page
                     .replace("{claimtool}", WordUtils.capitalizeFully(
                             Config.CLAIM_TOOL_MATERIAL.replace("_", " ")))
                     .replace("{inpsecttool}", WordUtils.capitalizeFully(
