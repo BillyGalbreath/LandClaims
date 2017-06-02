@@ -33,7 +33,7 @@ public class WelcomeTask extends BukkitRunnable {
         meta.setAuthor(Lang.CLAIMBOOK_AUTHOR);
         meta.setTitle(Lang.CLAIMBOOK_TITLE);
         for (int i = 0; i < Lang.CLAIMBOOK_PAGES.size(); i++) {
-            meta.setPage(i, Lang.CLAIMBOOK_PAGES.get(i)
+            meta.setPage(i + 1, Lang.CLAIMBOOK_PAGES.get(i)
                     .replace("{claimtool}", WordUtils.capitalizeFully(
                             Config.CLAIM_TOOL_MATERIAL.replace("_", " ")))
                     .replace("{inpsecttool}", WordUtils.capitalizeFully(
