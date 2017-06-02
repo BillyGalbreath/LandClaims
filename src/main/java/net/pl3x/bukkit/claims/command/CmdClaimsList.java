@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,9 +27,9 @@ public class CmdClaimsList implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 1) {
-            return Bukkit.getOnlinePlayers().stream()
+            return Arrays.stream(Bukkit.getOfflinePlayers())
                     .filter(target -> target.getName().toLowerCase().startsWith(args[0].toLowerCase()))
-                    .map(Player::getName)
+                    .map(OfflinePlayer::getName)
                     .collect(Collectors.toList());
         }
         return null;
