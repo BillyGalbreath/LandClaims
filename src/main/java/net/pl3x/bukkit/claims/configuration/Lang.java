@@ -212,7 +212,7 @@ public class Lang {
         CLAIMBOOK_DISABLED = config.getString("claimbook-disabled", "&4Claimbooks are disabled");
         CLAIMBOOK_GIVEN = config.getString("claimbook-given", "&gGiven claimbook to {target}");
         CLAIMBOOK_AUTHOR = config.getString("claimbook-author", "BillyGalbreath");
-        CLAIMBOOK_TITLE = config.getString("claimbook-title", "How to Clam Land");
+        CLAIMBOOK_TITLE = config.getString("claimbook-title", "How to Claim Land");
         CLAIMBOOK_PAGES = config.getStringList("claimbook-pages");
         if (CLAIMBOOK_PAGES == null || CLAIMBOOK_PAGES.isEmpty()) {
             CLAIMBOOK_PAGES = new ArrayList<>();
