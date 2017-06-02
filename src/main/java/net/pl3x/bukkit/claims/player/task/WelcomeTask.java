@@ -36,7 +36,7 @@ public class WelcomeTask extends BukkitRunnable {
             meta.addPage(page
                     .replace("{claimtool}", WordUtils.capitalizeFully(
                             Config.CLAIM_TOOL_MATERIAL.replace("_", " ")))
-                    .replace("{inpsecttool}", WordUtils.capitalizeFully(
+                    .replace("{inspecttool}", WordUtils.capitalizeFully(
                             Config.INSPECT_TOOL_MATERIAL.replace("_", " "))));
         }
 
