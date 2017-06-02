@@ -408,7 +408,7 @@ public class ClaimToolListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerPlacedBlockOutsideClaim(BlockPlaceEvent event) {
         //
-        // TODO
+        // TODO show player their claim and warn about no protection
         //
     }
 }

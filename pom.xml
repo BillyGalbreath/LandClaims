@@ -6,6 +6,7 @@
     <version>1.12-b${build}</version>
     <packaging>jar</packaging>
     <properties>
+        <build>SNAPSHOT</build>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>

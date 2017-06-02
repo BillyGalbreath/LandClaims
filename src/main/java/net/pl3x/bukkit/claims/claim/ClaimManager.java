@@ -92,14 +92,15 @@ public class ClaimManager {
     public void resizeClaim(Player player, Claim claim, Coordinates newCoords) {
         Pl3xPlayer pl3xPlayer = plugin.getPlayerManager().getPlayer(player);
         Coordinates oldCoords = claim.getCoordinates();
+        plugin.getLog().debug(player.getName() + " is Resizing Claim #" + claim.getId());
+        plugin.getLog().debug("    Old Coords: " + oldCoords);
+        plugin.getLog().debug("    New Coords: " + newCoords);
 
         // check top level claim size rules and permissions
         // admin claims bypass this check
         if (claim.getParent() == null && !claim.isAdminClaim()) {
-            // check minimum size requirements if shrinking
-            // players with "adminclaims" permissions bypass this check
-            if (!player.hasPermission("command.adminclaims") &&
-                    (newCoords.getWidthX() < oldCoords.getWidthX() || newCoords.getWidthZ() < oldCoords.getWidthZ())) {
+            // re-check minimum size requirements if shrinking
+            if (newCoords.getWidthX() < oldCoords.getWidthX() || newCoords.getWidthZ() < oldCoords.getWidthZ()) {
                 if (newCoords.getWidthX() < Config.CLAIMS_MIN_WIDTH || newCoords.getWidthZ() < Config.CLAIMS_MIN_WIDTH) {
                     Lang.send(player, Lang.RESIZE_FAILED_TOO_NARROW
                             .replace("{minimum}", Integer.toString(Config.CLAIMS_MIN_WIDTH)));

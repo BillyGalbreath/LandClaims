@@ -32,11 +32,11 @@ public class Coordinates {
                 coords.getMaxX(), coords.getMaxZ());
     }
 
-    public void resize(int x1, int x2, int z1, int z2) {
-        minX = Math.min(x1, x2);
-        minZ = Math.min(z1, z2);
-        maxX = Math.max(x1, x2);
-        maxZ = Math.max(z1, z2);
+    public void resize(int minX, int minZ, int maxX, int maxZ) {
+        this.minX = Math.min(minX, maxX);
+        this.minZ = Math.min(minZ, maxZ);
+        this.maxX = Math.max(minX, maxX);
+        this.maxZ = Math.max(minZ, maxZ);
     }
 
     public World getWorld() {
@@ -131,5 +131,14 @@ public class Coordinates {
             }
         }
         return hashes;
+    }
+
+    @Override
+    public String toString() {
+        return "Coordinates[world:" + world.getName() +
+                ",minX:" + minX +
+                ",minZ:" + minZ +
+                ",maxX:" + maxX +
+                ",maxZ:" + maxZ + "]";
     }
 }
