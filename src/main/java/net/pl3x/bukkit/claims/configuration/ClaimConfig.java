@@ -110,7 +110,7 @@ public class ClaimConfig extends YamlConfiguration {
     }
 
     public void setOwner(UUID owner) {
-        set("owner", owner.toString());
+        set("owner", owner == null ? null : owner.toString());
     }
 
     public void setParent(Claim parent) {

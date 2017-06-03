@@ -169,9 +169,13 @@ public class ClaimManager {
         int remaining = pl3xPlayer.getRemainingClaimBlocks();
         UUID owner = claim.getParent() != null ? claim.getParent().getOwner() : claim.getOwner();
         if (!player.getUniqueId().equals(owner)) {
-            remaining = plugin.getPlayerManager().getPlayer(owner).getRemainingClaimBlocks();
-            if (!Bukkit.getOfflinePlayer(owner).isOnline()) {
-                plugin.getPlayerManager().unload(owner);
+            if (claim.isAdminClaim()) {
+                remaining = 0;
+            } else {
+                remaining = plugin.getPlayerManager().getPlayer(owner).getRemainingClaimBlocks();
+                if (!Bukkit.getOfflinePlayer(owner).isOnline()) {
+                    plugin.getPlayerManager().unload(owner);
+                }
             }
         }
 
@@ -238,7 +242,7 @@ public class ClaimManager {
 
             // get the owner
             UUID owner = config.getOwner();
-            if (owner == null) {
+            if (owner == null && !isAdminClaim) {
                 plugin.getLog().error("   Could not get owner! Skipping.. (file " + id + ".yml)");
                 continue;
             }
