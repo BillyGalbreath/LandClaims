@@ -111,7 +111,9 @@ public class ClaimToolListener implements Listener {
         }
 
         Lang.send(player, Lang.INSPECT_BLOCK_CLAIMED
-                .replace("{owner}", claim.getOwner() == null ? "admin" : Bukkit.getOfflinePlayer(claim.getOwner()).getName()));
+                .replace("{owner}", claim.getOwner() == null ? "admin" :
+                        Bukkit.getOfflinePlayer(claim.getOwner()).getName())
+                .replace("{flags}", claim.getFlagsList()));
         pl3xPlayer.showVisualization(claim);
 
         if (player.hasPermission("claims.inspect.seeclaimsize")) {

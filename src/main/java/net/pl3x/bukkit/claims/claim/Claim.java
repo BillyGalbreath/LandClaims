@@ -3,6 +3,7 @@ package net.pl3x.bukkit.claims.claim;
 import net.pl3x.bukkit.claims.Logger;
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.claim.flag.FlagType;
+import net.pl3x.bukkit.claims.configuration.Lang;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Claim {
     private final Pl3xClaims plugin;
@@ -88,6 +90,14 @@ public class Claim {
             return;
         }
         flags.put(flag, value);
+    }
+
+    public String getFlagsList() {
+        return String.join("", flags.entrySet().stream()
+                .map(entry -> Lang.INSPECT_BLOCK_FLAGS
+                        .replace("{flag}", entry.getKey().name())
+                        .replace("{value}", entry.getValue() ? "allow" : "deny"))
+                .collect(Collectors.toList()));
     }
 
     public Map<UUID, TrustType> getTrusts() {
@@ -227,7 +237,7 @@ public class Claim {
     }
 
     public boolean allowManage(Player player) {
-        return owner == player.getUniqueId() || managers.contains(player.getUniqueId()) ||
+        return isOwner(player) || managers.contains(player.getUniqueId()) ||
                 (isAdminClaim() && player.hasPermission("command.adminclaims"));
     }
 }

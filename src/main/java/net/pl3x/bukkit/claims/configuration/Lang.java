@@ -70,6 +70,7 @@ public class Lang {
     public static String INSPECT_TOO_FAR;
     public static String INSPECT_NEARBY_CLAIMS;
     public static String INSPECT_BLOCK_CLAIMED;
+    public static String INSPECT_BLOCK_FLAGS;
     public static String INSPECT_CLAIM_DIMENSIONS;
     public static String INSPECT_OWNER_INACTIVITY;
 
@@ -228,7 +229,8 @@ public class Lang {
         INSPECT_NO_CLAIM = config.getString("inspect-no-claim", "&4There are no claims here");
         INSPECT_TOO_FAR = config.getString("inspect-too-far", "&4That is too far away");
         INSPECT_NEARBY_CLAIMS = config.getString("inspect-nearby-claims", "&dFound {amount} land claims");
-        INSPECT_BLOCK_CLAIMED = config.getString("inspect-block-claimed", "&dThat block has been claimed by {owner}");
+        INSPECT_BLOCK_CLAIMED = config.getString("inspect-block-claimed", "&dThat block has been claimed by {owner}\n&d Flags&e:{flags}");
+        INSPECT_BLOCK_FLAGS = config.getString("inspect-block-flags", "\n&3  {flag}&e: &7{value}");
         INSPECT_CLAIM_DIMENSIONS = config.getString("inspect-claim-dimensions", "&d {widthX}x{widthZ}={area}");
         INSPECT_OWNER_INACTIVITY = config.getString("inspect-owner-inactivity", "&d Last login: {amount} days ago");
 
