@@ -32,7 +32,7 @@ public class CmdTrust implements TabExecutor {
         CONTAINERTRUST(Lang.TRUST_CONTAINER),
         ACCESSTRUST(Lang.TRUST_ACCESS),
         PERMISSIONTRUST(Lang.TRUST_PERMISSION),
-        UNTRUST(null);
+        UNTRUST(Lang.TRUST_UNTRUST);
 
         private final String desc;
 

@@ -102,10 +102,10 @@ public class CmdTrustList implements TabExecutor {
         Lang.send(sender, ChatColor.YELLOW + "> " + String.join(", ", builders));
         Lang.send(sender, ChatColor.GREEN + "> " + String.join(", ", containers));
         Lang.send(sender, ChatColor.BLUE + "> " + String.join(", ", accessors));
-        Lang.send(sender, ChatColor.GOLD + Lang.TRUSTLIST_MANAGERS + ", " +
-                ChatColor.GOLD + Lang.TRUSTLIST_BUILDERS + " " +
-                ChatColor.GOLD + Lang.TRUSTLIST_CONTAINERS + " " +
-                ChatColor.GOLD + Lang.TRUSTLIST_ACCESSORS);
+        Lang.send(sender, ChatColor.GOLD + Lang.TRUSTLIST_MANAGERS + " " +
+                ChatColor.YELLOW + Lang.TRUSTLIST_BUILDERS + " " +
+                ChatColor.GREEN + Lang.TRUSTLIST_CONTAINERS + " " +
+                ChatColor.BLUE + Lang.TRUSTLIST_ACCESSORS);
         return true;
     }
 }

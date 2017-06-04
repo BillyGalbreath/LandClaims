@@ -6,7 +6,7 @@ import org.bukkit.inventory.InventoryHolder;
 
 public class BlockUtil {
     public static boolean isContainer(Block block) {
-        return block instanceof InventoryHolder ||
+        return block.getState() instanceof InventoryHolder ||
                 block.getType() == Material.CAULDRON ||
                 block.getType() == Material.JUKEBOX ||
                 block.getType() == Material.ANVIL ||

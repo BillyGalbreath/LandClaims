@@ -139,6 +139,7 @@ public class Lang {
     public static String TRUST_CONTAINER;
     public static String TRUST_ACCESS;
     public static String TRUST_PERMISSION;
+    public static String TRUST_UNTRUST;
     public static String TRUST_CURRENT_CLAIM;
     public static String TRUST_ALL_CLAIMS;
     public static String TRUST_SUCCESS;
@@ -299,6 +300,7 @@ public class Lang {
         TRUST_CONTAINER = config.getString("trust-container", "access containers and animals");
         TRUST_ACCESS = config.getString("trust-access", "use buttons and levers");
         TRUST_PERMISSION = config.getString("trust-permission", "manage permissions");
+        TRUST_UNTRUST = config.getString("trust-untrust", "untrust player");
         TRUST_CURRENT_CLAIM = config.getString("trust-current-claim", "in this claim");
         TRUST_ALL_CLAIMS = config.getString("trust-all-claims", "in all your claims");
         TRUST_SUCCESS = config.getString("trust-success", "&dGranted {target} permission to {desc} {location}");
