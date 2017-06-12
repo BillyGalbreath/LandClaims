@@ -26,6 +26,7 @@ import net.pl3x.bukkit.claims.command.CmdTrust;
 import net.pl3x.bukkit.claims.command.CmdTrustList;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
+import net.pl3x.bukkit.claims.dynmap.DynmapHook;
 import net.pl3x.bukkit.claims.listener.ClaimToolListener;
 import net.pl3x.bukkit.claims.listener.FlagListener;
 import net.pl3x.bukkit.claims.listener.PlayerListener;
@@ -41,6 +42,7 @@ public class Pl3xClaims extends JavaPlugin {
     private final Logger logger;
     private final ClaimManager claimManager;
     private final PlayerManager playerManager;
+    private DynmapHook dynmapHook;
 
     public Pl3xClaims() {
         logger = new Logger(this);
@@ -80,6 +82,11 @@ public class Pl3xClaims extends JavaPlugin {
         getLog().info("&3                                   ▀███▄▄▄   ▄▄▄███▀                  Pl3x&oClaims");
         getLog().info("&3                                      ▀▀▀█████▀▀▀                          ©2017");
 
+        if (getServer().getPluginManager().isPluginEnabled("Dynmap")) {
+            getLog().info("Found Dynmap. Hooking claim markers...");
+            dynmapHook = new DynmapHook(this);
+        }
+
         getServer().getPluginManager().registerEvents(new ClaimToolListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         getServer().getPluginManager().registerEvents(new ProtectionListener(this), this);
@@ -116,6 +123,8 @@ public class Pl3xClaims extends JavaPlugin {
     }
 
     public void onDisable() {
+        dynmapHook.disable();
+
         getClaimManager().unloadClaims();
 
         getPlayerManager().unloadAll();

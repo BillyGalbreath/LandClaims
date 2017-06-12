@@ -49,7 +49,7 @@ public class Claim {
     }
 
     public boolean isOwner(Player player) {
-        return isOwner(player.getUniqueId());
+        return isAdminClaim && player.hasPermission("command.adminclaims") || isOwner(player.getUniqueId());
     }
 
     public boolean isOwner(UUID uuid) {
@@ -113,7 +113,11 @@ public class Claim {
     }
 
     public TrustType getTrust(UUID uuid) {
-        return trusts.get(uuid);
+        TrustType trust = trusts.get(uuid);
+        if (trust == null) {
+            trust = trusts.get(null);
+        }
+        return trust;
     }
 
     public void setTrust(UUID uuid, TrustType trustType) {
@@ -149,14 +153,10 @@ public class Claim {
     }
 
     public boolean allowAccess(Player player) {
-        return allowAccess(player.getUniqueId());
-    }
-
-    public boolean allowAccess(UUID uuid) {
-        if (isOwner(uuid)) {
+        if (isOwner(player)) {
             return true;
         }
-        TrustType trust = trusts.get(uuid);
+        TrustType trust = getTrust(player);
         if (trust == null) {
             logger.debug("allowAccess: trusts empty (" + id + ")");
             return false;
@@ -167,20 +167,16 @@ public class Claim {
             case BUILDER:
                 return true;
             default:
-                logger.debug("allowAccess: not trusted (" + uuid + " " + id + ")");
+                logger.debug("allowAccess: not trusted (" + player.getUniqueId() + " " + id + ")");
                 return false;
         }
     }
 
     public boolean allowContainers(Player player) {
-        return allowContainers(player.getUniqueId());
-    }
-
-    public boolean allowContainers(UUID uuid) {
-        if (isOwner(uuid)) {
+        if (isOwner(player)) {
             return true;
         }
-        TrustType trust = trusts.get(uuid);
+        TrustType trust = getTrust(player);
         if (trust == null) {
             logger.debug("allowContainers: trusts empty (" + id + ")");
             return false;
@@ -190,20 +186,16 @@ public class Claim {
             case BUILDER:
                 return true;
             default:
-                logger.debug("allowContainers: not trusted (" + uuid + " " + id + ")");
+                logger.debug("allowContainers: not trusted (" + player.getUniqueId() + " " + id + ")");
                 return false;
         }
     }
 
     public boolean allowBuild(Player player) {
-        return allowBuild(player.getUniqueId());
-    }
-
-    public boolean allowBuild(UUID uuid) {
-        if (isOwner(uuid)) {
+        if (isOwner(player)) {
             return true;
         }
-        TrustType trust = trusts.get(uuid);
+        TrustType trust = getTrust(player);
         if (trust == null) {
             logger.debug("allowBuild: trusts empty (" + id + ")");
             return false;
@@ -212,7 +204,7 @@ public class Claim {
             case BUILDER:
                 return true;
             default:
-                logger.debug("allowBuild: not trusted (" + uuid + " " + id + ")");
+                logger.debug("allowBuild: not trusted (" + player.getUniqueId() + " " + id + ")");
                 return false;
         }
     }

@@ -3,6 +3,7 @@ package net.pl3x.bukkit.claims.listener;
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.player.Pl3xPlayer;
+import net.pl3x.bukkit.claims.player.task.WelcomeTask;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -36,6 +37,7 @@ public class PlayerListener implements Listener {
 
         if (!player.hasPlayedBefore()) {
             pl3xPlayer.setClaimBlocks(Config.STARTING_BLOCKS);
+            new WelcomeTask(player).runTaskLater(plugin, 200L);
         }
     }
 

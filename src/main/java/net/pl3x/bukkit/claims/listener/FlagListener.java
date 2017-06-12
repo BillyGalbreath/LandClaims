@@ -6,6 +6,7 @@ import net.pl3x.bukkit.claims.claim.flag.FlagType;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.util.EntityUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -170,7 +171,7 @@ public class FlagListener implements Listener {
      * PvP & Mob Damage & Mob Griefing
      */
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onPlayerDamagePlayer(EntityDamageByEntityEvent event) {
+    public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
         if (Config.isWorldDisabled(event.getDamager().getWorld())) {
             return; // claims not enabled in this world
         }

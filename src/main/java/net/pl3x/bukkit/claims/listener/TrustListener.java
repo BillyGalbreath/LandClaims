@@ -19,6 +19,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Hanging;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
@@ -30,7 +31,7 @@ import org.bukkit.event.block.BlockMultiPlaceEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerFishEvent;
@@ -41,6 +42,7 @@ import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.projectiles.ProjectileSource;
 
 public class TrustListener implements Listener {
     private final Pl3xClaims plugin;
@@ -63,6 +65,20 @@ public class TrustListener implements Listener {
         Claim claim = plugin.getClaimManager().getClaim(event.getBlock().getLocation());
         if (claim == null) {
             return;
+        }
+        if ((event.getBlock().getType() == Material.MELON_BLOCK ||
+                event.getBlock().getType() == Material.PUMPKIN ||
+                event.getBlock().getType() == Material.CROPS ||
+                event.getBlock().getType() == Material.BEETROOT_BLOCK ||
+                event.getBlock().getType() == Material.POTATO ||
+                event.getBlock().getType() == Material.CARROT ||
+                event.getBlock().getType() == Material.COCOA ||
+                event.getBlock().getType() == Material.SUGAR_CANE_BLOCK ||
+                event.getBlock().getType() == Material.NETHER_WART_BLOCK ||
+                event.getBlock().getType() == Material.CACTUS) &&
+                !claim.allowContainers(event.getPlayer())) {
+            Lang.send(event.getPlayer(), Lang.CONTAINER_DENY);
+            event.setCancelled(true);
         }
         if (!claim.allowBuild(event.getPlayer())) {
             Lang.send(event.getPlayer(), Lang.BUILD_DENY);
@@ -130,6 +146,10 @@ public class TrustListener implements Listener {
             return;
         }
 
+        if (plugin.getPlayerManager().getPlayer((Player) event.getEntity()).isIgnoringClaims()) {
+            return; // overrides claims
+        }
+
         Player player = (Player) event.getEntity();
         Claim claim = plugin.getClaimManager().getClaim(event.getBlock().getLocation());
         if (claim != null && !claim.allowBuild(player)) {
@@ -158,6 +178,50 @@ public class TrustListener implements Listener {
 
         if (!claim.allowBuild(event.getPlayer())) {
             Lang.send(event.getPlayer(), Lang.BUILD_DENY);
+            event.setCancelled(true);
+        }
+    }
+
+    /*
+     * Stops players from hurting animals without container trust
+     */
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerHurtAnimal(EntityDamageByEntityEvent event) {
+        Entity entity = event.getEntity();
+        if (Config.isWorldDisabled(entity.getWorld())) {
+            return;
+        }
+
+        if (!EntityUtil.isAnimal(entity)) {
+            return; // not hurting animal
+        }
+
+        Entity killer = event.getDamager();
+        Player player = null;
+        if (killer instanceof Player) {
+            player = (Player) killer;
+        } else if (killer instanceof Projectile) {
+            ProjectileSource shooter = ((Projectile) killer).getShooter();
+            if (shooter instanceof Player) {
+                player = (Player) shooter;
+            }
+        }
+
+        if (player == null) {
+            return; // not killed by player
+        }
+
+        if (plugin.getPlayerManager().getPlayer(player).isIgnoringClaims()) {
+            return; // overrides claims
+        }
+
+        Claim claim = plugin.getClaimManager().getClaim(entity.getLocation());
+        if (claim == null) {
+            return;
+        }
+
+        if (!claim.allowContainers(player)) {
+            Lang.send(player, Lang.CONTAINER_DENY);
             event.setCancelled(true);
         }
     }
@@ -344,6 +408,10 @@ public class TrustListener implements Listener {
             return;
         }
 
+        if (plugin.getPlayerManager().getPlayer(event.getPlayer()).isIgnoringClaims()) {
+            return; // overrides claims
+        }
+
         Claim claim = plugin.getClaimManager().getClaim(event.getTo());
         if (claim == null) {
             return;
@@ -370,6 +438,10 @@ public class TrustListener implements Listener {
 
         if (Config.isWorldDisabled(event.getTo().getWorld())) {
             return; // claims not enabled in this world
+        }
+
+        if (plugin.getPlayerManager().getPlayer(event.getPlayer()).isIgnoringClaims()) {
+            return; // overrides claims
         }
 
         Location destination = event.getTo();
@@ -403,6 +475,10 @@ public class TrustListener implements Listener {
             return; // claims not enabled in this world
         }
 
+        if (plugin.getPlayerManager().getPlayer(event.getPlayer()).isIgnoringClaims()) {
+            return; // overrides claims
+        }
+
         Claim claim = plugin.getClaimManager().getClaim(event.getBlockClicked().getRelative(event.getBlockFace()).getLocation());
         if (claim != null && !claim.allowBuild(event.getPlayer())) {
             Lang.send(event.getPlayer(), Lang.BUILD_DENY);
@@ -423,33 +499,13 @@ public class TrustListener implements Listener {
             return; // clicked cow for milk; let interact event handle
         }
 
+        if (plugin.getPlayerManager().getPlayer(event.getPlayer()).isIgnoringClaims()) {
+            return; // overrides claims
+        }
+
         Claim claim = plugin.getClaimManager().getClaim(event.getBlockClicked().getLocation());
         if (claim != null && !claim.allowBuild(event.getPlayer())) {
             Lang.send(event.getPlayer(), Lang.BUILD_DENY);
-            event.setCancelled(true);
-        }
-    }
-
-    /*
-     * Stops players from trampling crops
-     */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onPlayerTrampleCrops(EntityChangeBlockEvent event) {
-        if (Config.isWorldDisabled(event.getBlock().getWorld())) {
-            return; // claims not enabled in this world
-        }
-
-        if (event.getEntityType() != EntityType.PLAYER) {
-            return;
-        }
-
-        if (event.getTo() != Material.DIRT || event.getBlock().getType() != Material.SOIL) {
-            return;
-        }
-
-        Claim claim = plugin.getClaimManager().getClaim(event.getBlock().getLocation());
-        if (claim != null && !claim.allowBuild((Player) event.getEntity())) {
-            Lang.send(event.getEntity(), Lang.BUILD_DENY);
             event.setCancelled(true);
         }
     }

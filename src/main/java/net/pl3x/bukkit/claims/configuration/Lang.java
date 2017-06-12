@@ -220,6 +220,7 @@ public class Lang {
             CLAIMBOOK_PAGES = new ArrayList<>();
             CLAIMBOOK_PAGES.add("Claim land to protect your stuff!\n\nOur claim tools are {claimtool} and {inspecttool}.");
             CLAIMBOOK_PAGES.add("Useful Commands:\n\n/trust /untrust /trustlist\n/claimslist\n/abandonclaim\n\n/claim /extendclaim\n\n/childclaims\n/accesstrust\n/containertrust\n/permissiontrust");
+            CLAIMBOOK_PAGES.add("/setflag Defaults:\n\nExplosions DENY\nFirespread DENY\nMob_Damage ALLOW\nMob_Griefing DENY\nPVP DENY\nSpawn_Animals ALLOW\nSpawn_Mobs ALLOW");
         }
 
         CLAIMSLIST_HEADER = config.getString("claimslist-header", "&d{owner} Claims:");

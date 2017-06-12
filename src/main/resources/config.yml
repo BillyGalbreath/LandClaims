@@ -34,3 +34,25 @@ inspect-tool:
     data: 0
     name: ""
     lore: []
+
+dynmap:
+    layer:
+        name: "Pl3xClaims"
+        priority: 2
+        hidebydefault: false
+    minzoom: 0
+    info-window: '<div class="infowindow">Claim Owner: <span style="font-weight:bold;">%owner%</span><br/>Permission Trust: <span style="font-weight:bold;">%managers%</span><br/>Trust: <span style="font-weight:bold;">%builders%</span><br/>Container Trust: <span style="font-weight:bold;">%containers%</span><br/>Access Trust: <span style="font-weight:bold;">%accessors%</span></div>'
+    admin-window: '<div class="infowindow"><span style="font-weight:bold;">Administrator Claim</span><br/>Permission Trust: <span style="font-weight:bold;">%managers%</span><br/>Trust: <span style="font-weight:bold;">%builders%</span><br/>Container Trust: <span style="font-weight:bold;">%containers%</span><br/>Access Trust: <span style="font-weight:bold;">%accessors%</span></div>'
+    use3dregions: false
+    visibleregions: []
+    hiddenregions: []
+    regionstyle:
+        strokeColor: "#FF0000"
+        strokeOpacity: 0.8
+        strokeWeight: 3
+        fillColor: "#FF0000"
+        fillOpacity: 0.35
+    ownerstyle:
+        administrator:
+            strokeColor: "#0000FF"
+            fillColor: "#0000FF"

@@ -52,7 +52,7 @@ public class CmdTrapped implements TabExecutor {
         }
 
         Claim claim = plugin.getClaimManager().getClaim(player.getLocation());
-        if (claim == null || claim.allowBuild(player.getUniqueId())) {
+        if (claim == null || claim.allowBuild(player)) {
             Lang.send(sender, Lang.TRAPPED_CAN_BUILD);
             return true;
         }

@@ -10,6 +10,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.block.BlockFromToEvent;
@@ -18,6 +19,8 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.material.Dispenser;
 
@@ -202,5 +205,53 @@ public class ProtectionListener implements Listener {
                 event.getEntityType() == EntityType.WITHER) {
             event.setCancelled(true);
         }
+    }
+
+    /*
+     * Stops soil from being trampled by entities
+     */
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onSoilTrample(EntityInteractEvent event) {
+        if (Config.isWorldDisabled(event.getBlock().getWorld())) {
+            return; // claims not enabled in this world
+        }
+
+        if (event.getBlock().getType() != Material.SOIL &&
+                event.getBlock().getType() != Material.CROPS) {
+            return; // not soil/crops
+        }
+
+        Claim claim = plugin.getClaimManager().getClaim(event.getBlock().getLocation());
+        if (claim == null) {
+            return;
+        }
+
+        event.setCancelled(true);
+    }
+
+    /*
+     * Stops soil from being trampled by players
+     */
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onSoilTrample(PlayerInteractEvent event) {
+        if (event.getAction() != Action.PHYSICAL) {
+            return;
+        }
+
+        if (Config.isWorldDisabled(event.getClickedBlock().getWorld())) {
+            return; // claims not enabled in this world
+        }
+
+        if (event.getClickedBlock().getType() != Material.SOIL &&
+                event.getClickedBlock().getType() != Material.CROPS) {
+            return; // not soil/crops
+        }
+
+        Claim claim = plugin.getClaimManager().getClaim(event.getClickedBlock().getLocation());
+        if (claim == null) {
+            return;
+        }
+
+        event.setCancelled(true);
     }
 }
