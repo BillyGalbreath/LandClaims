@@ -58,12 +58,13 @@ public class CmdTrust implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 1) {
-            List<String> results = Arrays.stream(Bukkit.getOfflinePlayers())
-                    .filter(offlinePlayer -> offlinePlayer.getName().toLowerCase().startsWith(args[0].toLowerCase()))
+            List<String> list = Arrays.stream(Bukkit.getOfflinePlayers())
                     .map(OfflinePlayer::getName).collect(Collectors.toList());
-            results.add("all");
-            results.add("public");
-            return results;
+            list.add("all");
+            list.add("public");
+            return list.stream()
+                    .filter(name -> name.toLowerCase().startsWith(args[0].toLowerCase()))
+                    .collect(Collectors.toList());
         }
         return null;
     }
@@ -91,11 +92,14 @@ public class CmdTrust implements TabExecutor {
             return false;
         }
 
-        //noinspection deprecation
-        OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
-        if (target == null && !(args[0].equalsIgnoreCase("all") || args[0].equalsIgnoreCase("public"))) {
-            Lang.send(sender, Lang.COMMAND_PLAYER_NOT_FOUND);
-            return true;
+        OfflinePlayer target = null;
+        if (!(args[0].equalsIgnoreCase("all") || args[0].equalsIgnoreCase("public"))) {
+            //noinspection deprecation
+            target = Bukkit.getOfflinePlayer(args[0]);
+            if (target == null) {
+                Lang.send(sender, Lang.COMMAND_PLAYER_NOT_FOUND);
+                return true;
+            }
         }
 
         Collection<Claim> targetClaims = new HashSet<>();
@@ -120,7 +124,7 @@ public class CmdTrust implements TabExecutor {
             return false; // not sure if this is even possible
         }
 
-        UUID targetUUID = target == null ? null : target.getUniqueId();
+        UUID targetUUID = target == null ? Claim.PUBLIC_UUID : target.getUniqueId();
         String targetName = target == null ? Lang.TRUST_PUBLIC : target.getName();
         String targetLoc = targetClaims.size() == 1 ? Lang.TRUST_CURRENT_CLAIM : Lang.TRUST_ALL_CLAIMS;
         for (Claim targetClaim : targetClaims) {

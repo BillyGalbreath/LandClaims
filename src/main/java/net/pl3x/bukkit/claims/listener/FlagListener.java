@@ -6,7 +6,6 @@ import net.pl3x.bukkit.claims.claim.flag.FlagType;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.util.EntityUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;

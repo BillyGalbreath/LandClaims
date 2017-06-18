@@ -4,6 +4,8 @@ import net.pl3x.bukkit.claims.Logger;
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.claim.flag.FlagType;
 import net.pl3x.bukkit.claims.configuration.Lang;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -14,6 +16,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Claim {
+    public static final UUID PUBLIC_UUID = new UUID(0L, 0L);
     private final Pl3xClaims plugin;
     private final Logger logger;
     private final long id;
@@ -42,6 +45,14 @@ public class Claim {
 
     public UUID getOwner() {
         return owner;
+    }
+
+    public String getOwnerName() {
+        if (owner == null) {
+            return "admin";
+        }
+        OfflinePlayer target = Bukkit.getOfflinePlayer(owner);
+        return target == null ? "unknown" : (target.getName() == null ? "unknown" : target.getName());
     }
 
     public void setOwner(UUID owner) {
@@ -115,16 +126,18 @@ public class Claim {
     public TrustType getTrust(UUID uuid) {
         TrustType trust = trusts.get(uuid);
         if (trust == null) {
-            trust = trusts.get(null);
+            trust = trusts.get(PUBLIC_UUID);
         }
         return trust;
     }
 
     public void setTrust(UUID uuid, TrustType trustType) {
         if (trustType == null) {
+            plugin.getLog().debug("Removing trust for UUID: " + uuid);
             trusts.remove(uuid);
             return;
         }
+        plugin.getLog().debug("Adding trust " + trustType.name() + " for UUID: " + uuid);
         trusts.put(uuid, trustType);
     }
 

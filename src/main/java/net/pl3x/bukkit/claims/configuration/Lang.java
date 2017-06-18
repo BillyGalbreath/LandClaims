@@ -74,8 +74,6 @@ public class Lang {
     public static String INSPECT_CLAIM_DIMENSIONS;
     public static String INSPECT_OWNER_INACTIVITY;
 
-    public static String NO_CLAIM_CREATE_PERMISSION;
-
     public static String RESIZE_FAILED_OVERLAP;
     public static String RESIZE_FAILED_CHILD_OVERLAP;
     public static String RESIZE_FAILED_CHILD_OVERLAP_PARENT;
@@ -235,8 +233,6 @@ public class Lang {
         INSPECT_BLOCK_FLAGS = config.getString("inspect-block-flags", "\n&3  {flag}&e: &7{value}");
         INSPECT_CLAIM_DIMENSIONS = config.getString("inspect-claim-dimensions", "&d {widthX}x{widthZ}={area}");
         INSPECT_OWNER_INACTIVITY = config.getString("inspect-owner-inactivity", "&d Last login: {amount} days ago");
-
-        NO_CLAIM_CREATE_PERMISSION = config.getString("no-claim-create-permission", "&You don't have permission to claim land");
 
         RESIZE_FAILED_OVERLAP = config.getString("resize-failed-overlap", "&4You can't resize the claim here because it will overlap another claim");
         RESIZE_FAILED_CHILD_OVERLAP = config.getString("resize-failed-child-overlap", "&4Your selected area overlaps another child");

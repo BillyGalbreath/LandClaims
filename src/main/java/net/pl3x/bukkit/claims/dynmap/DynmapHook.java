@@ -83,7 +83,7 @@ public class DynmapHook {
 
         claim.getTrusts().forEach((uuid, trustType) -> {
             String targetName = null;
-            if (uuid == null) {
+            if (uuid.equals(Claim.PUBLIC_UUID)) {
                 targetName = Lang.TRUST_PUBLIC;
             } else {
                 OfflinePlayer target = Bukkit.getOfflinePlayer(uuid);
@@ -104,7 +104,7 @@ public class DynmapHook {
 
         claim.getManagers().forEach(uuid -> {
             String targetName = null;
-            if (uuid == null) {
+            if (uuid.equals(Claim.PUBLIC_UUID)) {
                 targetName = Lang.TRUST_PUBLIC;
             } else {
                 OfflinePlayer target = Bukkit.getOfflinePlayer(uuid);
@@ -112,11 +112,13 @@ public class DynmapHook {
                     targetName = target.getName();
                 }
             }
-            managers.add(targetName);
+            if (targetName != null) {
+                managers.add(targetName);
+            }
         });
 
         return ("<div class=\"regioninfo\">" + (claim.isAdminClaim() ? Config.DYNMAP_ADMIN_WINDOW : Config.DYNMAP_INFO_WINDOW) + "</div>")
-                .replace("%owner%", claim.isAdminClaim() ? ADMIN_ID : Bukkit.getOfflinePlayer(claim.getOwner()).getName())
+                .replace("%owner%", claim.getOwnerName())
                 .replace("%area%", Integer.toString(claim.getCoordinates().getArea()))
                 .replace("%builders%", String.join(", ", builders))
                 .replace("%containers%", String.join(", ", containers))
@@ -172,7 +174,7 @@ public class DynmapHook {
             return;
         }
         String worldName = min.getWorld().getName();
-        String ownerName = claim.isAdminClaim() ? ADMIN_ID : Bukkit.getOfflinePlayer(claim.getOwner()).getName();
+        String ownerName = claim.getOwnerName();
 
         double[] x;
         double[] z;

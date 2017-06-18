@@ -65,7 +65,7 @@ public class CmdTrustList implements TabExecutor {
 
         claim.getTrusts().forEach((uuid, trustType) -> {
             String targetName = null;
-            if (uuid == null) {
+            if (uuid.equals(Claim.PUBLIC_UUID)) {
                 targetName = Lang.TRUST_PUBLIC;
             } else {
                 OfflinePlayer target = Bukkit.getOfflinePlayer(uuid);
@@ -73,6 +73,7 @@ public class CmdTrustList implements TabExecutor {
                     targetName = target.getName();
                 }
             }
+            System.out.print("targetName: " + targetName);
             if (targetName != null) {
                 if (trustType == TrustType.BUILDER) {
                     builders.add(targetName);
@@ -86,7 +87,7 @@ public class CmdTrustList implements TabExecutor {
 
         claim.getManagers().forEach(uuid -> {
             String targetName = null;
-            if (uuid == null) {
+            if (uuid.equals(Claim.PUBLIC_UUID)) {
                 targetName = Lang.TRUST_PUBLIC;
             } else {
                 OfflinePlayer target = Bukkit.getOfflinePlayer(uuid);
@@ -94,7 +95,9 @@ public class CmdTrustList implements TabExecutor {
                     targetName = target.getName();
                 }
             }
-            managers.add(targetName);
+            if (targetName != null) {
+                managers.add(targetName);
+            }
         });
 
         Lang.send(sender, Lang.TRUSTLIST_HEADER);

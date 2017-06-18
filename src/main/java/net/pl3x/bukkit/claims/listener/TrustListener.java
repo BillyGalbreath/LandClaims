@@ -32,6 +32,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerFishEvent;
@@ -66,7 +67,9 @@ public class TrustListener implements Listener {
         if (claim == null) {
             return;
         }
-        if ((event.getBlock().getType() == Material.MELON_BLOCK ||
+
+        // container trust
+        if (event.getBlock().getType() == Material.MELON_BLOCK ||
                 event.getBlock().getType() == Material.PUMPKIN ||
                 event.getBlock().getType() == Material.CROPS ||
                 event.getBlock().getType() == Material.BEETROOT_BLOCK ||
@@ -75,12 +78,15 @@ public class TrustListener implements Listener {
                 event.getBlock().getType() == Material.COCOA ||
                 event.getBlock().getType() == Material.SUGAR_CANE_BLOCK ||
                 event.getBlock().getType() == Material.NETHER_WART_BLOCK ||
-                event.getBlock().getType() == Material.CACTUS) &&
-                !claim.allowContainers(event.getPlayer())) {
-            Lang.send(event.getPlayer(), Lang.CONTAINER_DENY);
-            event.setCancelled(true);
+                event.getBlock().getType() == Material.CACTUS) {
+            if (!claim.allowContainers(event.getPlayer())) {
+                Lang.send(event.getPlayer(), Lang.CONTAINER_DENY);
+                event.setCancelled(true);
+            }
         }
-        if (!claim.allowBuild(event.getPlayer())) {
+
+        // build trust
+        else if (!claim.allowBuild(event.getPlayer())) {
             Lang.send(event.getPlayer(), Lang.BUILD_DENY);
             event.setCancelled(true);
         }
@@ -104,7 +110,25 @@ public class TrustListener implements Listener {
             return;
         }
 
-        if (!claim.allowBuild(event.getPlayer())) {
+        // container trust
+        if (event.getBlock().getType() == Material.MELON_BLOCK ||
+                event.getBlock().getType() == Material.PUMPKIN ||
+                event.getBlock().getType() == Material.CROPS ||
+                event.getBlock().getType() == Material.BEETROOT_BLOCK ||
+                event.getBlock().getType() == Material.POTATO ||
+                event.getBlock().getType() == Material.CARROT ||
+                event.getBlock().getType() == Material.COCOA ||
+                event.getBlock().getType() == Material.SUGAR_CANE_BLOCK ||
+                event.getBlock().getType() == Material.NETHER_WART_BLOCK ||
+                event.getBlock().getType() == Material.CACTUS) {
+            if (!claim.allowContainers(event.getPlayer())) {
+                Lang.send(event.getPlayer(), Lang.CONTAINER_DENY);
+                event.setCancelled(true);
+            }
+        }
+
+        // build trust
+        else if (!claim.allowBuild(event.getPlayer())) {
             Lang.send(event.getPlayer(), Lang.BUILD_DENY);
             event.setCancelled(true);
         }
@@ -134,7 +158,7 @@ public class TrustListener implements Listener {
     }
 
     /*
-     * Stops players from forming blocks
+     * Stops players from forming blocks (frost walker, etc)
      */
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerFormBlock(EntityBlockFormEvent event) {
@@ -153,7 +177,7 @@ public class TrustListener implements Listener {
         Player player = (Player) event.getEntity();
         Claim claim = plugin.getClaimManager().getClaim(event.getBlock().getLocation());
         if (claim != null && !claim.allowBuild(player)) {
-            Lang.send(player, Lang.BUILD_DENY);
+            // do not notify player (to prevent spam)
             event.setCancelled(true);
         }
     }
@@ -183,17 +207,17 @@ public class TrustListener implements Listener {
     }
 
     /*
-     * Stops players from hurting animals without container trust
+     * Stops players from hurting non-mob entities (animals, armorstands, etc)
      */
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onPlayerHurtAnimal(EntityDamageByEntityEvent event) {
+    public void onPlayerHurtEntity(EntityDamageByEntityEvent event) {
         Entity entity = event.getEntity();
         if (Config.isWorldDisabled(entity.getWorld())) {
             return;
         }
 
-        if (!EntityUtil.isAnimal(entity)) {
-            return; // not hurting animal
+        if (EntityUtil.isMob(entity)) {
+            return; // dont care about hurting mobs
         }
 
         Entity killer = event.getDamager();
@@ -220,9 +244,16 @@ public class TrustListener implements Listener {
             return;
         }
 
-        if (!claim.allowContainers(player)) {
-            Lang.send(player, Lang.CONTAINER_DENY);
-            event.setCancelled(true);
+        if (EntityUtil.isAnimal(entity)) {
+            if (!claim.allowContainers(player)) {
+                Lang.send(player, Lang.CONTAINER_DENY);
+                event.setCancelled(true);
+            }
+        } else {
+            if (!claim.allowBuild(player)) {
+                Lang.send(player, Lang.BUILD_DENY);
+                event.setCancelled(true);
+            }
         }
     }
 
@@ -344,33 +375,52 @@ public class TrustListener implements Listener {
         ItemStack itemInHand = ItemUtil.getItemInHand(event.getPlayer(), event.getHand());
 
         // (container trust)
+        // special farmland check
+        if (clickedBlock.getType() == Material.SOIL &&
+                (itemInHand.getType() == Material.SEEDS ||
+                        itemInHand.getType() == Material.BEETROOT_SEEDS ||
+                        itemInHand.getType() == Material.MELON_SEEDS ||
+                        itemInHand.getType() == Material.PUMPKIN_SEEDS ||
+                        itemInHand.getType() == Material.POTATO ||
+                        itemInHand.getType() == Material.CARROT ||
+                        itemInHand.getType() == Material.COCOA ||
+                        itemInHand.getType() == Material.SUGAR_CANE ||
+                        itemInHand.getType() == Material.NETHER_WARTS ||
+                        itemInHand.getType() == Material.CACTUS)) {
+            if (!claim.allowContainers(event.getPlayer())) {
+                Lang.send(player, Lang.CONTAINER_DENY);
+                event.setCancelled(true);
+            }
+        }
+
+        // (container trust)
         // prevent opening containers
         // prevent placing minecarts
-        if ((BlockUtil.isContainer(clickedBlock) || ItemUtil.isMinecart(itemInHand))
-                && !claim.allowContainers(event.getPlayer())) {
-            Lang.send(player, Lang.CONTAINER_DENY);
-            event.setCancelled(true);
-            return;
+        else if (BlockUtil.isContainer(clickedBlock) || ItemUtil.isMinecart(itemInHand)) {
+            if (!claim.allowContainers(event.getPlayer())) {
+                Lang.send(player, Lang.CONTAINER_DENY);
+                event.setCancelled(true);
+            }
         }
 
         // (access trust)
         // prevent stealing cake
         // prevent using beds, doors, buttons, and levers
-        if ((clickedBlock.getType() == Material.CAKE_BLOCK ||
+        else if (clickedBlock.getType() == Material.CAKE_BLOCK ||
                 clickedBlock.getType() == Material.BED_BLOCK ||
                 BlockUtil.isDoor(clickedBlock) ||
-                BlockUtil.isButton(clickedBlock))
-                && !claim.allowAccess(player)) {
-            Lang.send(player, Lang.ACCESS_DENY);
-            event.setCancelled(true);
-            return;
+                BlockUtil.isButton(clickedBlock)) {
+            if (!claim.allowAccess(player)) {
+                Lang.send(player, Lang.ACCESS_DENY);
+                event.setCancelled(true);
+            }
         }
 
         // (build trust)
         // prevent using note blocks, repeaters, comparators, daylight sensors, dragon eggs, flower pots, and end crystals
         // prevent placing ink sack (bone meal), end crystals, armorstands, item frames, boats, and minecarts
         // prevent spawning monsters using eggs or monster blocks
-        if ((clickedBlock.getType() == Material.NOTE_BLOCK ||
+        else if (clickedBlock.getType() == Material.NOTE_BLOCK ||
                 clickedBlock.getType() == Material.DIODE_BLOCK_ON ||
                 clickedBlock.getType() == Material.DIODE_BLOCK_OFF ||
                 clickedBlock.getType() == Material.REDSTONE_COMPARATOR_ON ||
@@ -387,10 +437,11 @@ public class TrustListener implements Listener {
                 itemInHand.getType() == Material.MONSTER_EGG ||
                 itemInHand.getType() == Material.MONSTER_EGGS ||
                 ItemUtil.isBoat(itemInHand) ||
-                ItemUtil.isMinecart(itemInHand))
-                && !claim.allowBuild(player)) {
-            Lang.send(player, Lang.BUILD_DENY);
-            event.setCancelled(true);
+                ItemUtil.isMinecart(itemInHand)) {
+            if (!claim.allowBuild(player)) {
+                Lang.send(player, Lang.BUILD_DENY);
+                event.setCancelled(true);
+            }
         }
     }
 
@@ -506,6 +557,43 @@ public class TrustListener implements Listener {
         Claim claim = plugin.getClaimManager().getClaim(event.getBlockClicked().getLocation());
         if (claim != null && !claim.allowBuild(event.getPlayer())) {
             Lang.send(event.getPlayer(), Lang.BUILD_DENY);
+            event.setCancelled(true);
+        }
+    }
+
+    /*
+     * Stops players from breaking paintings, item frames, and leash hitches
+     */
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerHangingBreak(HangingBreakByEntityEvent event) {
+        if (Config.isWorldDisabled(event.getEntity().getWorld())) {
+            return; // claims not enabled in this world
+        }
+
+        Entity remover = event.getRemover();
+        Hanging hanging = event.getEntity();
+
+        Player player = null;
+        if (remover instanceof Player) {
+            player = (Player) remover;
+        } else if (remover instanceof Projectile) {
+            ProjectileSource shooter = ((Projectile) remover).getShooter();
+            if (shooter instanceof Player) {
+                player = (Player) shooter;
+            }
+        }
+
+        if (player == null) {
+            return; // not broke by player
+        }
+
+        if (plugin.getPlayerManager().getPlayer(player).isIgnoringClaims()) {
+            return; // overrides claims
+        }
+
+        Claim claim = plugin.getClaimManager().getClaim(hanging.getLocation());
+        if (claim != null && !claim.allowBuild(player)) {
+            Lang.send(player, Lang.BUILD_DENY);
             event.setCancelled(true);
         }
     }

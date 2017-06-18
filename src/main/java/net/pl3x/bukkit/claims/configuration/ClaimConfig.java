@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 
 public class ClaimConfig extends YamlConfiguration {
     public static final String CLAIM_DIRECTORY = "claimdata";
-    public static final UUID UUID_ZERO = new UUID(0, 0);
     private static final Map<Long, ClaimConfig> configs = new HashMap<>();
 
     public static Map<Long, ClaimConfig> getConfigs() {
@@ -219,10 +218,10 @@ public class ClaimConfig extends YamlConfiguration {
     }
 
     private String uuidToString(UUID uuid) {
-        return (uuid == null ? UUID_ZERO : uuid).toString();
+        return (uuid == null ? Claim.PUBLIC_UUID : uuid).toString();
     }
 
     private UUID stringToUUID(String s) {
-        return s == null || s.isEmpty() || s.equals(UUID_ZERO.toString()) ? null : UUID.fromString(s);
+        return s == null || s.isEmpty() ? Claim.PUBLIC_UUID : UUID.fromString(s);
     }
 }
