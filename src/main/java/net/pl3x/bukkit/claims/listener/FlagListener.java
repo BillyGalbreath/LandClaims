@@ -6,6 +6,7 @@ import net.pl3x.bukkit.claims.claim.flag.FlagType;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.util.EntityUtil;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -19,13 +20,19 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.entity.AreaEffectCloudApplyEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.entity.LingeringPotionSplashEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.projectiles.ProjectileSource;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class FlagListener implements Listener {
     private final Pl3xClaims plugin;
@@ -192,6 +199,70 @@ public class FlagListener implements Listener {
 
         if (cancelDamage(event.getCombuster(), event.getEntity())) {
             event.setCancelled(true);
+        }
+    }
+
+    /*
+     * PvP & Mob Damage
+     */
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPotionSplash(PotionSplashEvent event) {
+        if (Config.isWorldDisabled(event.getEntity().getWorld())) {
+            return; // claims not enabled in this world
+        }
+
+        if (event.getAffectedEntities().stream()
+                .anyMatch(entity -> cancelDamage(event.getEntity(), entity))) {
+            event.setCancelled(true);
+        }
+    }
+
+    /*
+     * PvP & Mob Damage
+     */
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onLingeringPotionSplash(LingeringPotionSplashEvent event) {
+        if (Config.isWorldDisabled(event.getAreaEffectCloud().getWorld())) {
+            return; // claims not enabled in this world
+        }
+
+        switch (event.getAreaEffectCloud().getBasePotionData().getType()) {
+            case SLOWNESS:
+            case INSTANT_DAMAGE:
+            case POISON:
+            case WEAKNESS:
+                break;
+            default:
+                return; // we only care about bad potion effects
+        }
+
+        Location loc = event.getAreaEffectCloud().getLocation();
+        float radius = event.getAreaEffectCloud().getRadius();
+        float radiusSquared = radius * radius;
+        int y = loc.getBlockY();
+        Set<Block> effectedBlocks = new HashSet<>();
+        for (float x = -radius; x <= radius; x++) {
+            for (float z = -radius; z <= radius; z++) {
+                if ((x * x) + (z * z) <= radiusSquared) {
+                    effectedBlocks.add(loc.getWorld().getBlockAt((int) x, y, (int) z));
+                }
+            }
+        }
+
+        if (effectedBlocks.isEmpty()) {
+            return; // no effected area ???
+        }
+
+        ProjectileSource shooter = event.getEntity().getShooter();
+        FlagType flag = shooter instanceof Player ? FlagType.PVP : FlagType.MOB_DAMAGE;
+
+        if (effectedBlocks.stream()
+                .map(block -> plugin.getClaimManager().getClaim(block.getLocation()))
+                .anyMatch(claim -> claim != null && !claim.getFlag(flag))) {
+            event.setCancelled(true);
+            if (flag == FlagType.PVP) {
+                Lang.send((Player) shooter, Lang.PVP_DENY);
+            }
         }
     }
 
