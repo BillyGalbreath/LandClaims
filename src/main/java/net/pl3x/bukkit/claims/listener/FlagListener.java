@@ -21,6 +21,7 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
@@ -171,18 +172,35 @@ public class FlagListener implements Listener {
      */
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        if (Config.isWorldDisabled(event.getDamager().getWorld())) {
+        if (Config.isWorldDisabled(event.getEntity().getWorld())) {
             return; // claims not enabled in this world
         }
 
-        Entity damaged = event.getEntity();
-        Entity damager = event.getDamager();
+        if (cancelDamage(event.getDamager(), event.getEntity())) {
+            event.setCancelled(true);
+        }
+    }
 
+    /*
+     * PvP & Mob Damage & Mob Griefing
+     */
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onEntityCombustEntity(EntityCombustByEntityEvent event) {
+        if (Config.isWorldDisabled(event.getEntity().getWorld())) {
+            return; // claims not enabled in this world
+        }
+
+        if (cancelDamage(event.getCombuster(), event.getEntity())) {
+            event.setCancelled(true);
+        }
+    }
+
+    private boolean cancelDamage(Entity damager, Entity damaged) {
         Claim damagedClaim = plugin.getClaimManager().getClaim(damaged.getLocation());
         Claim damagerClaim = plugin.getClaimManager().getClaim(damager.getLocation());
 
         if (damagedClaim == null && damagerClaim == null) {
-            return; // return out early if not in any claims
+            return false; // return out early if not in any claims
         }
 
         boolean pvp = false; // player hurt player
@@ -207,7 +225,7 @@ public class FlagListener implements Listener {
                 if (EntityUtil.isAnimal(damaged) || damaged instanceof Villager) {
                     mobgriefing = true; // mob hurt animal or villager
                 } else if (!EntityUtil.isMob(damaged)) {
-                    mobgriefing = true; // mob hut tile entity
+                    mobgriefing = true; // mob hurt tile entity
                 }
             } else if (damager instanceof Projectile) {
                 ProjectileSource shooter = ((Projectile) damager).getShooter();
@@ -225,17 +243,19 @@ public class FlagListener implements Listener {
         if (pvp && ((damagerClaim != null && !damagerClaim.getFlag(FlagType.PVP)) ||
                 (damagedClaim != null && !damagedClaim.getFlag(FlagType.PVP)))) {
             Lang.send(damager, Lang.PVP_DENY);
-            event.setCancelled(true); // cancel pvp
+            return true; // cancel pvp
         }
 
         // check position of player mob is hitting
         else if (mobdamage && damagedClaim != null && !damagedClaim.getFlag(FlagType.MOB_DAMAGE)) {
-            event.setCancelled(true); // cancel mob damage
+            return true; // cancel mob damage
         }
 
         // check position of entity mob is griefing
         else if (mobgriefing && damagedClaim != null && !damagedClaim.getFlag(FlagType.MOB_GRIEFING)) {
-            event.setCancelled(true); // cancel mob griefing
+            return true; // cancel mob griefing
         }
+
+        return false;
     }
 }
