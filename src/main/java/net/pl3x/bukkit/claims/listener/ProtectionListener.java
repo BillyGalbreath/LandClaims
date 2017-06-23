@@ -254,4 +254,25 @@ public class ProtectionListener implements Listener {
 
         event.setCancelled(true);
     }
+
+    /*
+     * Stops dragon eggs from teleporting from/to claims
+     */
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onDragonEggTouch(BlockFromToEvent event) {
+        if (event.getBlock().getType() != Material.DRAGON_EGG) {
+            return; // not a dragon egg
+        }
+
+        if (Config.isWorldDisabled(event.getBlock().getWorld())) {
+            return; // claims not enabled in this world
+        }
+
+        Claim fromClaim = plugin.getClaimManager().getClaim(event.getBlock().getLocation());
+        Claim toClaim = plugin.getClaimManager().getClaim(event.getBlock().getLocation());
+
+        if (fromClaim != null || toClaim != null) {
+            event.setCancelled(true); // do not teleport the egg
+        }
+    }
 }
