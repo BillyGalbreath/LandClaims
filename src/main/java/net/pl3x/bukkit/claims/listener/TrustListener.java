@@ -31,6 +31,7 @@ import org.bukkit.event.block.BlockMultiPlaceEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
@@ -287,6 +288,41 @@ public class TrustListener implements Listener {
             Lang.send(event.getPlayer(), Lang.CONTAINER_DENY);
             event.setCancelled(true);
         }
+    }
+
+    /*
+     * Prevent players from harming protected animals with flame bow
+     */
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onEntityCombustEntity(EntityCombustByEntityEvent event) {
+        if (Config.isWorldDisabled(event.getEntity().getWorld())) {
+            return; // claims not enabled in this world
+        }
+
+        if (!EntityUtil.isAnimal(event.getEntity())) {
+            return; // not an animal
+        }
+
+        Claim claim = plugin.getClaimManager().getClaim(event.getEntity().getLocation());
+        if (claim == null) {
+            return; // animal is not protected
+        }
+
+        if (event.getCombuster() instanceof Projectile) {
+            ProjectileSource shooter = ((Projectile) event.getCombuster()).getShooter();
+            if (shooter instanceof Player) {
+                Player player = (Player) shooter;
+                if (plugin.getPlayerManager().getPlayer(player).isIgnoringClaims()) {
+                    return; // player is ignoring claims
+                }
+                if (claim.allowContainers(player)) {
+                    return; // player is allowed to harm this animal
+                }
+            }
+        }
+
+        // cancel everything else (players, mobs, dispensers, etc)
+        event.setCancelled(true);
     }
 
     /*
