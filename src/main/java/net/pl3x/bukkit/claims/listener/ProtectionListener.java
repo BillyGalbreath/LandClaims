@@ -126,6 +126,11 @@ public class ProtectionListener implements Listener {
             return; // claims not enabled in this world
         }
 
+        if (event.getEntityType() == EntityType.CREEPER) {
+            event.blockList().clear();
+            return; // NEVER let creepers make potholes
+        }
+
         Claim from = plugin.getClaimManager().getClaim(event.getEntity().getLocation());
 
         // dont let blocks explode passed claim borders
@@ -194,16 +199,11 @@ public class ProtectionListener implements Listener {
             return; // claims not enabled in this world
         }
 
-        Claim claim = plugin.getClaimManager().getClaim(event.getBlock().getLocation());
-        if (claim == null) {
-            return;
-        }
-
         if (event.getEntityType() == EntityType.ENDERMAN ||
                 event.getEntityType() == EntityType.SILVERFISH ||
                 event.getEntityType() == EntityType.RABBIT ||
                 event.getEntityType() == EntityType.WITHER) {
-            event.setCancelled(true);
+            event.setCancelled(true); // NEVER let mobs grief the land
         }
     }
 
