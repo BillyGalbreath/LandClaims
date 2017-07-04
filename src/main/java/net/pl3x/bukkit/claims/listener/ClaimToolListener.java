@@ -193,7 +193,7 @@ public class ClaimToolListener implements Listener {
         if (clickedClaim != null) {
             if (!clickedClaim.allowEdit(player)) {
                 Lang.send(player, Lang.CREATE_FAILED_OVERLAP_OTHER_PLAYER
-                        .replace("{owner}", Bukkit.getOfflinePlayer(clickedClaim.getOwner()).getName()));
+                        .replace("{owner}", clickedClaim.getOwnerName()));
                 pl3xPlayer.showVisualization(clickedClaim, VisualizationType.ERROR);
                 return;
             }
