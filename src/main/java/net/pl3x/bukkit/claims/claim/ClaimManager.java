@@ -146,6 +146,9 @@ public class ClaimManager {
 
             // check for overlapping other children
             for (Claim child : claim.getParent().getChildren()) {
+                if (child.getId() == claim.getId()) {
+                    continue;
+                }
                 if (child.getCoordinates().overlaps(newCoords)) {
                     Lang.send(player, Lang.RESIZE_FAILED_CHILD_OVERLAP);
                     return;
@@ -196,16 +199,22 @@ public class ClaimManager {
         if (claim == null) {
             return false; // nothing to delete
         }
-        Collection<Claim> children = claim.getChildren();
-        if (children.size() > 0) {
-            if (!deleteChildren) {
-                return false; // has child claims!
+
+        if (claim.getParent() != null) {
+            claim.getParent().removeChild(claim);
+        } else {
+            // check for children
+            Collection<Claim> children = claim.getChildren();
+            if (children.size() > 0) {
+                if (!deleteChildren) {
+                    return false; // has child claims!
+                }
+                children.forEach(this::deleteClaim); // delete all child claims
             }
-            children.forEach(this::deleteClaim); // delete all child claims
+            removeChunkHashes(claim);
+            topLevelClaims.remove(claim.getId()); // remove from memory
         }
-        removeChunkHashes(claim);
         ClaimConfig.getConfig(plugin, claim.getId()).delete(); // delete the file
-        topLevelClaims.remove(claim.getId()); // remove from memory
         return true;
     }
 
@@ -270,12 +279,6 @@ public class ClaimManager {
             // everything looks good, make the claim
             Claim claim = new Claim(plugin, id, owner, parent, coordinates, isAdminClaim);
 
-            // add to parent as child (if there is a parent)
-            if (parent != null) {
-                plugin.getLog().debug("   Claim #" + id + " is a child of #" + parentId);
-                parent.addChild(claim);
-            }
-
             // trusts
             claim.getTrusts().putAll(config.getTrusts());
             claim.getManagers().addAll(config.getManagers());
@@ -292,8 +295,15 @@ public class ClaimManager {
             logger.debug("  trusts: " + claim.getTrusts());
             logger.debug("  flags: " + claim.getFlags());
 
-            // finally store the claim in the manager
-            addTopLevelClaim(claim);
+            // finally store the claim
+            if (parent != null) {
+                // add to parent as child (if there is a parent)
+                parent.addChild(claim);
+            } else {
+                // add to chunk map
+                addTopLevelClaim(claim);
+            }
+
             nextId = id + 1; // make sure next id is actually the next id...
             plugin.getLog().debug("   Claim #" + id + " loaded successfully.");
             count++;

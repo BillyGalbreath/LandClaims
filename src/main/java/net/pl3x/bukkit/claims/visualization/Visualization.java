@@ -101,6 +101,13 @@ public class Visualization {
             visualizationType = VisualizationType.ADMIN;
         }
 
+        if (visualizationType == VisualizationType.CLAIM && claim.getParent() != null) {
+            addClaimElements(claim.getParent(), VisualizationType.CLAIM);
+            claim.getParent().getChildren().forEach(child ->
+                    addClaimElements(child, VisualizationType.CHILD));
+            return;
+        }
+
         Collection<VisualizationElement> newElements = new HashSet<>();
 
         if (visualizationType == VisualizationType.CLAIM) {

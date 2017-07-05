@@ -231,7 +231,7 @@ public class Lang {
         INSPECT_NEARBY_CLAIMS = config.getString("inspect-nearby-claims", "&dFound {amount} land claims");
         INSPECT_BLOCK_CLAIMED = config.getString("inspect-block-claimed", "&dThat block has been claimed by {owner}\n&d Flags&e:{flags}");
         INSPECT_BLOCK_FLAGS = config.getString("inspect-block-flags", "\n&3  {flag}&e: &7{value}");
-        INSPECT_CLAIM_DIMENSIONS = config.getString("inspect-claim-dimensions", "&d {widthX}x{widthZ}={area}");
+        INSPECT_CLAIM_DIMENSIONS = config.getString("inspect-claim-dimensions", "&d {type}: {widthX}x{widthZ} = {area}");
         INSPECT_OWNER_INACTIVITY = config.getString("inspect-owner-inactivity", "&d Last login: {amount} days ago");
 
         RESIZE_FAILED_OVERLAP = config.getString("resize-failed-overlap", "&4You can't resize the claim here because it will overlap another claim");

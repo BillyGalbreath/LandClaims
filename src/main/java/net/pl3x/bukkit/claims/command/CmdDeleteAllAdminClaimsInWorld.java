@@ -66,7 +66,7 @@ public class CmdDeleteAllAdminClaimsInWorld implements TabExecutor {
             return true;
         }
 
-        claims.forEach(plugin.getClaimManager()::deleteClaim);
+        claims.forEach(claim -> plugin.getClaimManager().deleteClaim(claim, true));
         Lang.send(sender, Lang.DELETE_ALL_ADMIN_CLAIMS_IN_WORLD_SUCCESS
                 .replace("{world}", world.getName()));
         return true;

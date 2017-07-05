@@ -3,7 +3,6 @@ package net.pl3x.bukkit.claims.listener;
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.claim.Coordinates;
-import net.pl3x.bukkit.claims.configuration.ClaimConfig;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.event.claim.CreateClaimEvent;
@@ -113,10 +112,17 @@ public class ClaimToolListener implements Listener {
         Lang.send(player, Lang.INSPECT_BLOCK_CLAIMED
                 .replace("{owner}", claim.getOwnerName())
                 .replace("{flags}", claim.getFlagsList()));
-        pl3xPlayer.showVisualization(claim);
+
+        // if this claim has children lets show them too
+        Claim showClaim = claim;
+        if (!claim.getChildren().isEmpty()) {
+            showClaim = claim.getChildren().stream().findFirst().orElse(claim);
+        }
+        pl3xPlayer.showVisualization(showClaim);
 
         if (player.hasPermission("claims.inspect.seeclaimsize")) {
             Lang.send(player, Lang.INSPECT_CLAIM_DIMENSIONS
+                    .replace("{type}", claim.getParent() == null ? "Top Level" : "Child")
                     .replace("{widthX}", Integer.toString(claim.getCoordinates().getWidthX()))
                     .replace("{widthZ}", Integer.toString(claim.getCoordinates().getWidthZ()))
                     .replace("{area}", Integer.toString(claim.getCoordinates().getArea())));
@@ -168,16 +174,17 @@ public class ClaimToolListener implements Listener {
         }
 
         // finish resizing claim that hasn't been deleted since started resizing
-        Claim clickedClaim = plugin.getClaimManager().getClaim(clickedBlock.getLocation());
-        if (pl3xPlayer.getResizingClaim() != null && plugin.getClaimManager().getClaim(pl3xPlayer.getResizingClaim().getId()) != null) {
+        Claim resizingClaim = pl3xPlayer.getResizingClaim();
+        if (resizingClaim != null && (plugin.getClaimManager().getClaim(resizingClaim.getId()) != null ||
+                (resizingClaim.getParent() != null && resizingClaim.getParent().getChildren().contains(resizingClaim)))) {
             if (clickedBlock.getLocation().equals(pl3xPlayer.getLastToolLocation())) {
                 return; // clicking the same location
             }
 
             Location toolLoc = pl3xPlayer.getLastToolLocation();
-            Coordinates oldCoords = pl3xPlayer.getResizingClaim().getCoordinates();
+            Coordinates oldCoords = resizingClaim.getCoordinates();
 
-            plugin.getClaimManager().resizeClaim(player, pl3xPlayer.getResizingClaim(),
+            plugin.getClaimManager().resizeClaim(player, resizingClaim,
                     new Coordinates(oldCoords.getWorld(),
                             toolLoc.getX() == oldCoords.getMinX() ? clickedBlock.getX() : oldCoords.getMinX(),
                             toolLoc.getZ() == oldCoords.getMinZ() ? clickedBlock.getZ() : oldCoords.getMinZ(),
@@ -190,6 +197,7 @@ public class ClaimToolListener implements Listener {
         // must be starting a resize, creating a new claim, or creating a child
 
         // clicked inside existing claim, not creating a new one
+        Claim clickedClaim = plugin.getClaimManager().getClaim(clickedBlock.getLocation());
         if (clickedClaim != null) {
             if (!clickedClaim.allowEdit(player)) {
                 Lang.send(player, Lang.CREATE_FAILED_OVERLAP_OTHER_PLAYER
@@ -241,7 +249,7 @@ public class ClaimToolListener implements Listener {
 
                 // check if overlapping other child claims
                 for (Claim siblingClaim : pl3xPlayer.getParentClaim().getChildren()) {
-                    if (siblingClaim == clickedClaim) {
+                    if (siblingClaim.getId() == clickedClaim.getId()) {
                         continue;
                     }
                     if (siblingClaim.getCoordinates().overlaps(newChildCoords)) {
@@ -251,8 +259,9 @@ public class ClaimToolListener implements Listener {
                     }
                 }
 
-                Claim newChildClaim = new Claim(plugin, plugin.getClaimManager().getNextId(), null, // child claims have no owner
-                        pl3xPlayer.getParentClaim(), newChildCoords, false);
+                Claim parent = pl3xPlayer.getParentClaim();
+                Claim newChildClaim = new Claim(plugin, plugin.getClaimManager().getNextId(), player.getUniqueId(), // child claims have no owner
+                        parent, newChildCoords, false);
 
                 CreateClaimEvent createClaimEvent = new CreateClaimEvent(player, newChildClaim);
                 Bukkit.getPluginManager().callEvent(createClaimEvent);
@@ -261,13 +270,11 @@ public class ClaimToolListener implements Listener {
                 }
 
                 // save the new child
-                pl3xPlayer.getParentClaim().addChild(newChildClaim);
-                ClaimConfig claimConfig = ClaimConfig.getConfig(plugin, newChildClaim.getId());
-                claimConfig.setCoordinates(newChildCoords);
-                claimConfig.save();
+                parent.addChild(newChildClaim);
+                plugin.getClaimManager().createNewClaim(newChildClaim);
 
                 Lang.send(player, Lang.CREATE_SUCCESS_CHILD);
-                pl3xPlayer.showVisualization(newChildClaim);
+                pl3xPlayer.showVisualization(newChildClaim, VisualizationType.CLAIM);
 
                 pl3xPlayer.setLastToolLocation(null);
                 pl3xPlayer.setParentClaim(null);
@@ -392,7 +399,7 @@ public class ClaimToolListener implements Listener {
 
         Claim claim = plugin.getClaimManager().getClaim(player.getLocation());
         if (claim != null && claim.allowEdit(player)) {
-            pl3xPlayer.showVisualization(claim);
+            pl3xPlayer.showVisualization(claim.getChildren().stream().findFirst().orElse(claim));
         }
     }
 

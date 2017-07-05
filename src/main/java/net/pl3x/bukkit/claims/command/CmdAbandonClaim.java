@@ -69,6 +69,8 @@ public class CmdAbandonClaim implements TabExecutor {
             return false; // show usage
         }
 
+        Claim parent = claim.getParent();
+
         // delete it
         plugin.getClaimManager().deleteClaim(claim, forceDelete);
 
@@ -77,8 +79,16 @@ public class CmdAbandonClaim implements TabExecutor {
                 .replace("{remaining}", Integer.toString(pl3xPlayer.getRemainingClaimBlocks())));
 
         //revert any current visualization
-        pl3xPlayer.revertVisualization();
 
+        if (parent != null && !parent.getChildren().isEmpty()) {
+            claim = parent.getChildren().stream().findFirst().orElse(null);
+            if (claim != null) {
+                pl3xPlayer.showVisualization(claim);
+                return true;
+            }
+        }
+
+        pl3xPlayer.revertVisualization();
         return true;
     }
 }

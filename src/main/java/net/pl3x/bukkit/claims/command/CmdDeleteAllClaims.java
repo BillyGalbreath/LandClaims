@@ -51,7 +51,7 @@ public class CmdDeleteAllClaims implements TabExecutor {
         }
 
         plugin.getPlayerManager().getPlayer(target.getUniqueId())
-                .getClaims().forEach(plugin.getClaimManager()::deleteClaim);
+                .getClaims().forEach(claim -> plugin.getClaimManager().deleteClaim(claim, true));
 
         if (!target.isOnline()) {
             plugin.getPlayerManager().unload(target.getUniqueId());

@@ -48,7 +48,7 @@ public class Claim {
     }
 
     public String getOwnerName() {
-        if (owner == null) {
+        if (isAdminClaim || owner == null) {
             return "admin";
         }
         OfflinePlayer target = Bukkit.getOfflinePlayer(owner);
@@ -60,6 +60,9 @@ public class Claim {
     }
 
     public boolean isOwner(Player player) {
+        if (owner == null && getParent() != null) {
+            return getParent().isOwner(player);
+        }
         return isAdminClaim && player.hasPermission("command.adminclaims") || isOwner(player.getUniqueId());
     }
 

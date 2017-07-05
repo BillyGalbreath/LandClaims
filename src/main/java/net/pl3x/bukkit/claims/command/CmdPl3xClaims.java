@@ -37,6 +37,8 @@ public class CmdPl3xClaims implements TabExecutor {
             Lang.reload(plugin);
 
             plugin.getPlayerManager().reloadAll();
+            plugin.getClaimManager().unloadClaims();
+            plugin.getClaimManager().loadClaims();
 
             Lang.send(sender, Lang.RELOAD
                     .replace("{plugin}", plugin.getName())
