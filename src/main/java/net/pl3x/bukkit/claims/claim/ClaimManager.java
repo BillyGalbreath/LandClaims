@@ -249,21 +249,6 @@ public class ClaimManager {
             // get if an admin claim or not
             boolean isAdminClaim = config.isAdminClaim();
 
-            // get the owner
-            UUID owner = config.getOwner();
-            if (owner == null && !isAdminClaim) {
-                plugin.getLog().error("   Could not get owner! Skipping.. (file " + id + ".yml)");
-                continue;
-            }
-
-            // get the coordinates
-            Coordinates coordinates = config.getCoordinates();
-            if (coordinates == null) {
-                plugin.getLog().error("   Could not get coordinates! Skipping.. (file " + id + ".yml)");
-                // most likely the world is not loaded yet
-                continue;
-            }
-
             // get the parent (if any)
             long parentId = config.getParentId();
             Claim parent = null;
@@ -274,6 +259,27 @@ public class ClaimManager {
                     plugin.getLog().error("   Could not get parent! Skipping.. (file " + id + ".yml)");
                     continue;
                 }
+            }
+
+            // get the owner
+            UUID owner = config.getOwner();
+            if (owner == null && !isAdminClaim) {
+                if (parent != null) {
+                    owner = parent.getOwner();
+                    config.setOwner(owner);
+                    config.save();
+                } else {
+                    plugin.getLog().error("   Could not get owner! Skipping.. (file " + id + ".yml)");
+                    continue;
+                }
+            }
+
+            // get the coordinates
+            Coordinates coordinates = config.getCoordinates();
+            if (coordinates == null) {
+                plugin.getLog().error("   Could not get coordinates! Skipping.. (file " + id + ".yml)");
+                // most likely the world is not loaded yet
+                continue;
             }
 
             // everything looks good, make the claim
