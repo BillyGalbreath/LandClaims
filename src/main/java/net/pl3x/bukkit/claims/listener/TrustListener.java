@@ -299,8 +299,8 @@ public class TrustListener implements Listener {
             return; // claims not enabled in this world
         }
 
-        if (!EntityUtil.isAnimal(event.getEntity())) {
-            return; // not an animal
+        if (!EntityUtil.isAnimal(event.getEntity()) && event.getEntityType() != EntityType.ENDER_CRYSTAL) {
+            return; // not an animal or ender crystal
         }
 
         Claim claim = plugin.getClaimManager().getClaim(event.getEntity().getLocation());
@@ -317,6 +317,9 @@ public class TrustListener implements Listener {
                 }
                 if (claim.allowContainers(player)) {
                     return; // player is allowed to harm this animal
+                }
+                if (event.getEntityType() == EntityType.ENDER_CRYSTAL && claim.allowBuild(player)) {
+                    return; // player is allowed to blow up this ender crystal
                 }
             }
         }
