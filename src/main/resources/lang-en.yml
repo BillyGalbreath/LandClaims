@@ -1,3 +1,9 @@
 command-no-permission: "&4You do not have permission for that command!"
+
+claimbook-pages:
+- "Claim land to protect your shit!\n\nOur claim tools are {claimtool} and {inspecttool}."
+- "Useful Commands:\n\n/trust /untrust /trustlist\n/claimslist\n/abandonclaim\n\n/claim /extendclaim\n\n/childclaims\n/accesstrust\n/containertrust\n/permissiontrust"
+- "/setflag Defaults:\n\nExplosions DENY\nFirespread DENY\nMob_Damage ALLOW\nMob_Griefing DENY\nPVP DENY\nSpawn_Animals ALLOW\nSpawn_Mobs ALLOW"
+
 version: "&d{plugin} v{version}."
 reload: "&d{plugin} v{version} reloaded."

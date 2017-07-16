@@ -33,6 +33,7 @@ import org.bukkit.event.block.EntityBlockFormEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -633,6 +634,40 @@ public class TrustListener implements Listener {
         Claim claim = plugin.getClaimManager().getClaim(hanging.getLocation());
         if (claim != null && !claim.allowBuild(player)) {
             Lang.send(player, Lang.BUILD_DENY);
+            event.setCancelled(true);
+        }
+    }
+
+    /*
+     * Stops players from shooting wood button
+     */
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerShootButton(EntityInteractEvent event) {
+        Block block = event.getBlock();
+        if (block == null || block.getType() != Material.WOOD_BUTTON) {
+            return;
+        }
+
+        Entity entity = event.getEntity();
+        if (!(entity instanceof Projectile)) {
+            return;
+        }
+
+        Claim claim = plugin.getClaimManager().getClaim(block.getLocation());
+        if (claim == null) {
+            return;
+        }
+
+        ProjectileSource shooter = ((Projectile) entity).getShooter();
+        if (shooter instanceof Player) {
+            Player player = (Player) shooter;
+            if (!claim.allowAccess(player)) {
+                // player doesnt have access rights
+                Lang.send(player, Lang.ACCESS_DENY);
+                event.setCancelled(true);
+            }
+        } else {
+            // always protect from non player shooters (skeletons, dispensers, etc)
             event.setCancelled(true);
         }
     }
