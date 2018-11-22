@@ -124,6 +124,14 @@ public class ClaimConfig extends YamlConfiguration {
         set("coordinates.max.z", coordinates.getMaxZ());
     }
 
+    public void setEntryMessage(String entryMessage) {
+        set("entry-message", entryMessage);
+    }
+
+    public void setExitMessage(String exitMessage) {
+        set("exit-message", exitMessage);
+    }
+
     public void setTrusts(Map<UUID, TrustType> trusts) {
         set("trusts.builders", trusts.entrySet().stream()
                 .filter(entry -> entry.getValue() == TrustType.BUILDER)
@@ -178,6 +186,14 @@ public class ClaimConfig extends YamlConfiguration {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public String getEntryMessage() {
+        return getString("entry-message", null);
+    }
+
+    public String getExitMessage() {
+        return getString("exit-message", null);
     }
 
     public Map<UUID, TrustType> getTrusts() {

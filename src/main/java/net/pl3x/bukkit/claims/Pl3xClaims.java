@@ -1,6 +1,7 @@
 package net.pl3x.bukkit.claims;
 
 import net.pl3x.bukkit.claims.claim.ClaimManager;
+import net.pl3x.bukkit.claims.claim.task.DeleteInactiveClaims;
 import net.pl3x.bukkit.claims.command.CmdAbandonAllClaims;
 import net.pl3x.bukkit.claims.command.CmdAbandonClaim;
 import net.pl3x.bukkit.claims.command.CmdAdjustAccruedBlocks;
@@ -19,6 +20,8 @@ import net.pl3x.bukkit.claims.command.CmdDeleteClaim;
 import net.pl3x.bukkit.claims.command.CmdExtendClaim;
 import net.pl3x.bukkit.claims.command.CmdIgnoreClaims;
 import net.pl3x.bukkit.claims.command.CmdPl3xClaims;
+import net.pl3x.bukkit.claims.command.CmdSetEntryMessage;
+import net.pl3x.bukkit.claims.command.CmdSetExitMessage;
 import net.pl3x.bukkit.claims.command.CmdSetFlag;
 import net.pl3x.bukkit.claims.command.CmdTransferClaim;
 import net.pl3x.bukkit.claims.command.CmdTrapped;
@@ -27,6 +30,7 @@ import net.pl3x.bukkit.claims.command.CmdTrustList;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.dynmap.DynmapHook;
+import net.pl3x.bukkit.claims.hook.DiscordSRVHook;
 import net.pl3x.bukkit.claims.listener.ClaimToolListener;
 import net.pl3x.bukkit.claims.listener.FlagListener;
 import net.pl3x.bukkit.claims.listener.PlayerListener;
@@ -43,6 +47,7 @@ public class Pl3xClaims extends JavaPlugin {
     private final ClaimManager claimManager;
     private final PlayerManager playerManager;
     private DynmapHook dynmapHook;
+    private DiscordSRVHook discordSRVHook;
 
     public Pl3xClaims() {
         logger = new Logger(this);
@@ -60,6 +65,10 @@ public class Pl3xClaims extends JavaPlugin {
 
     public PlayerManager getPlayerManager() {
         return playerManager;
+    }
+
+    public DiscordSRVHook getDiscordSRVHook() {
+        return discordSRVHook;
     }
 
     @Override
@@ -87,6 +96,10 @@ public class Pl3xClaims extends JavaPlugin {
             dynmapHook = new DynmapHook(this);
         }
 
+        if (getServer().getPluginManager().isPluginEnabled("DiscordSRV")) {
+            discordSRVHook = new DiscordSRVHook();
+        }
+
         getServer().getPluginManager().registerEvents(new ClaimToolListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         getServer().getPluginManager().registerEvents(new ProtectionListener(this), this);
@@ -112,12 +125,18 @@ public class Pl3xClaims extends JavaPlugin {
         getCommand("ignoreclaims").setExecutor(new CmdIgnoreClaims(this));
         getCommand("pl3xclaims").setExecutor(new CmdPl3xClaims(this));
         getCommand("setflag").setExecutor(new CmdSetFlag(this));
+        getCommand("setentrymessage").setExecutor(new CmdSetEntryMessage(this));
+        getCommand("setexitmessage").setExecutor(new CmdSetExitMessage(this));
         getCommand("transferclaim").setExecutor(new CmdTransferClaim(this));
         getCommand("trapped").setExecutor(new CmdTrapped(this));
         getCommand("trust").setExecutor(new CmdTrust(this));
         getCommand("trustlist").setExecutor(new CmdTrustList(this));
 
         getClaimManager().loadClaims();
+
+        // Delete inactive claims task - delay 60 seconds, repeat 30 minutes
+        new DeleteInactiveClaims(this)
+                .runTaskTimerAsynchronously(this, 600, 36000);
 
         getLog().info(getName() + " v" + getDescription().getVersion() + " enabled!");
     }

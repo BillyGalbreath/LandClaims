@@ -26,7 +26,6 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 
 public class ClaimToolListener implements Listener {
@@ -132,11 +131,7 @@ public class ClaimToolListener implements Listener {
                 (player.hasPermission("command.deleteclaim") ||
                         player.hasPermission("claims.inspect.seeinactivity"))) {
             Lang.send(player, Lang.INSPECT_OWNER_INACTIVITY
-                    .replace("{amount}", Long.toString((new Date().getTime() -
-                            new Date(Bukkit.getOfflinePlayer(claim.getParent() != null ?
-                                    claim.getParent().getOwner() :
-                                    claim.getOwner()).getLastPlayed())
-                                    .getTime()) / 86400000)));
+                    .replace("{amount}", Integer.toString(claim.getLastActive())));
         }
     }
 
@@ -367,6 +362,10 @@ public class ClaimToolListener implements Listener {
         plugin.getClaimManager().createNewClaim(newClaim);
         Lang.send(player, Lang.CREATE_SUCCESS
                 .replace("{amount}", Integer.toString(pl3xPlayer.getRemainingClaimBlocks())));
+        if (!newClaim.isAdminClaim() && plugin.getDiscordSRVHook() != null) {
+            plugin.getDiscordSRVHook().sendToDiscord(Lang.CREATE_SUCCESS_DISCORD
+                    .replace("{owner}", newClaim.getOwnerName()));
+        }
 
         pl3xPlayer.showVisualization(newClaim);
 

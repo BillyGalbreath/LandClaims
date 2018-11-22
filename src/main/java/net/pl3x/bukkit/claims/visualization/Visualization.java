@@ -86,7 +86,7 @@ public class Visualization {
     }
 
     public void addClaimElements(Claim claim, VisualizationType visualizationType) {
-        boolean waterIsTransparent = center.getBlock().getType() == Material.STATIONARY_WATER;
+        boolean waterIsTransparent = center.getBlock().getType() == Material.WATER;
 
         World world = claim.getCoordinates().getWorld();
         int minX = (int) claim.getCoordinates().getMinLocation().getX();
@@ -118,12 +118,12 @@ public class Visualization {
             accentMaterial = Material.PUMPKIN;
         } else if (visualizationType == VisualizationType.CHILD) {
             cornerMaterial = Material.IRON_BLOCK;
-            accentMaterial = Material.WOOL;
+            accentMaterial = Material.WHITE_WOOL;
         } else if (visualizationType == VisualizationType.NEW_POINT) {
             cornerMaterial = Material.DIAMOND_BLOCK;
             accentMaterial = Material.DIAMOND_BLOCK;
         } else {
-            cornerMaterial = Material.GLOWING_REDSTONE_ORE;
+            cornerMaterial = Material.REDSTONE_ORE;
             accentMaterial = Material.NETHERRACK;
         }
 
@@ -208,25 +208,24 @@ public class Visualization {
                 return false;
         }
         switch (block.getType()) {
-            case FENCE:
+            case OAK_FENCE:
             case ACACIA_FENCE:
             case BIRCH_FENCE:
             case DARK_OAK_FENCE:
             case JUNGLE_FENCE:
-            case NETHER_FENCE:
+            case NETHER_BRICK_FENCE:
             case SPRUCE_FENCE:
-            case FENCE_GATE:
+            case OAK_FENCE_GATE:
             case ACACIA_FENCE_GATE:
             case BIRCH_FENCE_GATE:
             case DARK_OAK_FENCE_GATE:
             case SPRUCE_FENCE_GATE:
             case JUNGLE_FENCE_GATE:
             case SIGN:
-            case SIGN_POST:
             case WALL_SIGN:
                 return true;
         }
-        return (waterIsTransparent && block.getType() == Material.STATIONARY_WATER) || block.getType().isTransparent();
+        return (waterIsTransparent && block.getType() == Material.WATER) || block.getType().isTransparent();
     }
 
     private void removeOutOfRange(Collection<VisualizationElement> elements, int minX, int minZ, int maxX, int maxZ) {

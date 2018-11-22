@@ -91,6 +91,7 @@ public class Lang {
     public static String CREATE_FAILED_NEED_MORE_BLOCKS;
     public static String CREATE_START;
     public static String CREATE_SUCCESS;
+    public static String CREATE_SUCCESS_DISCORD;
     public static String CREATE_FAILED_CHILD;
     public static String CREATE_FAILED_CHILD_OVERLAP;
     public static String CREATE_FAILED_CHILD_OVERLAP_PARENT;
@@ -113,6 +114,12 @@ public class Lang {
     public static String DELETE_ALL_USER_CLAIMS_IN_WORLD_NO_CLAIMS;
     public static String DELETE_ALL_USER_CLAIMS_IN_WORLD_SUCCESS;
 
+    public static String DELETED_INACTIVE_CLAIMS;
+    public static String DELETED_INACTIVE_CLAIMS_DISCORD;
+
+    public static String ENTRY_DENIED;
+    public static String EXIT_DENIED;
+
     public static String EXTEND_NO_CLAIM;
     public static String EXTEND_TO_SKY;
     public static String EXTEND_DOWNWARD;
@@ -121,9 +128,18 @@ public class Lang {
     public static String RESPECT_CLAIMS;
 
     public static String SETFLAG_NO_CLAIM;
+    public static String SETFLAG_NO_MANAGE;
     public static String SETFLAG_NO_PERMISSION;
     public static String SETFLAG_REMOVED;
     public static String SETFLAG_SUCCESS;
+
+    public static String SETENTRYMESSAGE_NO_CLAIM;
+    public static String SETENTRYMESSAGE_REMOVED;
+    public static String SETENTRYMESSAGE_SUCCESS;
+
+    public static String SETEXITMESSAGE_NO_CLAIM;
+    public static String SETEXITMESSAGE_REMOVED;
+    public static String SETEXITMESSAGE_SUCCESS;
 
     public static String TRANSFER_NO_CLAIM;
     public static String TRANSFER_CHILD;
@@ -251,6 +267,7 @@ public class Lang {
         CREATE_FAILED_NEED_MORE_BLOCKS = config.getString("create-failed-need-more-blocks", "&4You don't have enough blocks to claim that entire area. You need {required} more blocks");
         CREATE_START = config.getString("create-start", "&dClaim corner set! Use the tool again at the opposite corner to claim a rectangle of land. To cancel, put your tool away");
         CREATE_SUCCESS = config.getString("create-success", "&dClaim created! {amount} available claim blocks remaining. Use /trust to share it with friends");
+        CREATE_SUCCESS_DISCORD = config.getString("create-success-discord", ":pick: {owner} created a new claim!");
         CREATE_FAILED_CHILD = config.getString("create-failed-child", "&4You can't create a child here because it would overlap another child");
         CREATE_FAILED_CHILD_OVERLAP = config.getString("create-failed-child-overlap", "&4Your selected area overlaps another child");
         CREATE_FAILED_CHILD_OVERLAP_PARENT = config.getString("create-failed-child-overlap-parent", "&4Your selected area overlaps the parent claim's border");
@@ -273,6 +290,12 @@ public class Lang {
         DELETE_ALL_USER_CLAIMS_IN_WORLD_NO_CLAIMS = config.getString("delete-all-user-claims-in-world-no-claims", "&4No non-admin claims to delete in {world}");
         DELETE_ALL_USER_CLAIMS_IN_WORLD_SUCCESS = config.getString("delete-all-user-claims-in-world-success", "&dDeleted all non-admin claims in {world}");
 
+        DELETED_INACTIVE_CLAIMS = config.getString("delete-inactive-claims", "&d{owner}'s claims have been deleted due to inactivity ({count})");
+        DELETED_INACTIVE_CLAIMS_DISCORD = config.getString("delete-inactive-claims-discord", ":sleeping: **{owner}'s claims have been deleted due to inactivity ({count})**");
+
+        ENTRY_DENIED = config.getString("entry-denied", "&4You are not allowed to enter this claim");
+        EXIT_DENIED = config.getString("exit-denied", "&4You are not allowed to exit this claim");
+
         EXTEND_NO_CLAIM = config.getString("extend-no-claim", "&4Stand inside the land claim you want to resize");
         EXTEND_TO_SKY = config.getString("extend-to-sky", "&4Land claims always extend to max build height");
         EXTEND_DOWNWARD = config.getString("extend-downward", "&4Land claims always extend to bedrock");
@@ -281,9 +304,18 @@ public class Lang {
         RESPECT_CLAIMS = config.getString("respect-claims", "&dNow respecting claims");
 
         SETFLAG_NO_CLAIM = config.getString("setflag-no-claim", "&4Stand inside the claim you want to set a flag for");
-        SETFLAG_NO_PERMISSION = config.getString("setflag-no-permission", "&4You do not have permission to edit this claim's flags");
+        SETFLAG_NO_MANAGE = config.getString("setflag-no-manage", "&4You do not have permission to edit this claim's flags");
+        SETFLAG_NO_PERMISSION = config.getString("setflag-no-permission", "&4You do not have permission to use that flag");
         SETFLAG_REMOVED = config.getString("setflag-removed", "&dFlag {flag} removed");
         SETFLAG_SUCCESS = config.getString("setflag-allow", "&dFlag {flag} set to {value}");
+
+        SETENTRYMESSAGE_NO_CLAIM = config.getString("setentrymessage-no-claim", "&4Stand inside the claim you want to set entry message for");
+        SETENTRYMESSAGE_REMOVED = config.getString("setentrymessage-removed", "&dEntry message removed");
+        SETENTRYMESSAGE_SUCCESS = config.getString("setentrymessage-success", "&dEntry message set");
+
+        SETEXITMESSAGE_NO_CLAIM = config.getString("setexitmessage-no-claim", "&4Stand inside the claim you want to set exit message for");
+        SETEXITMESSAGE_REMOVED = config.getString("setexitmessage-removed", "&dExit message removed");
+        SETEXITMESSAGE_SUCCESS = config.getString("setexitmessage-success", "&dExit message set");
 
         TRANSFER_NO_CLAIM = config.getString("transfer-no-claim", "&4There's no claim here. Stand in the claim you want to transfer");
         TRANSFER_CHILD = config.getString("transfer-child", "&4Only top level claims can be transferred. Stand outside the child claim and try again");

@@ -3,263 +3,283 @@ main: ${project.groupId}.${project.artifactId}
 version: ${project.version}
 description: ${project.artifactId} Bukkit Plugin
 author: BillyGalbreath
+api-version: 1.13
 softdepend:
 - Dynmap
+- DiscordSRV
 
 commands:
-    abandonallclaims:
-        description: Deletes ALL your claims
-        permission: command.abandonallclaims
-        usage: /<command>
-        aliases:
-        - unclaimall
-        - declaimall
-        - disclaimall
-        - removeallclaims
-    abandonclaim:
-        description: Deletes a claim
-        permission: command.abandonclaim
-        usage: /<command> (force)
-        aliases:
-        - unclaim
-        - declaim
-        - disclaim
-        - removeclaim
-        - abandontoplevelclaim
-        - abandonparentclaim
-    adjustaccruedblocks:
-        description: Manage players' accrued claim blocks
-        permission: command.adjustaccruedblocks
-        usage: /<command> [player] [amount]
-        aliases:
-        - acb
-        - adjustclaimblocks
-    adjustbonusblocks:
-        description: Manage players' bonus claim blocks
-        permission: command.adjustbonusblocks
-        usage: /<command> [player] [amount]
-        aliases:
-        - abb
-        - adjustbonusclaimblocks
-    adminclaims:
-        description: Switches the claim tool to admin mode, used to create admin claims
-        permission: command.adminclaims
-        usage: /<command>
-        aliases:
-        - adminclaim
-        - adminmode
-    basicclaims:
-        description: Switches the claim tool to basic mode, used to create top level claims
-        permission: command.basicclaims
-        usage: /<command>
-        aliases:
-        - basicclaim
-        - basicmode
-    childclaims:
-        description: Switches the claim tool to child mode, used to create child claims
-        permission: command.childclaims
-        usage: /<command>
-        aliases:
-        - childclaim
-        - childmode
-        - subdivideclaims
-        - subdivideclaim
-    claim:
-        description: Creates a claim centered around your current location
-        permission: command.claim
-        usage: /<command> (radius)
-        aliases:
-        - makeclaim
-        - createclaim
-        - newclaim
-    claimbook:
-        description: Gives a player a manual about claiming land
-        permission: command.claimbook
-        usage: /<command> (player)
-        aliases:
-        - giveclaimbook
-    claimslist:
-        description: List information about a player's claim blocks and claims
-        permission: command.claimslist
-        usage: /<command> (player)
-        aliases:
-        - claimlist
-        - listclaims
-        - adminclaimslist
-    deleteclaim:
-        description: Deletes the claim you're stnading in, even if it's not your claim
-        permission: command.deleteclaim
-        usage: /<command> (force)
-        aliases: []
-    deleteallclaims:
-        description: Deletes all of a player's claims
-        permission: command.deleteallclaims
-        usage: /<command> [player]
-        aliases: []
-    deleteallclaimsinworld:
-        description: Deletes all admin and non-admin claims in a world. Only usable from console
-        permission: command.deleteallclaimsinworld
-        usage: /<command> [world]
-        aliases: []
-    deletealladminclaimsinworld:
-        description: Deletes all admin claims in a world. Only usable from console
-        permission: command.deletealladminclaimsinworld
-        usage: /<command> [world]
-        aliases: []
-    deletealluserclaimsinworld:
-        description: Deletes all non-admin claims in a world. Only usable from console
-        permission: command.deletealluserclaimsinworld
-        usage: /<command> [world]
-        aliases: []
-    extendclaim:
-        description: Resizes the land claim you're standing in by pushing or pulling its boundary in the direction you're facing
-        permission: command.extendclaim
-        usage: /<command> [amount]
-        aliases:
-        - expandclaim
-        - resizeclaim
-    ignoreclaims:
-        description: Toggle ignore claims mode
-        permission: command.ignoreclaims
-        usage: /<command>
-        aliases: []
-    pl3xclaims:
-        description: Reload configs
-        permission: command.pl3xclaims
-        usage: /<command> (reload)
-        aliases:
-        - claims
-    setflag:
-        description: Set or remove a flag for a claim you manage
-        permission: command.setflag
-        usage: /<command> [flag] (allow | deny | none)
-        aliases:
-        - flagset
-    transferclaim:
-        description: Transfer a claim's owner
-        permission: command.transferclaim
-        usage: /<command> (player)
-        aliases:
-        - giveclaim
-    trapped:
-        description: Rescues you to nearby unclaimed land
-        permission: command.trapped
-        usage: /<command>
-        aliases:
-        - rescue
-        - unstuck
-    trust:
-        description: Manage your claim(s) trustlist
-        permission: command.trust
-        usage: /<command> [player | public]
-        aliases:
-        - containertrust
-        - accesstrust
-        - permissiontrust
-        - untrust
-    trustlist:
-        description: List permissions for the claim you're standing in
-        permission: command.trustlist
-        usage: /<command>
-        aliases:
-        - trustslist
-        - listtrust
-        - listtrusts
+  abandonallclaims:
+    description: Deletes ALL your claims
+    permission: command.abandonallclaims
+    usage: /<command>
+    aliases:
+    - unclaimall
+    - declaimall
+    - disclaimall
+    - removeallclaims
+  abandonclaim:
+    description: Deletes a claim
+    permission: command.abandonclaim
+    usage: /<command> (force)
+    aliases:
+    - unclaim
+    - declaim
+    - disclaim
+    - removeclaim
+    - abandontoplevelclaim
+    - abandonparentclaim
+  adjustaccruedblocks:
+    description: Manage players' accrued claim blocks
+    permission: command.adjustaccruedblocks
+    usage: /<command> [player] [amount]
+    aliases:
+    - acb
+    - adjustclaimblocks
+  adjustbonusblocks:
+    description: Manage players' bonus claim blocks
+    permission: command.adjustbonusblocks
+    usage: /<command> [player] [amount]
+    aliases:
+    - abb
+    - adjustbonusclaimblocks
+  adminclaims:
+    description: Switches the claim tool to admin mode, used to create admin claims
+    permission: command.adminclaims
+    usage: /<command>
+    aliases:
+    - adminclaim
+    - adminmode
+  basicclaims:
+    description: Switches the claim tool to basic mode, used to create top level claims
+    permission: command.basicclaims
+    usage: /<command>
+    aliases:
+    - basicclaim
+    - basicmode
+  childclaims:
+    description: Switches the claim tool to child mode, used to create child claims
+    permission: command.childclaims
+    usage: /<command>
+    aliases:
+    - childclaim
+    - childmode
+    - subdivideclaims
+    - subdivideclaim
+  claim:
+    description: Creates a claim centered around your current location
+    permission: command.claim
+    usage: /<command> (radius)
+    aliases:
+    - makeclaim
+    - createclaim
+    - newclaim
+  claimbook:
+    description: Gives a player a manual about claiming land
+    permission: command.claimbook
+    usage: /<command> (player)
+    aliases:
+    - giveclaimbook
+  claimslist:
+    description: List information about a player's claim blocks and claims
+    permission: command.claimslist
+    usage: /<command> (player)
+    aliases:
+    - claimlist
+    - listclaims
+    - adminclaimslist
+  deleteclaim:
+    description: Deletes the claim you're stnading in, even if it's not your claim
+    permission: command.deleteclaim
+    usage: /<command> (force)
+    aliases: []
+  deleteallclaims:
+    description: Deletes all of a player's claims
+    permission: command.deleteallclaims
+    usage: /<command> [player]
+    aliases: []
+  deleteallclaimsinworld:
+    description: Deletes all admin and non-admin claims in a world. Only usable from console
+    permission: command.deleteallclaimsinworld
+    usage: /<command> [world]
+    aliases: []
+  deletealladminclaimsinworld:
+    description: Deletes all admin claims in a world. Only usable from console
+    permission: command.deletealladminclaimsinworld
+    usage: /<command> [world]
+    aliases: []
+  deletealluserclaimsinworld:
+    description: Deletes all non-admin claims in a world. Only usable from console
+    permission: command.deletealluserclaimsinworld
+    usage: /<command> [world]
+    aliases: []
+  extendclaim:
+    description: Resizes the land claim you're standing in by pushing or pulling its boundary in the direction you're facing
+    permission: command.extendclaim
+    usage: /<command> [amount]
+    aliases:
+    - expandclaim
+    - resizeclaim
+  ignoreclaims:
+    description: Toggle ignore claims mode
+    permission: command.ignoreclaims
+    usage: /<command>
+    aliases: []
+  pl3xclaims:
+    description: Reload configs
+    permission: command.pl3xclaims
+    usage: /<command> (reload)
+    aliases:
+    - claims
+  setflag:
+    description: Set or remove a flag for a claim you manage
+    permission: command.setflag
+    usage: /<command> [flag] (allow | deny | none)
+    aliases:
+    - flagset
+  setentrymessage:
+    description: Set or remove entry message for a claim you manage
+    permission: command.setentrymessage
+    usage: /<command> (message)
+    aliases:
+    - entrymessage
+  setexitmessage:
+    description: Set or remove exit message for a claim you manage
+    permission: command.setexitmessage
+    usage: /<command> (message)
+    aliases:
+    - exitmessage
+  transferclaim:
+    description: Transfer a claim's owner
+    permission: command.transferclaim
+    usage: /<command> (player)
+    aliases:
+    - giveclaim
+  trapped:
+    description: Rescues you to nearby unclaimed land
+    permission: command.trapped
+    usage: /<command>
+    aliases:
+    - rescue
+    - unstuck
+  trust:
+    description: Manage your claim(s) trustlist
+    permission: command.trust
+    usage: /<command> [player | public]
+    aliases:
+    - containertrust
+    - accesstrust
+    - permissiontrust
+    - untrust
+  trustlist:
+    description: List permissions for the claim you're standing in
+    permission: command.trustlist
+    usage: /<command>
+    aliases:
+    - trustslist
+    - listtrust
+    - listtrusts
 
 permissions:
-    command.abandonallclaims:
-        description: Allows to abandon all claims
-        default: op
-    command.abandonclaim:
-        description: Allows to abandon claims
-        default: op
-    command.adjustaccruedblocks:
-        description: Allows to adjust accrued claim blocks for online players
-        default: op
-    command.adjustbonusblocks:
-        description: Allows to adjust bonus claim blocks for online players
-        default: op
-    command.adminclaims:
-        description: Allows to change to admin claims mode
-        default: op
-    command.basicclaims:
-        description: Allows to change to basic claims mode
-        default: op
-    command.childclaims:
-        description: Allows to change to child claims mode
-        default: op
-    command.claim:
-        description: Allows to create claims
-        default: op
-    command.claimbook:
-        description: Allows to get the claim book
-        default: op
-    command.claimbook.others:
-        description: Allows to give other players the claim book
-        default: op
-    command.claimslist:
-        description: Allows to list information about your claims and claim blocks
-        default: op
-    command.claimslist.admin:
-        description: Allows to list information about all admin claims
-        default: op
-    command.claimslist.others:
-        description: Allows to list information about other players' claims and claim blocks
-        default: op
-    command.deleteclaim:
-        description: Allows to delete any claim
-        default: op
-    command.deleteallclaims:
-        description: Allows to delete all of a player's claims
-        default: op
-    command.deleteallclaimsinworld:
-        description: Allows to delete all admin and non-admin claims in a world
-        default: op
-    command.deletealladminclaimsinworld:
-        description: Allows to delete all admin claims in a world
-        default: op
-    command.deletealluserclaimsinworld:
-        description: Allows to delete all non-admin claims in a world
-        default: op
-    command.extendclaim:
-        description: Allows to resize claims
-        default: op
-    command.ignoreclaims:
-        description: Allows to toggle ignore claims mode
-        default: op
-    command.pl3xclaims:
-        description: Allows reload configs
-        default: op
-    command.setflag:
-        description: Allows to set flags to claims
-        default: op
-    command.transferclaim:
-        description: Allows transfer claim ownership
-        default: op
-    command.trapped:
-        description: Allows to be rescued to nearby unclaimed land
-        default: true
-    command.trust:
-        description: Allows to manage claim trust list
-        default: op
-    command.trustlist:
-        description: Allows to list a claim's trusts
-        default: op
+  command.abandonallclaims:
+    description: Allows to abandon all claims
+    default: op
+  command.abandonclaim:
+    description: Allows to abandon claims
+    default: op
+  command.adjustaccruedblocks:
+    description: Allows to adjust accrued claim blocks for online players
+    default: op
+  command.adjustbonusblocks:
+    description: Allows to adjust bonus claim blocks for online players
+    default: op
+  command.adminclaims:
+    description: Allows to change to admin claims mode
+    default: op
+  command.basicclaims:
+    description: Allows to change to basic claims mode
+    default: op
+  command.childclaims:
+    description: Allows to change to child claims mode
+    default: op
+  command.claim:
+    description: Allows to create claims
+    default: op
+  command.claimbook:
+    description: Allows to get the claim book
+    default: op
+  command.claimbook.others:
+    description: Allows to give other players the claim book
+    default: op
+  command.claimslist:
+    description: Allows to list information about your claims and claim blocks
+    default: op
+  command.claimslist.admin:
+    description: Allows to list information about all admin claims
+    default: op
+  command.claimslist.others:
+    description: Allows to list information about other players' claims and claim blocks
+    default: op
+  command.deleteclaim:
+    description: Allows to delete any claim
+    default: op
+  command.deleteallclaims:
+    description: Allows to delete all of a player's claims
+    default: op
+  command.deleteallclaimsinworld:
+    description: Allows to delete all admin and non-admin claims in a world
+    default: op
+  command.deletealladminclaimsinworld:
+    description: Allows to delete all admin claims in a world
+    default: op
+  command.deletealluserclaimsinworld:
+    description: Allows to delete all non-admin claims in a world
+    default: op
+  command.extendclaim:
+    description: Allows to resize claims
+    default: op
+  command.ignoreclaims:
+    description: Allows to toggle ignore claims mode
+    default: op
+  command.pl3xclaims:
+    description: Allows reload configs
+    default: op
+  command.setflag:
+    description: Allows to set flags to claims
+    default: op
+  command.setentrymessage:
+    description: Allows to set entry message to claims
+    default: op
+  command.setexitmessage:
+    description: Allows to set exit message to claims
+    default: op
+  command.transferclaim:
+    description: Allows transfer claim ownership
+    default: op
+  command.trapped:
+    description: Allows to be rescued to nearby unclaimed land
+    default: true
+  command.trust:
+    description: Allows to manage claim trust list
+    default: op
+  command.trustlist:
+    description: Allows to list a claim's trusts
+    default: op
 
-    claims.overridelimits:
-        description: Allows to override configured limits
-        default: op
+  claims.overridelimits:
+    description: Allows to override configured limits
+    default: op
 
-    claims.visualize:
-        description: Allows to visualize claims
-        default: true
-    claims.visualize.nearby:
-        description: Allows to visualize multiple nearby claims
-        default: op
+  claims.visualize:
+    description: Allows to visualize claims
+    default: true
+  claims.visualize.nearby:
+    description: Allows to visualize multiple nearby claims
+    default: op
 
-    claims.inspect.seeclaimsize:
-        description: Allows to see the claim size with inspect tool
-        default: true
-    claims.inspect.seeinactivity:
-        description: Allows to see the claim owner last online
-        default: true
+  claims.inspect.seeclaimsize:
+    description: Allows to see the claim size with inspect tool
+    default: true
+  claims.inspect.seeinactivity:
+    description: Allows to see the claim owner last online
+    default: true

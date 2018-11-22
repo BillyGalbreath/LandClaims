@@ -285,6 +285,17 @@ public class ClaimManager {
             // everything looks good, make the claim
             Claim claim = new Claim(plugin, id, owner, parent, coordinates, isAdminClaim);
 
+            // Entry and exit messages
+            String entryMessage = config.getEntryMessage();
+            if (entryMessage != null && !entryMessage.isEmpty()) {
+                claim.setEntryMessage(entryMessage);
+            }
+
+            String exitMessage = config.getExitMessage();
+            if (exitMessage != null && !exitMessage.isEmpty()) {
+                claim.setExitMessage(exitMessage);
+            }
+
             // trusts
             claim.getTrusts().putAll(config.getTrusts());
             claim.getManagers().addAll(config.getManagers());

@@ -3,6 +3,7 @@ package net.pl3x.bukkit.claims.visualization.task;
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.visualization.Visualization;
 import net.pl3x.bukkit.claims.visualization.VisualizationElement;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -24,7 +25,7 @@ public class VisualizationApplyTask extends BukkitRunnable {
                 continue;  // cheap distance check
             }
             //noinspection deprecation
-            player.sendBlockChange(element.getLocation(), element.getMaterial(), element.getData());
+            player.sendBlockChange(element.getLocation(), element.getMaterial(), element.getMaterial() == Material.REDSTONE_ORE ? 1 : element.getData());
         }
 
         plugin.getPlayerManager().getPlayer(player).setVisualization(visualization);

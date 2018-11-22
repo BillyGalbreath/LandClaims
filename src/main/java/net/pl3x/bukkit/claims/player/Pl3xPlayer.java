@@ -2,6 +2,7 @@ package net.pl3x.bukkit.claims.player;
 
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
+import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.configuration.PlayerConfig;
 import net.pl3x.bukkit.claims.event.claim.VisualizeClaimsEvent;
 import net.pl3x.bukkit.claims.player.task.AccrueClaimBlocksTask;
@@ -10,10 +11,12 @@ import net.pl3x.bukkit.claims.visualization.VisualizationType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Pl3xPlayer extends PlayerConfig {
@@ -30,6 +33,8 @@ public class Pl3xPlayer extends PlayerConfig {
     private boolean ignoreClaims = false;
     private Visualization visualization;
     private AccrueClaimBlocksTask accrueClaimBlocksTask;
+    private Set<Long> entryMessageOnCooldown = new HashSet<>();
+    private Set<Long> exitMessageOnCooldown = new HashSet<>();
 
     Pl3xPlayer(Pl3xClaims plugin, OfflinePlayer player) {
         super(plugin, player.getUniqueId());
@@ -126,6 +131,30 @@ public class Pl3xPlayer extends PlayerConfig {
             return;
         }
 
+        if (player.isOnline()) {
+            if (inClaim != null && inClaim.hasExitMessage() && !exitMessageOnCooldown.contains(inClaim.getId())) {
+                Lang.send(player.getPlayer(), inClaim.getExitMessage().replace("\\n", "\n"));
+                long id = inClaim.getId();
+                exitMessageOnCooldown.add(id);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        exitMessageOnCooldown.remove(id);
+                    }
+                }.runTaskLater(plugin, 6000);
+            }
+            if (claim != null && claim.hasEntryMessage() && !entryMessageOnCooldown.contains(claim.getId())) {
+                Lang.send(player.getPlayer(), claim.getEntryMessage().replace("\\n", "\n"));
+                long id = claim.getId();
+                entryMessageOnCooldown.add(id);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        entryMessageOnCooldown.remove(id);
+                    }
+                }.runTaskLater(plugin, 6000);
+            }
+        }
         this.inClaim = claim;
     }
 
@@ -133,9 +162,9 @@ public class Pl3xPlayer extends PlayerConfig {
         return lastLocation;
     }
 
-    public void updateLocation() {
+    public void updateLocation(Location newLocation) {
         if (player.isOnline()) {
-            this.lastLocation = player.getPlayer().getLocation();
+            this.lastLocation = newLocation.clone();
             inClaim(plugin.getClaimManager().getClaim(lastLocation));
         }
     }

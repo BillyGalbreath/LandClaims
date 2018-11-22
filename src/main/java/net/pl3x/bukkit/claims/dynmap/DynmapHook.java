@@ -6,6 +6,7 @@ import net.pl3x.bukkit.claims.claim.TrustType;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
@@ -26,7 +27,8 @@ public class DynmapHook {
     private static final String ADMIN_ID = "administrator";
 
     private Map<String, AreaMarker> resAreas = new HashMap<>();
-    private MarkerSet markerSet;
+    private MarkerSet markerSetTop;
+    private MarkerSet markerSetChild;
     private AreaStyle defStyle;
     private Map<String, AreaStyle> ownerStyle;
 
@@ -42,23 +44,37 @@ public class DynmapHook {
             return;
         }
 
-        markerSet = markerapi.getMarkerSet("pl3xclaims.markerset");
-        if (markerSet == null) {
-            markerSet = markerapi.createMarkerSet("pl3xclaims.markerset", Config.DYNMAP_LAYER_NAME, null, false);
+        markerSetTop = markerapi.getMarkerSet("pl3xclaims.markerset");
+        if (markerSetTop == null) {
+            markerSetTop = markerapi.createMarkerSet("pl3xclaims.markerset", "Claims", null, false);
         } else {
-            markerSet.setMarkerSetLabel(Config.DYNMAP_LAYER_NAME);
+            markerSetTop.setMarkerSetLabel("Claims");
         }
-        if (markerSet == null) {
-            plugin.getLog().error("Error creating marker set");
+        if (markerSetTop == null) {
+            plugin.getLog().error("Error creating top marker set");
+            return;
+        }
+
+        markerSetChild = markerapi.getMarkerSet("pl3xclaims.markersetchild");
+        if (markerSetChild == null) {
+            markerSetChild = markerapi.createMarkerSet("pl3xclaims.markersetchild", "Child Claims", null, false);
+        } else {
+            markerSetChild.setMarkerSetLabel("Child Claims");
+        }
+        if (markerSetChild == null) {
+            plugin.getLog().error("Error creating child marker set");
             return;
         }
 
         int minzoom = Config.DYNMAP_MIN_ZOOM;
         if (minzoom > 0) {
-            markerSet.setMinZoom(minzoom);
+            markerSetTop.setMinZoom(minzoom);
+            markerSetChild.setMinZoom(minzoom);
         }
-        markerSet.setLayerPriority(Config.DYNMAP_LAYER_PRIORITY);
-        markerSet.setHideByDefault(Config.DYNMAP_LAYER_HIDEBYDEFAULT);
+        markerSetTop.setLayerPriority(Config.DYNMAP_LAYER_PRIORITY);
+        markerSetTop.setHideByDefault(Config.DYNMAP_LAYER_HIDEBYDEFAULT);
+        markerSetChild.setLayerPriority(Config.DYNMAP_LAYER_PRIORITY + 1);
+        markerSetChild.setHideByDefault(Config.DYNMAP_LAYER_HIDEBYDEFAULT);
 
         /* Get style information */
         defStyle = new AreaStyle(plugin.getConfig(), "regionstyle");
@@ -72,7 +88,7 @@ public class DynmapHook {
         }
 
         stop = false;
-        new DynmapUpdate(this).runTaskTimer(plugin, 40, 1200);
+        new DynmapUpdate(this).runTaskTimerAsynchronously(plugin, 40, 1200);
     }
 
     private String formatInfoWindow(Claim claim) {
@@ -119,11 +135,15 @@ public class DynmapHook {
 
         return ("<div class=\"regioninfo\">" + (claim.isAdminClaim() ? Config.DYNMAP_ADMIN_WINDOW : Config.DYNMAP_INFO_WINDOW) + "</div>")
                 .replace("%owner%", claim.getOwnerName())
+                .replace("%dimensions%", claim.getCoordinates().getWidthX() + "x" + claim.getCoordinates().getWidthZ())
                 .replace("%area%", Integer.toString(claim.getCoordinates().getArea()))
+                .replace("%lastactive%", claim.getLastActive() + " days ago")
                 .replace("%builders%", String.join(", ", builders))
                 .replace("%containers%", String.join(", ", containers))
                 .replace("%accessors%", String.join(", ", accessors))
-                .replace("%managers%", String.join(", ", managers));
+                .replace("%managers%", String.join(", ", managers))
+                .replace("%flags%", ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', claim.getFlagsList()))
+                                .replace("\n", "<br>"));
     }
 
     private boolean isVisible(String ownerName, String worldName) {
@@ -143,22 +163,29 @@ public class DynmapHook {
         return true;
     }
 
-    private void addStyle(String owner, AreaMarker marker) {
-        AreaStyle as = null;
+    private void addStyle(Claim claim, AreaMarker marker) {
+        AreaStyle as = defStyle;
 
-        if (!ownerStyle.isEmpty()) {
-            as = ownerStyle.get(owner.toLowerCase());
-        }
-        if (as == null) {
-            as = defStyle;
+        // default claims are green
+        int sc = 0x00FF00;
+        int fc = 0x00FF00;
+
+        // stale claims are red (older than 14 days inactive)
+        if (claim.getLastActive() > 14) {
+            sc = 0xFF0000;
+            fc = 0xFF0000;
         }
 
-        int sc = 0xFF0000;
-        int fc = 0xFF0000;
-        try {
-            sc = Integer.parseInt(as.strokeColor.substring(1), 16);
-            fc = Integer.parseInt(as.fillColor.substring(1), 16);
-        } catch (NumberFormatException ignore) {
+        // admin claims are blue
+        if (claim.isAdminClaim()) {
+            sc = 0x0000FF;
+            fc = 0x0000FF;
+        }
+
+        // child claims are white
+        if (claim.getParent() != null) {
+            sc = 0xFFFFFF;
+            fc = 0xFFFFFF;
         }
         marker.setLineStyle(as.strokeWeight, as.strokeOpacity, sc);
         marker.setFillStyle(as.fillOpacity, fc);
@@ -193,7 +220,11 @@ public class DynmapHook {
             String markerid = "PC_" + Long.toHexString(claim.getId());
             AreaMarker marker = resAreas.remove(markerid);
             if (marker == null) {
-                marker = markerSet.createAreaMarker(markerid, ownerName, false, worldName, x, z, false);
+                if (claim.getParent() == null) {
+                    marker = markerSetTop.createAreaMarker(markerid, ownerName, false, worldName, x, z, false);
+                } else {
+                    marker = markerSetChild.createAreaMarker(markerid, ownerName, false, worldName, x, z, false);
+                }
                 if (marker == null) {
                     return;
                 }
@@ -205,7 +236,7 @@ public class DynmapHook {
                 marker.setRangeY(max.getY() + 1.0, min.getY());
             }
 
-            addStyle(ownerName, marker);
+            addStyle(claim, marker);
             marker.setDescription(formatInfoWindow(claim));
             newmap.put(markerid, marker);
         }
@@ -213,10 +244,10 @@ public class DynmapHook {
 
     void updateClaims() {
         Map<String, AreaMarker> newMap = new HashMap<>();
-        Collection<Claim> claims = plugin.getClaimManager().getTopLevelClaims();
-        if (claims != null) {
-            claims.forEach(claim -> handleClaim(claim, newMap));
-            claims.stream()
+        Collection<Claim> topLevelClaims = plugin.getClaimManager().getTopLevelClaims();
+        if (topLevelClaims != null) {
+            topLevelClaims.forEach(claim -> handleClaim(claim, newMap));
+            topLevelClaims.stream()
                     .filter(claim -> !claim.getChildren().isEmpty())
                     .flatMap(claim -> claim.getChildren().stream())
                     .forEach(child -> handleClaim(child, newMap));
@@ -227,9 +258,13 @@ public class DynmapHook {
 
     public void disable() {
         stop = true;
-        if (markerSet != null) {
-            markerSet.deleteMarkerSet();
-            markerSet = null;
+        if (markerSetTop != null) {
+            markerSetTop.deleteMarkerSet();
+            markerSetTop = null;
+        }
+        if (markerSetChild != null) {
+            markerSetChild.deleteMarkerSet();
+            markerSetChild = null;
         }
         resAreas.clear();
     }

@@ -73,8 +73,14 @@ public class CmdSetFlag implements TabExecutor {
             return true;
         }
 
-        if (!claim.allowManage(player)) {
+        if (!sender.hasPermission("command.setflag.*") &&
+                !sender.hasPermission("command.setflag." + flag.name().toLowerCase())) {
             Lang.send(sender, Lang.SETFLAG_NO_PERMISSION);
+            return true;
+        }
+
+        if (!claim.allowManage(player)) {
+            Lang.send(sender, Lang.SETFLAG_NO_MANAGE);
             return true;
         }
 

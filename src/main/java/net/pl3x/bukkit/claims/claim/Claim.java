@@ -9,6 +9,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -28,6 +29,8 @@ public class Claim {
     private final Map<UUID, TrustType> trusts = new HashMap<>();
     private final Collection<UUID> managers = new HashSet<>();
     private final Collection<Claim> children = new HashSet<>();
+    private String entryMessage;
+    private String exitMessage;
 
     public Claim(Pl3xClaims plugin, long id, UUID owner, Claim parent, Coordinates coordinates, boolean isAdminClaim) {
         this.plugin = plugin;
@@ -68,6 +71,41 @@ public class Claim {
 
     public boolean isOwner(UUID uuid) {
         return owner != null && owner.equals(uuid);
+    }
+
+    public int getLastActive() {
+        if (isAdminClaim) {
+            return 0;
+        }
+        OfflinePlayer owner = Bukkit.getOfflinePlayer(getOwner());
+        if (owner.isOnline()) {
+            return 0;
+        }
+        return (int) ((new Date().getTime() - new Date(owner.getLastPlayed()).getTime()) / 86400000);
+    }
+
+    public boolean hasEntryMessage() {
+        return entryMessage != null && !entryMessage.isEmpty();
+    }
+
+    public String getEntryMessage() {
+        return entryMessage;
+    }
+
+    public void setEntryMessage(String entryMessage) {
+        this.entryMessage = entryMessage;
+    }
+
+    public boolean hasExitMessage() {
+        return exitMessage != null && !exitMessage.isEmpty();
+    }
+
+    public String getExitMessage() {
+        return exitMessage;
+    }
+
+    public void setExitMessage(String exitMessage) {
+        this.exitMessage = exitMessage;
     }
 
     public Claim getParent() {

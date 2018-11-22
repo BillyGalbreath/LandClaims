@@ -9,7 +9,9 @@ public enum FlagType {
     SPAWN_ANIMALS(true),
     SPAWN_MOBS(true),
     MOB_DAMAGE(true),
-    MOB_GRIEFING(false);
+    MOB_GRIEFING(false),
+    ENTRY(true),
+    EXIT(true);
 
     private final boolean def;
 

@@ -12,6 +12,10 @@ enabled-worlds:
 
 supply-claimbook: true
 
+# Delete inactive claims after amount of days
+# 0 or negative value to disable auto deletions
+delete-inactive-claims: 30
+
 claims:
     minimum-width: 5
     minimum-area: 100
@@ -37,12 +41,11 @@ inspect-tool:
 
 dynmap:
     layer:
-        name: "Pl3xClaims"
         priority: 2
         hidebydefault: false
     minzoom: 0
-    info-window: '<div class="infowindow">Claim Owner: <span style="font-weight:bold;">%owner%</span><br/>Permission Trust: <span style="font-weight:bold;">%managers%</span><br/>Trust: <span style="font-weight:bold;">%builders%</span><br/>Container Trust: <span style="font-weight:bold;">%containers%</span><br/>Access Trust: <span style="font-weight:bold;">%accessors%</span></div>'
-    admin-window: '<div class="infowindow"><span style="font-weight:bold;">Administrator Claim</span><br/>Permission Trust: <span style="font-weight:bold;">%managers%</span><br/>Trust: <span style="font-weight:bold;">%builders%</span><br/>Container Trust: <span style="font-weight:bold;">%containers%</span><br/>Access Trust: <span style="font-weight:bold;">%accessors%</span></div>'
+    info-window: '<div class="infowindow"><span style="font-weight:bold;">%owner%</span>''s Claim<br/>%dimensions% = <span style="font-weight:bold;">%area%</span><br/>Last Active: <span style="font-weight:bold;">%lastactive%</span><br/><br/>Permission Trust: <span style="font-weight:bold;">%managers%</span><br/>Trust: <span style="font-weight:bold;">%builders%</span><br/>Container Trust: <span style="font-weight:bold;">%containers%</span><br/>Access Trust: <span style="font-weight:bold;">%accessors%</span><br/><br/><span style="font-weight:bold;">Flags:</span>%flags%</div>'
+    admin-window: '<div class="infowindow"><span style="font-weight:bold;">Administrator</span> Claim<br/>%dimensions% = <span style="font-weight:bold;">%area%</span><br/><br/>Permission Trust: <span style="font-weight:bold;">%managers%</span><br/>Trust: <span style="font-weight:bold;">%builders%</span><br/>Container Trust: <span style="font-weight:bold;">%containers%</span><br/>Access Trust: <span style="font-weight:bold;">%accessors%</span><br/><br/><span style="font-weight:bold;">Flags:</span>%flags%</div>'
     use3dregions: false
     visibleregions: []
     hiddenregions: []

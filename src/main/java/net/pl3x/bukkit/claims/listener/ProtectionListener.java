@@ -3,6 +3,7 @@ package net.pl3x.bukkit.claims.listener;
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.configuration.Config;
+import net.pl3x.bukkit.claims.util.MaterialTags;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -216,8 +217,7 @@ public class ProtectionListener implements Listener {
             return; // claims not enabled in this world
         }
 
-        if (event.getBlock().getType() != Material.SOIL &&
-                event.getBlock().getType() != Material.CROPS) {
+        if (event.getBlock().getType() != Material.FARMLAND && !MaterialTags.FARMABLE.isTagged(event.getBlock())) {
             return; // not soil/crops
         }
 
@@ -242,8 +242,7 @@ public class ProtectionListener implements Listener {
             return; // claims not enabled in this world
         }
 
-        if (event.getClickedBlock().getType() != Material.SOIL &&
-                event.getClickedBlock().getType() != Material.CROPS) {
+        if (event.getClickedBlock().getType() != Material.FARMLAND && !MaterialTags.FARMABLE.isTagged(event.getClickedBlock())) {
             return; // not soil/crops
         }
 

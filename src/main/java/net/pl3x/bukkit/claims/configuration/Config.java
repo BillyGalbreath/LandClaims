@@ -39,7 +39,8 @@ public class Config {
     public static int ACCRUED_PER_HOUR;
     public static int ACCRUED_IDLE_PERCENT;
 
-    public static String DYNMAP_LAYER_NAME;
+    public static int DELETE_INACTIVE_CLAIMS;
+
     public static int DYNMAP_LAYER_PRIORITY;
     public static boolean DYNMAP_LAYER_HIDEBYDEFAULT;
     public static int DYNMAP_MIN_ZOOM;
@@ -91,12 +92,13 @@ public class Config {
         ACCRUED_PER_HOUR = config.getInt("claim-blocks.accrued-per-hour", 100);
         ACCRUED_IDLE_PERCENT = config.getInt("claim-blocks.accrued-idle-percent", 50);
 
-        DYNMAP_LAYER_NAME = config.getString("dynmap.layer.name", "Pl3xClaims");
+        DELETE_INACTIVE_CLAIMS = config.getInt("delete-inactive-claims", 30);
+
         DYNMAP_LAYER_PRIORITY = config.getInt("dynmap.layer.priority", 2);
         DYNMAP_LAYER_HIDEBYDEFAULT = config.getBoolean("dynmap.layer.hidebydefault", false);
         DYNMAP_MIN_ZOOM = config.getInt("dynmap.minzoom", 0);
-        DYNMAP_INFO_WINDOW = config.getString("dynmap.info-window", "<div class=\"infowindow\">Claim Owner: <span style=\"font-weight:bold;\">%owner%</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>");
-        DYNMAP_ADMIN_WINDOW = config.getString("dynmap.admin-window", "<div class=\"infowindow\"><span style=\"font-weight:bold;\">Administrator Claim</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>");
+        DYNMAP_INFO_WINDOW = config.getString("dynmap.info-window", "<div class=\"infowindow\"><span style=\"font-weight:bold;\">%owner%</span>''s Claim<br/>%dimensions% = <span style=\"font-weight:bold;\">%area%</span><br/>Last Active: <span style=\"font-weight:bold;\">%lastactive%</span><br/><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span><br/><br/><span style=\"font-weight:bold;\">Flags:</span>%flags%</div>");
+        DYNMAP_ADMIN_WINDOW = config.getString("dynmap.admin-window", "<div class=\"infowindow\"><span style=\"font-weight:bold;\">Administrator</span> Claim<br/>%dimensions% = <span style=\"font-weight:bold;\">%area%</span><br/><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span><br/><br/><span style=\"font-weight:bold;\">Flags:</span>%flags%</div>");
         DYNMAP_3D_REGIONS = config.getBoolean("use3dregions", false);
 
         DYNMAP_VISIBLE_REGIONS = config.getStringList("visibleregions");

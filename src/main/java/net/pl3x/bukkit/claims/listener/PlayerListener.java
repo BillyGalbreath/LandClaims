@@ -31,7 +31,9 @@ public class PlayerListener implements Listener {
             @Override
             public void run() {
                 // wait 20 ticks to update location for spawn relocation
-                pl3xPlayer.updateLocation();
+                if (player.isOnline()) {
+                    pl3xPlayer.updateLocation(player.getLocation());
+                }
             }
         }.runTaskLater(plugin, 20);
 
@@ -54,17 +56,17 @@ public class PlayerListener implements Listener {
             return; // did not move a full block
         }
 
-        plugin.getPlayerManager().getPlayer(event.getPlayer()).updateLocation();
+        plugin.getPlayerManager().getPlayer(event.getPlayer()).updateLocation(event.getTo());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        plugin.getPlayerManager().getPlayer(event.getPlayer()).updateLocation();
+        plugin.getPlayerManager().getPlayer(event.getPlayer()).updateLocation(event.getTo());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
-        plugin.getPlayerManager().getPlayer(event.getPlayer()).updateLocation();
+        plugin.getPlayerManager().getPlayer(event.getPlayer()).updateLocation(event.getPlayer().getLocation());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

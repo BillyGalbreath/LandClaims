@@ -5,9 +5,8 @@ import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.player.Pl3xPlayer;
-import net.pl3x.bukkit.claims.util.BlockUtil;
 import net.pl3x.bukkit.claims.util.EntityUtil;
-import net.pl3x.bukkit.claims.util.ItemUtil;
+import net.pl3x.bukkit.claims.util.MaterialTags;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.TravelAgent;
@@ -71,16 +70,7 @@ public class TrustListener implements Listener {
         }
 
         // container trust
-        if (event.getBlock().getType() == Material.MELON_BLOCK ||
-                event.getBlock().getType() == Material.PUMPKIN ||
-                event.getBlock().getType() == Material.CROPS ||
-                event.getBlock().getType() == Material.BEETROOT_BLOCK ||
-                event.getBlock().getType() == Material.POTATO ||
-                event.getBlock().getType() == Material.CARROT ||
-                event.getBlock().getType() == Material.COCOA ||
-                event.getBlock().getType() == Material.SUGAR_CANE_BLOCK ||
-                event.getBlock().getType() == Material.NETHER_WART_BLOCK ||
-                event.getBlock().getType() == Material.CACTUS) {
+        if (MaterialTags.FARMABLE.isTagged(event.getBlock())) {
             if (!claim.allowContainers(event.getPlayer())) {
                 Lang.send(event.getPlayer(), Lang.CONTAINER_DENY);
                 event.setCancelled(true);
@@ -113,16 +103,7 @@ public class TrustListener implements Listener {
         }
 
         // container trust
-        if (event.getBlock().getType() == Material.MELON_BLOCK ||
-                event.getBlock().getType() == Material.PUMPKIN ||
-                event.getBlock().getType() == Material.CROPS ||
-                event.getBlock().getType() == Material.BEETROOT_BLOCK ||
-                event.getBlock().getType() == Material.POTATO ||
-                event.getBlock().getType() == Material.CARROT ||
-                event.getBlock().getType() == Material.COCOA ||
-                event.getBlock().getType() == Material.SUGAR_CANE_BLOCK ||
-                event.getBlock().getType() == Material.NETHER_WART_BLOCK ||
-                event.getBlock().getType() == Material.CACTUS) {
+        if (MaterialTags.FARMABLE.isTagged(event.getBlock())) {
             if (!claim.allowContainers(event.getPlayer())) {
                 Lang.send(event.getPlayer(), Lang.CONTAINER_DENY);
                 event.setCancelled(true);
@@ -362,7 +343,7 @@ public class TrustListener implements Listener {
             return;
         }
 
-        ItemStack itemInHand = ItemUtil.getItemInHand(event.getPlayer(), event.getHand());
+        ItemStack itemInHand = event.getPlayer().getInventory().getItem(event.getHand());
 
         // (build trust)
         // check interaction with armorstands and item frames/paintings (build trust)
@@ -377,7 +358,7 @@ public class TrustListener implements Listener {
         if ((EntityUtil.isAnimal(entity) ||
                 entity instanceof Villager ||
                 (entity instanceof Vehicle && entity instanceof InventoryHolder) ||
-                (entity instanceof Creature && itemInHand.getType() == Material.LEASH)) &&
+                (entity instanceof Creature && itemInHand.getType() == Material.LEAD)) &&
                 !claim.allowContainers(event.getPlayer())) {
             Lang.send(event.getPlayer(), Lang.CONTAINER_DENY);
             event.setCancelled(true);
@@ -412,21 +393,11 @@ public class TrustListener implements Listener {
             return;
         }
 
-        ItemStack itemInHand = ItemUtil.getItemInHand(event.getPlayer(), event.getHand());
+        ItemStack itemInHand = event.getPlayer().getInventory().getItem(event.getHand());
 
         // (container trust)
         // special farmland check
-        if (clickedBlock.getType() == Material.SOIL &&
-                (itemInHand.getType() == Material.SEEDS ||
-                        itemInHand.getType() == Material.BEETROOT_SEEDS ||
-                        itemInHand.getType() == Material.MELON_SEEDS ||
-                        itemInHand.getType() == Material.PUMPKIN_SEEDS ||
-                        itemInHand.getType() == Material.POTATO ||
-                        itemInHand.getType() == Material.CARROT ||
-                        itemInHand.getType() == Material.COCOA ||
-                        itemInHand.getType() == Material.SUGAR_CANE ||
-                        itemInHand.getType() == Material.NETHER_WARTS ||
-                        itemInHand.getType() == Material.CACTUS)) {
+        if (clickedBlock.getType() == Material.FARMLAND && MaterialTags.FARMABLE.isTagged(itemInHand)) {
             if (!claim.allowContainers(event.getPlayer())) {
                 Lang.send(player, Lang.CONTAINER_DENY);
                 event.setCancelled(true);
@@ -436,7 +407,7 @@ public class TrustListener implements Listener {
         // (container trust)
         // prevent opening containers
         // prevent placing minecarts
-        else if (BlockUtil.isContainer(clickedBlock) || ItemUtil.isMinecart(itemInHand)) {
+        else if (MaterialTags.CONTAINER.isTagged(clickedBlock) || MaterialTags.MINECARTS.isTagged(itemInHand)) {
             if (!claim.allowContainers(event.getPlayer())) {
                 Lang.send(player, Lang.CONTAINER_DENY);
                 event.setCancelled(true);
@@ -446,10 +417,10 @@ public class TrustListener implements Listener {
         // (access trust)
         // prevent stealing cake
         // prevent using beds, doors, buttons, and levers
-        else if (clickedBlock.getType() == Material.CAKE_BLOCK ||
-                clickedBlock.getType() == Material.BED_BLOCK ||
-                BlockUtil.isDoor(clickedBlock) ||
-                BlockUtil.isButton(clickedBlock)) {
+        else if (clickedBlock.getType() == Material.CAKE ||
+                MaterialTags.BEDS.isTagged(clickedBlock) ||
+                MaterialTags.DOORS.isTagged(clickedBlock) ||
+                MaterialTags.BUTTONS.isTagged(clickedBlock)) {
             if (!claim.allowAccess(player)) {
                 Lang.send(player, Lang.ACCESS_DENY);
                 event.setCancelled(true);
@@ -460,27 +431,51 @@ public class TrustListener implements Listener {
         // prevent using note blocks, repeaters, comparators, daylight sensors, dragon eggs, flower pots, and end crystals
         // prevent placing ink sack (bone meal), end crystals, armorstands, item frames, boats, and minecarts
         // prevent spawning monsters using eggs or monster blocks
-        else if (clickedBlock.getType() == Material.NOTE_BLOCK ||
-                clickedBlock.getType() == Material.DIODE_BLOCK_ON ||
-                clickedBlock.getType() == Material.DIODE_BLOCK_OFF ||
-                clickedBlock.getType() == Material.REDSTONE_COMPARATOR_ON ||
-                clickedBlock.getType() == Material.REDSTONE_COMPARATOR_OFF ||
-                clickedBlock.getType() == Material.DAYLIGHT_DETECTOR ||
-                clickedBlock.getType() == Material.DAYLIGHT_DETECTOR_INVERTED ||
-                clickedBlock.getType() == Material.DRAGON_EGG ||
-                clickedBlock.getType() == Material.FLOWER_POT ||
-                clickedBlock.getType() == Material.END_CRYSTAL ||
-                itemInHand.getType() == Material.INK_SACK ||
-                itemInHand.getType() == Material.END_CRYSTAL ||
-                itemInHand.getType() == Material.ARMOR_STAND ||
-                itemInHand.getType() == Material.ITEM_FRAME ||
-                itemInHand.getType() == Material.MONSTER_EGG ||
-                itemInHand.getType() == Material.MONSTER_EGGS ||
-                ItemUtil.isBoat(itemInHand) ||
-                ItemUtil.isMinecart(itemInHand)) {
+        else if (MaterialTags.INTERACTABLE.isTagged(itemInHand) ||
+                MaterialTags.BOATS.isTagged(itemInHand) ||
+                MaterialTags.MINECARTS.isTagged(itemInHand)) {
             if (!claim.allowBuild(player)) {
                 Lang.send(player, Lang.BUILD_DENY);
                 event.setCancelled(true);
+            }
+        }
+    }
+
+    /*
+     * Stops players from putting out fires
+     */
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerInteractLeft(PlayerInteractEvent event) {
+        if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
+            return;
+        }
+
+        Player player = event.getPlayer();
+        if (Config.isWorldDisabled(player.getWorld())) {
+            return; // claims not enabled in this world
+        }
+
+        if (plugin.getPlayerManager().getPlayer(player).isIgnoringClaims()) {
+            return; // overrides claims
+        }
+
+        Block clickedBlock = event.getClickedBlock();
+        if (clickedBlock == null || clickedBlock.getType() == Material.AIR) {
+            return;
+        }
+
+        Claim claim = plugin.getClaimManager().getClaim(clickedBlock.getLocation());
+        if (claim == null) {
+            return;
+        }
+
+        // (build trust, special)
+        // prevent players from putting out fires
+        if (clickedBlock.getRelative(event.getBlockFace()).getType() == Material.FIRE) {
+            if (!claim.allowBuild(player)) {
+                Lang.send(player, Lang.BUILD_DENY);
+                event.setCancelled(true);
+                player.sendBlockChange(clickedBlock.getRelative(event.getBlockFace()).getLocation(), Material.FIRE, (byte) 0);
             }
         }
     }
@@ -546,7 +541,7 @@ public class TrustListener implements Listener {
             agent.setCanCreatePortal(true);
         }
 
-        if (destination.getBlock().getType() == Material.PORTAL) {
+        if (MaterialTags.PORTAL.isTagged(destination.getBlock())) {
             return; // already a portal there
         }
 
@@ -644,7 +639,7 @@ public class TrustListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerShootButton(EntityInteractEvent event) {
         Block block = event.getBlock();
-        if (block == null || block.getType() != Material.WOOD_BUTTON) {
+        if (block == null || !MaterialTags.BUTTONS.isTagged(block.getType())) {
             return;
         }
 

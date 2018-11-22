@@ -6,6 +6,7 @@ import net.pl3x.bukkit.claims.claim.flag.FlagType;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.util.EntityUtil;
+import net.pl3x.bukkit.claims.util.MaterialTags;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -28,6 +29,8 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.LingeringPotionSplashEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.HashSet;
@@ -163,7 +166,7 @@ public class FlagListener implements Listener {
         }
 
         Block block = event.getBlock();
-        if (block.getType() != Material.SOIL && block.getType() != Material.CROPS) {
+        if (block.getType() != Material.FARMLAND && !MaterialTags.FARMABLE.isTagged(block)) {
             return;
         }
 
@@ -198,6 +201,35 @@ public class FlagListener implements Listener {
 
         if (cancelDamage(event.getCombuster(), event.getEntity())) {
             event.setCancelled(true);
+        }
+    }
+
+    /*
+     * Mob Griefing hanging (item frame, paintings, etc)
+     */
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onEntityBreakHangingEntity(HangingBreakByEntityEvent event) {
+        if (Config.isWorldDisabled(event.getEntity().getWorld())) {
+            return; // claims not enabled in this world
+        }
+
+        Claim claim = plugin.getClaimManager().getClaim(event.getEntity().getLocation());
+        if (claim == null) {
+            return; // not in claim
+        }
+
+        if (claim.getFlag(FlagType.MOB_GRIEFING)) {
+            return; // allow mob griefing
+        }
+
+        Entity remover = event.getRemover();
+        if (!(remover instanceof Player || remover instanceof Projectile)) {
+            event.setCancelled(true); // cancel mob griefing
+        } else if (remover instanceof Projectile) {
+            ProjectileSource shooter = ((Projectile) remover).getShooter();
+            if (!(shooter instanceof Player)) {
+                event.setCancelled(true); // cancel mob griefing
+            }
         }
     }
 
@@ -327,5 +359,33 @@ public class FlagListener implements Listener {
         }
 
         return false;
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if (event.getTo().getBlockX() == event.getFrom().getBlockX()
+                && event.getTo().getBlockY() == event.getFrom().getBlockY()
+                && event.getTo().getBlockZ() == event.getFrom().getBlockZ()) {
+            return; // did not move a full block
+        }
+
+        Claim from = plugin.getClaimManager().getClaim(event.getFrom());
+        Claim to = plugin.getClaimManager().getClaim(event.getTo());
+
+        if (from == to) {
+            return;
+        }
+
+        Player player = event.getPlayer();
+
+        if (from != null && !from.getFlag(FlagType.EXIT) && !from.allowAccess(player)) {
+            event.setTo(event.getFrom()); // cancel movement
+            Lang.send(player, Lang.EXIT_DENIED);
+        }
+
+        if (to != null && !to.getFlag(FlagType.ENTRY) && !to.allowAccess(player)) {
+            event.setTo(event.getFrom()); // cancel movement
+            Lang.send(player, Lang.ENTRY_DENIED);
+        }
     }
 }
