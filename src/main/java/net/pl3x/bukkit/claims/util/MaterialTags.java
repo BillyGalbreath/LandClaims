@@ -360,8 +360,9 @@ public class MaterialTags {
     public static final MaterialSetTag CONTAINER = new MaterialSetTag()
             .add(Material.CHEST, Material.CHEST_MINECART, Material.ENDER_CHEST, Material.TRAPPED_CHEST,
                     Material.BEACON, Material.BREWING_STAND, Material.DISPENSER, Material.DROPPER, Material.HOPPER,
-                    Material.HOPPER_MINECART, Material.FURNACE, Material.FURNACE_MINECART, Material.SHULKER_BOX,
-                    Material.CAULDRON, Material.JUKEBOX, Material.ANVIL, Material.CAKE);
+                    Material.HOPPER_MINECART, Material.FURNACE, Material.FURNACE_MINECART,
+                    Material.CAULDRON, Material.JUKEBOX, Material.ANVIL, Material.CAKE)
+            .add(SHULKER_BOXES);
 
     public static final MaterialSetTag FARMABLE = new MaterialSetTag()
             .add(Material.MELON, Material.PUMPKIN, Material.WHEAT, Material.BEETROOT, Material.POTATO,
