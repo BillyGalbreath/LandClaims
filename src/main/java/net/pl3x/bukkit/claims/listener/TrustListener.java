@@ -384,7 +384,7 @@ public class TrustListener implements Listener {
         }
 
         Block clickedBlock = event.getClickedBlock();
-        if (clickedBlock == null || clickedBlock.getType() == Material.AIR) {
+        if (clickedBlock == null || clickedBlock.isEmpty()) {
             return;
         }
 
@@ -460,7 +460,7 @@ public class TrustListener implements Listener {
         }
 
         Block clickedBlock = event.getClickedBlock();
-        if (clickedBlock == null || clickedBlock.getType() == Material.AIR) {
+        if (clickedBlock == null || clickedBlock.isEmpty()) {
             return;
         }
 
@@ -581,7 +581,7 @@ public class TrustListener implements Listener {
             return; // claims not enabled in this world
         }
 
-        if (event.getBlockClicked().getType() == Material.AIR) {
+        if (event.getBlockClicked().isEmpty()) {
             return; // clicked cow for milk; let interact event handle
         }
 

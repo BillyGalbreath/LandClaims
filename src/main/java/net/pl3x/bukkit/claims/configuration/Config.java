@@ -1,7 +1,6 @@
 package net.pl3x.bukkit.claims.configuration;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -110,7 +109,7 @@ public class Config {
     }
 
     public static boolean isClaimTool(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) {
+        if (item == null || item.getType().isEmpty()) {
             return false; // no item
         }
         if (!item.getType().name().equals(Config.CLAIM_TOOL_MATERIAL)) {
@@ -128,19 +127,18 @@ public class Config {
                 return false; // name mismatch
             }
         }
-        if (Config.CLAIM_TOOL_LORE != null && !Config.CLAIM_TOOL_LORE.isEmpty()) {
+        if (!Config.CLAIM_TOOL_LORE.isEmpty()) {
             if (!item.hasItemMeta()) {
                 return false; // no item meta
             }
             // lore mismatch
-            return Config.CLAIM_TOOL_LORE.stream()
-                    .allMatch(lore -> item.getItemMeta().getLore().contains(lore));
+            return item.getItemMeta().getLore().containsAll(Config.CLAIM_TOOL_LORE);
         }
         return true;
     }
 
     public static boolean isInspectTool(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) {
+        if (item == null || item.getType().isEmpty()) {
             return false; // no item
         }
         if (!item.getType().name().equals(Config.INSPECT_TOOL_MATERIAL)) {
@@ -158,13 +156,12 @@ public class Config {
                 return false; // name mismatch
             }
         }
-        if (Config.INSPECT_TOOL_LORE != null && !Config.INSPECT_TOOL_LORE.isEmpty()) {
+        if (!Config.INSPECT_TOOL_LORE.isEmpty()) {
             if (!item.hasItemMeta()) {
                 return false; // no item meta
             }
             // lore mismatch
-            return Config.INSPECT_TOOL_LORE.stream()
-                    .allMatch(lore -> item.getItemMeta().getLore().contains(lore));
+            return item.getItemMeta().getLore().containsAll(Config.INSPECT_TOOL_LORE);
         }
         return true;
     }

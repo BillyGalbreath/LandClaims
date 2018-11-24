@@ -64,7 +64,7 @@ public class ClaimToolListener implements Listener {
         }
 
         Pl3xPlayer pl3xPlayer = plugin.getPlayerManager().getPlayer(player);
-        if (clickedBlock == null || clickedBlock.getType() == Material.AIR) {
+        if (clickedBlock == null || clickedBlock.isEmpty()) {
             Lang.send(player, Lang.INSPECT_TOO_FAR);
             pl3xPlayer.revertVisualization();
             return; // no block clicked
@@ -164,7 +164,7 @@ public class ClaimToolListener implements Listener {
         }
 
         Pl3xPlayer pl3xPlayer = plugin.getPlayerManager().getPlayer(player);
-        if (clickedBlock == null || clickedBlock.getType() == Material.AIR) {
+        if (clickedBlock == null || clickedBlock.isEmpty()) {
             return; // no block clicked
         }
 
