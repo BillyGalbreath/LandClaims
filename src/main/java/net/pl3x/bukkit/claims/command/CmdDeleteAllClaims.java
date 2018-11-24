@@ -43,7 +43,6 @@ public class CmdDeleteAllClaims implements TabExecutor {
             return true;
         }
 
-        //noinspection deprecation
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
         if (target == null) {
             Lang.send(sender, Lang.COMMAND_PLAYER_NOT_FOUND);

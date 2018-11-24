@@ -109,7 +109,6 @@ public class ProtectionListener implements Listener {
             return; // claims not enabled in this world
         }
 
-        //noinspection deprecation
         if (!Objects.equals(plugin.getClaimManager().getClaim(event.getBlock().getLocation()),
                 plugin.getClaimManager().getClaim(event.getBlock()
                         .getRelative(new Dispenser(Material.DISPENSER, event.getBlock().getData()).getFacing())

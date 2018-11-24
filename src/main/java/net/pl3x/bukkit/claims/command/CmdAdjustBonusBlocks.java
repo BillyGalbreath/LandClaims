@@ -49,7 +49,6 @@ public class CmdAdjustBonusBlocks implements TabExecutor {
         }
 
         Collection<Player> targetPlayers = new HashSet<>();
-        //noinspection deprecation
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
             if (!"all".equalsIgnoreCase(args[0])) {

@@ -78,7 +78,6 @@ public class Visualization {
         //send real block information for any remaining elements
         for (VisualizationElement element : visualization.getElements()) {
             Block block = element.getLocation().getBlock();
-            //noinspection deprecation
             player.sendBlockChange(element.getLocation(), block.getType(), block.getData());
         }
 

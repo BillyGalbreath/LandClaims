@@ -50,7 +50,6 @@ public class CmdClaimBook implements TabExecutor {
                 return true;
             }
 
-            //noinspection deprecation
             target = Bukkit.getPlayer(args[0]);
             if (target == null) {
                 Lang.send(sender, Lang.COMMAND_PLAYER_NOT_FOUND);

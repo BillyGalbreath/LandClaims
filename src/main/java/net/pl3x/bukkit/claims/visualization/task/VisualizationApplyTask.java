@@ -24,7 +24,6 @@ public class VisualizationApplyTask extends BukkitRunnable {
             if (!element.getLocation().getChunk().isLoaded()) {
                 continue;  // cheap distance check
             }
-            //noinspection deprecation
             player.sendBlockChange(element.getLocation(), element.getMaterial(), element.getMaterial() == Material.REDSTONE_ORE ? 1 : element.getData());
         }
 

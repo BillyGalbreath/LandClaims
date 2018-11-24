@@ -48,7 +48,6 @@ public class SaveTrappedPlayerTask extends BukkitRunnable {
                 }
 
                 Chunk chunk = location.getChunk();
-                //noinspection StatementWithEmptyBody
                 while (!chunk.isLoaded() || !chunk.load(true)) ;
 
                 destination = location.getWorld()

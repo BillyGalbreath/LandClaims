@@ -94,7 +94,6 @@ public class CmdTrust implements TabExecutor {
 
         OfflinePlayer target = null;
         if (!(args[0].equalsIgnoreCase("all") || args[0].equalsIgnoreCase("public"))) {
-            //noinspection deprecation
             target = Bukkit.getOfflinePlayer(args[0]);
             if (target == null) {
                 Lang.send(sender, Lang.COMMAND_PLAYER_NOT_FOUND);

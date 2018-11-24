@@ -115,7 +115,6 @@ public class Config {
         if (!item.getType().name().equals(Config.CLAIM_TOOL_MATERIAL)) {
             return false; // wrong material
         }
-        //noinspection deprecation
         if (item.getData().getData() != Config.CLAIM_TOOL_DATA) {
             return false; // wrong data
         }
@@ -144,7 +143,6 @@ public class Config {
         if (!item.getType().name().equals(Config.INSPECT_TOOL_MATERIAL)) {
             return false; // wrong material
         }
-        //noinspection deprecation
         if (item.getData().getData() != Config.INSPECT_TOOL_DATA) {
             return false; // wrong data
         }
