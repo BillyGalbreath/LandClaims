@@ -1,1 +1,1 @@
-![Pl3x](http://pl3x.net/pl3x_full.svg)
+![](http://pl3x.net/pl3x_logo_black.png)
