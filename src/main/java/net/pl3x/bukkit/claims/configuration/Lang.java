@@ -46,6 +46,8 @@ public class Lang {
     public static String CONTAINER_DENY;
     public static String ACCESS_DENY;
 
+    public static String USE_STICK_TO_CLAIM_THIS_LAND;
+
     public static String ABANDON_CLAIM_MISSING;
     public static String ABANDON_TOP_LEVEL_CLAIM;
     public static String ABANDON_SUCCESS;
@@ -215,6 +217,8 @@ public class Lang {
         PVP_DENY = config.getString("pvp-deny", "&4PvP is disabled here");
         CONTAINER_DENY = config.getString("container-deny", "&4You don't have permission to use that");
         ACCESS_DENY = config.getString("container-deny", "&4You don't have permission to use that");
+
+        USE_STICK_TO_CLAIM_THIS_LAND = config.getString("use-stick-to-claim-this-land", "&dUh oh! This chest is unprotected!\n&dUse a stick to protect it by claiming this land");
 
         ABANDON_CLAIM_MISSING = config.getString("abandon-claim-missing", "&4Stand in the claim you want to delete, or consider /AbandonAllClaims");
         ABANDON_TOP_LEVEL_CLAIM = config.getString("abandon-top-level-claim", "&4To delete a child claim, stand inside it. Otherwise, use /AbandonClaim force to delete this claim and all it's children");

@@ -7,6 +7,8 @@ import net.pl3x.bukkit.claims.util.MaterialTags;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -126,10 +128,12 @@ public class ProtectionListener implements Listener {
             return; // claims not enabled in this world
         }
 
+        /* // lets allow creeper explosions in the wilderness
         if (event.getEntityType() == EntityType.CREEPER) {
             event.blockList().clear();
             return; // NEVER let creepers make potholes
         }
+        */
 
         Claim from = plugin.getClaimManager().getClaim(event.getEntity().getLocation());
 
@@ -189,9 +193,7 @@ public class ProtectionListener implements Listener {
     }
 
     /*
-     * Stop entities from changing blocks
-     * rabbits eating crops, endermen moving blocks, silverfish breaking blocks,
-     * wither breaking blocks
+     * Stop entities from changing blocks in the world
      */
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
@@ -199,11 +201,30 @@ public class ProtectionListener implements Listener {
             return; // claims not enabled in this world
         }
 
-        if (event.getEntityType() == EntityType.ENDERMAN ||
-                event.getEntityType() == EntityType.SILVERFISH ||
-                event.getEntityType() == EntityType.RABBIT ||
-                event.getEntityType() == EntityType.WITHER) {
-            event.setCancelled(true); // NEVER let mobs grief the land
+        EntityType type = event.getEntityType();
+
+        if (type == EntityType.ARROW) {
+            type = ((Entity) ((Arrow) event.getEntity()).getShooter()).getType();
+        }
+
+        Claim claim = plugin.getClaimManager().getClaim(event.getBlock().getLocation());
+        if (claim == null) {
+            return; // no claim here
+        }
+
+        // stop these entities only if in a claim
+        if (type == EntityType.ENDERMAN ||       // endermen steal blocks
+                type == EntityType.SILVERFISH || // silverfish break/replace stone
+                type == EntityType.RABBIT ||     // rabbit eats crops
+                type == EntityType.WITHER ||     // wither explodes blocks
+                type == EntityType.ZOMBIE ||     // zombie breaks doors
+                type == EntityType.PIG_ZOMBIE || // zombie breaks doors
+                type == EntityType.HUSK ||       // zombie breaks doors
+                type == EntityType.DROWNED ||    // zombie breaks doors
+                type == EntityType.SPIDER ||     // spider shoots webs (ridables)
+                type == EntityType.SHEEP ||      // sheep eat grass
+                type == EntityType.VILLAGER) {   // villagers farm crops
+            event.setCancelled(true); // dont let mobs grief claims
         }
     }
 

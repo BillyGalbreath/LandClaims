@@ -35,6 +35,7 @@ import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class FlagListener implements Listener {
     private final Pl3xClaims plugin;
@@ -52,11 +53,10 @@ public class FlagListener implements Listener {
             return; // claims not enabled in this world
         }
 
-        // explosions denied in this claim
-        Claim from = plugin.getClaimManager().getClaim(event.getEntity().getLocation());
-        if (from != null && !from.getFlag(FlagType.EXPLOSIONS)) {
-            event.blockList().clear();
-        }
+        // dont let blocks explode inside this claim
+        event.blockList().removeAll(event.blockList().stream()
+                .filter(block -> plugin.getClaimManager().getClaim(block.getLocation()) != null)
+                .collect(Collectors.toSet()));
     }
 
     /*

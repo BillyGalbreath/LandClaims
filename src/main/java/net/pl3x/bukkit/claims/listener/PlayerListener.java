@@ -2,8 +2,10 @@ package net.pl3x.bukkit.claims.listener;
 
 import net.pl3x.bukkit.claims.Pl3xClaims;
 import net.pl3x.bukkit.claims.configuration.Config;
+import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.player.Pl3xPlayer;
 import net.pl3x.bukkit.claims.player.task.WelcomeTask;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,7 +39,8 @@ public class PlayerListener implements Listener {
             }
         }.runTaskLater(plugin, 20);
 
-        if (!player.hasPlayedBefore()) {
+        // make sure everyone has at least the starting amount of claimblocks
+        if (!player.hasPlayedBefore() || pl3xPlayer.getClaimBlocks() < 1) {
             pl3xPlayer.setClaimBlocks(Config.STARTING_BLOCKS);
             new WelcomeTask(player).runTaskLater(plugin, 200L);
         }
@@ -71,8 +74,20 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerPlaceFirstChest(BlockPlaceEvent event) {
-        //
-        // TODO
-        //
+        if (event.getBlockPlaced().getType() != Material.CHEST) {
+            return; // not placing a chest
+        }
+
+        if (plugin.getClaimManager().getClaim(event.getBlockPlaced().getLocation()) != null) {
+            return; // already a claim here
+        }
+
+        Player player = event.getPlayer();
+        Pl3xPlayer pl3xPlayer = plugin.getPlayerManager().getPlayer(player);
+        if (pl3xPlayer.getClaims().size() > 0) {
+            return; // already has claims
+        }
+
+        Lang.send(player, Lang.USE_STICK_TO_CLAIM_THIS_LAND);
     }
 }
