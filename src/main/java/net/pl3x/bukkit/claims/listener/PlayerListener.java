@@ -40,7 +40,7 @@ public class PlayerListener implements Listener {
         }.runTaskLater(plugin, 20);
 
         // make sure everyone has at least the starting amount of claimblocks
-        if (!player.hasPlayedBefore() || pl3xPlayer.getClaimBlocks() < 1) {
+        if (!player.hasPlayedBefore() || (int) pl3xPlayer.getClaimBlocks() < 1) {
             pl3xPlayer.setClaimBlocks(Config.STARTING_BLOCKS);
             new WelcomeTask(player).runTaskLater(plugin, 200L);
         }

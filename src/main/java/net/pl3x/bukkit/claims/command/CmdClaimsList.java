@@ -82,9 +82,9 @@ public class CmdClaimsList implements TabExecutor {
         Collection<Claim> claims = pl3xTarget.getClaims();
 
         Lang.send(sender, Lang.CLAIM_BLOCK_COUNTS
-                .replace("{accrued}", Integer.toString(pl3xTarget.getClaimBlocks()))
-                .replace("{bonus}", Integer.toString(pl3xTarget.getBonusBlocks()))
-                .replace("{total}", Integer.toString(pl3xTarget.getClaimBlocks() + pl3xTarget.getBonusBlocks())));
+                .replace("{accrued}", Integer.toString((int) pl3xTarget.getClaimBlocks()))
+                .replace("{bonus}", Integer.toString((int) pl3xTarget.getBonusBlocks()))
+                .replace("{total}", Integer.toString((int) (pl3xTarget.getClaimBlocks() + pl3xTarget.getBonusBlocks()))));
 
         if (claims.size() > 0) {
             Lang.send(sender, Lang.CLAIMSLIST_HEADER

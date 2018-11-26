@@ -42,7 +42,7 @@ public class Pl3xPlayer extends PlayerConfig {
         this.player = player;
 
         accrueClaimBlocksTask = new AccrueClaimBlocksTask(this);
-        accrueClaimBlocksTask.runTaskTimer(plugin, 12000, 12000); // 10 minute cycle
+        accrueClaimBlocksTask.runTaskTimer(plugin, 1200, 1200); // 1 minute cycle
     }
 
     /**
@@ -72,30 +72,30 @@ public class Pl3xPlayer extends PlayerConfig {
         return player;
     }
 
-    public int getClaimBlocks() {
-        return getInt("claim-blocks", 0);
+    public double getClaimBlocks() {
+        return getDouble("claim-blocks", 0);
     }
 
-    public void setClaimBlocks(int claimBlocks) {
+    public void setClaimBlocks(double claimBlocks) {
         set("claim-blocks", claimBlocks);
         save();
     }
 
-    public int getBonusBlocks() {
-        return getInt("bonus-blocks", 0);
+    public double getBonusBlocks() {
+        return getDouble("bonus-blocks", 0);
     }
 
-    public void setBonusBlocks(int bonusBlocks) {
+    public void setBonusBlocks(double bonusBlocks) {
         set("bonus-blocks", bonusBlocks);
         save();
     }
 
     public int getRemainingClaimBlocks() {
-        int total = getClaimBlocks() + getBonusBlocks();
+        double total = getClaimBlocks() + getBonusBlocks();
         for (Claim claim : getClaims()) {
             total -= claim.getCoordinates().getArea();
         }
-        return total;
+        return (int) total;
     }
 
     public Claim getResizingClaim() {

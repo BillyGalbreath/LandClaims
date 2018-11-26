@@ -57,7 +57,7 @@ public class AccrueClaimBlocksTask extends BukkitRunnable {
             return; // cancelled by another plugin
         }
 
-        int accruedAmount = accrueClaimBlocksEvent.getAccrualRate() / 6; // earned every 10 minutes (6 times per hour)
+        double accruedAmount = accrueClaimBlocksEvent.getAccrualRate() / 60D; // earned every 1 minute (60 times per hour)
         if (accruedAmount < 0) {
             logger.debug(player.getName() + " claim block delivery was negative. Skipping");
             return;
