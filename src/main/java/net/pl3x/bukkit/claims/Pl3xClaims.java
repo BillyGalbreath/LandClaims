@@ -142,7 +142,9 @@ public class Pl3xClaims extends JavaPlugin {
     }
 
     public void onDisable() {
-        dynmapHook.disable();
+        if (dynmapHook != null) {
+            dynmapHook.disable();
+        }
 
         getClaimManager().unloadClaims();
 
