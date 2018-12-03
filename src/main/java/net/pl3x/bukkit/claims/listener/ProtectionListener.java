@@ -128,12 +128,11 @@ public class ProtectionListener implements Listener {
             return; // claims not enabled in this world
         }
 
-        /* // lets allow creeper explosions in the wilderness
+        // NEVER let creepers make potholes
         if (event.getEntityType() == EntityType.CREEPER) {
             event.blockList().clear();
-            return; // NEVER let creepers make potholes
+            return;
         }
-        */
 
         Claim from = plugin.getClaimManager().getClaim(event.getEntity().getLocation());
 

@@ -57,11 +57,12 @@ public class SaveTrappedPlayerTask extends BukkitRunnable {
             }
         }
 
-        player.teleport(destination);
         pl3xPlayer.setPendingRescue(false);
 
-        logger.warn("Rescued trapped player " + player.getName());
-        logger.warn("  from " + original);
-        logger.warn("  to   " + destination);
+        player.teleportAsync(destination).thenAccept(result -> {
+            logger.warn("Rescued trapped player " + player.getName());
+            logger.warn("  from " + original);
+            logger.warn("  to   " + destination);
+        });
     }
 }
