@@ -1,6 +1,6 @@
 package net.pl3x.bukkit.claims.command;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.claim.flag.FlagType;
 import net.pl3x.bukkit.claims.claim.flag.FlagValue;
@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CmdSetFlag implements TabExecutor {
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
 
-    public CmdSetFlag(Pl3xClaims plugin) {
+    public CmdSetFlag(LandClaims plugin) {
         this.plugin = plugin;
     }
 

@@ -1,6 +1,6 @@
 package net.pl3x.bukkit.claims.command;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.player.Pl3xPlayer;
@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CmdClaimsList implements TabExecutor {
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
 
-    public CmdClaimsList(Pl3xClaims plugin) {
+    public CmdClaimsList(LandClaims plugin) {
         this.plugin = plugin;
     }
 

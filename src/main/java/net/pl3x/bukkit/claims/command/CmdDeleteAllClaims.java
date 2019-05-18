@@ -1,6 +1,6 @@
 package net.pl3x.bukkit.claims.command;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CmdDeleteAllClaims implements TabExecutor {
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
 
-    public CmdDeleteAllClaims(Pl3xClaims plugin) {
+    public CmdDeleteAllClaims(LandClaims plugin) {
         this.plugin = plugin;
     }
 

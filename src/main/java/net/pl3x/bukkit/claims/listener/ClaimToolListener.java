@@ -1,6 +1,6 @@
 package net.pl3x.bukkit.claims.listener;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.claim.Coordinates;
 import net.pl3x.bukkit.claims.configuration.Config;
@@ -29,9 +29,9 @@ import java.util.Collection;
 import java.util.HashSet;
 
 public class ClaimToolListener implements Listener {
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
 
-    public ClaimToolListener(Pl3xClaims plugin) {
+    public ClaimToolListener(LandClaims plugin) {
         this.plugin = plugin;
     }
 
@@ -362,10 +362,6 @@ public class ClaimToolListener implements Listener {
         plugin.getClaimManager().createNewClaim(newClaim);
         Lang.send(player, Lang.CREATE_SUCCESS
                 .replace("{amount}", Integer.toString(pl3xPlayer.getRemainingClaimBlocks())));
-        if (!newClaim.isAdminClaim() && plugin.getDiscordSRVHook() != null) {
-            plugin.getDiscordSRVHook().sendToDiscord(Lang.CREATE_SUCCESS_DISCORD
-                    .replace("{owner}", newClaim.getOwnerName()));
-        }
 
         pl3xPlayer.showVisualization(newClaim);
 

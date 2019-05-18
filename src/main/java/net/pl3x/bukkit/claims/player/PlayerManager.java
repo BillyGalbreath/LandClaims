@@ -1,6 +1,6 @@
 package net.pl3x.bukkit.claims.player;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -9,10 +9,10 @@ import java.util.Map;
 import java.util.UUID;
 
 public class PlayerManager {
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
     private final Map<UUID, Pl3xPlayer> players = new HashMap<>();
 
-    public PlayerManager(Pl3xClaims plugin) {
+    public PlayerManager(LandClaims plugin) {
         this.plugin = plugin;
     }
 

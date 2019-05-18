@@ -1,6 +1,6 @@
 package net.pl3x.bukkit.claims.command;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.configuration.ClaimConfig;
 import net.pl3x.bukkit.claims.configuration.Config;
@@ -13,9 +13,9 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class CmdSetExitMessage implements TabExecutor {
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
 
-    public CmdSetExitMessage(Pl3xClaims plugin) {
+    public CmdSetExitMessage(LandClaims plugin) {
         this.plugin = plugin;
     }
 

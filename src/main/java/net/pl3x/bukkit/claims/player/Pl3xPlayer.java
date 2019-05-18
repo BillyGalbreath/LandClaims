@@ -1,6 +1,6 @@
 package net.pl3x.bukkit.claims.player;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.configuration.PlayerConfig;
@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Pl3xPlayer extends PlayerConfig {
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
     private OfflinePlayer player;
     private Location lastLocation;
     private Location lastIdleCheckLocation;
@@ -36,7 +36,7 @@ public class Pl3xPlayer extends PlayerConfig {
     private Set<Long> entryMessageOnCooldown = new HashSet<>();
     private Set<Long> exitMessageOnCooldown = new HashSet<>();
 
-    Pl3xPlayer(Pl3xClaims plugin, OfflinePlayer player) {
+    Pl3xPlayer(LandClaims plugin, OfflinePlayer player) {
         super(plugin, player.getUniqueId());
         this.plugin = plugin;
         this.player = player;
@@ -64,7 +64,7 @@ public class Pl3xPlayer extends PlayerConfig {
         }
     }
 
-    public Pl3xClaims getPlugin() {
+    public LandClaims getPlugin() {
         return plugin;
     }
 

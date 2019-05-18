@@ -1,6 +1,6 @@
 package net.pl3x.bukkit.claims.configuration;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.claim.Coordinates;
 import net.pl3x.bukkit.claims.claim.TrustType;
@@ -29,7 +29,7 @@ public class ClaimConfig extends YamlConfiguration {
         }
     }
 
-    public static ClaimConfig getConfig(Pl3xClaims plugin, long id) {
+    public static ClaimConfig getConfig(LandClaims plugin, long id) {
         synchronized (configs) {
             return configs.computeIfAbsent(id, k -> new ClaimConfig(plugin, id));
         }
@@ -47,12 +47,12 @@ public class ClaimConfig extends YamlConfiguration {
         }
     }
 
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
     private final long claimId;
     private final File file;
     private final Object saveLock = new Object();
 
-    private ClaimConfig(Pl3xClaims plugin, long claimId) {
+    private ClaimConfig(LandClaims plugin, long claimId) {
         super();
         this.plugin = plugin;
         this.claimId = claimId;

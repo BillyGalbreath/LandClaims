@@ -1,7 +1,7 @@
 package net.pl3x.bukkit.claims.claim;
 
 import net.pl3x.bukkit.claims.Logger;
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.claim.flag.FlagType;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import org.bukkit.Bukkit;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class Claim {
     public static final UUID PUBLIC_UUID = new UUID(0L, 0L);
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
     private final Logger logger;
     private final long id;
     private UUID owner;
@@ -32,7 +32,7 @@ public class Claim {
     private String entryMessage;
     private String exitMessage;
 
-    public Claim(Pl3xClaims plugin, long id, UUID owner, Claim parent, Coordinates coordinates, boolean isAdminClaim) {
+    public Claim(LandClaims plugin, long id, UUID owner, Claim parent, Coordinates coordinates, boolean isAdminClaim) {
         this.plugin = plugin;
         this.logger = plugin.getLog();
         this.id = id;

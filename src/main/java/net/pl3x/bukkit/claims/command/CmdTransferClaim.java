@@ -1,6 +1,6 @@
 package net.pl3x.bukkit.claims.command;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.configuration.ClaimConfig;
 import net.pl3x.bukkit.claims.configuration.Config;
@@ -18,9 +18,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class CmdTransferClaim implements TabExecutor {
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
 
-    public CmdTransferClaim(Pl3xClaims plugin) {
+    public CmdTransferClaim(LandClaims plugin) {
         this.plugin = plugin;
     }
 

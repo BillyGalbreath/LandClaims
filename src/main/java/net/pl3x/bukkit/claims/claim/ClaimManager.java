@@ -1,7 +1,7 @@
 package net.pl3x.bukkit.claims.claim;
 
 import net.pl3x.bukkit.claims.Logger;
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.configuration.ClaimConfig;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
@@ -22,9 +22,9 @@ import java.util.TreeMap;
 import java.util.UUID;
 
 public class ClaimManager {
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
 
-    public ClaimManager(Pl3xClaims plugin) {
+    public ClaimManager(LandClaims plugin) {
         this.plugin = plugin;
     }
 

@@ -1,6 +1,6 @@
 package net.pl3x.bukkit.claims.listener;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.player.Pl3xPlayer;
@@ -19,9 +19,9 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerListener implements Listener {
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
 
-    public PlayerListener(Pl3xClaims plugin) {
+    public PlayerListener(LandClaims plugin) {
         this.plugin = plugin;
     }
 

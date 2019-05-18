@@ -1,6 +1,6 @@
 package net.pl3x.bukkit.claims.configuration;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -10,7 +10,7 @@ public abstract class PlayerConfig extends YamlConfiguration {
     private final File file;
     private final Object saveLock = new Object();
 
-    public PlayerConfig(Pl3xClaims plugin, UUID uuid) {
+    public PlayerConfig(LandClaims plugin, UUID uuid) {
         super();
         this.file = new File(plugin.getDataFolder(),
                 "userdata" + File.separator + uuid.toString() + ".yml");

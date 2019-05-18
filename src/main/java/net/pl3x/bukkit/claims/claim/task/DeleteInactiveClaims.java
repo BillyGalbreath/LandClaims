@@ -1,6 +1,6 @@
 package net.pl3x.bukkit.claims.claim.task;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
@@ -15,9 +15,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class DeleteInactiveClaims extends BukkitRunnable {
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
 
-    public DeleteInactiveClaims(Pl3xClaims plugin) {
+    public DeleteInactiveClaims(LandClaims plugin) {
         this.plugin = plugin;
     }
 
@@ -58,12 +58,6 @@ public class DeleteInactiveClaims extends BukkitRunnable {
             Lang.send(Bukkit.getConsoleSender(), Lang.DELETED_INACTIVE_CLAIMS
                     .replace("{owner}", name)
                     .replace("{count}", Integer.toString(count)));
-
-            if (plugin.getDiscordSRVHook() != null) {
-                plugin.getDiscordSRVHook().sendToDiscord(Lang.DELETED_INACTIVE_CLAIMS_DISCORD
-                        .replace("{owner}", name)
-                        .replace("{count}", Integer.toString(count)));
-            }
         }
     }
 }

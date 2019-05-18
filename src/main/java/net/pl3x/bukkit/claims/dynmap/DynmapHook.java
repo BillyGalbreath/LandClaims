@@ -1,6 +1,6 @@
 package net.pl3x.bukkit.claims.dynmap;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.claim.TrustType;
 import net.pl3x.bukkit.claims.configuration.Config;
@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class DynmapHook {
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
 
     private static final String ADMIN_ID = "administrator";
 
@@ -34,7 +34,7 @@ public class DynmapHook {
 
     boolean stop;
 
-    public DynmapHook(Pl3xClaims plugin) {
+    public DynmapHook(LandClaims plugin) {
         this.plugin = plugin;
         DynmapAPI api = (DynmapAPI) plugin.getServer().getPluginManager().getPlugin("Dynmap");
         MarkerAPI markerapi = api.getMarkerAPI();

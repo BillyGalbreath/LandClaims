@@ -1,6 +1,6 @@
 package net.pl3x.bukkit.claims.command;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.claim.Coordinates;
 import net.pl3x.bukkit.claims.configuration.Config;
@@ -15,9 +15,9 @@ import org.bukkit.util.Vector;
 import java.util.List;
 
 public class CmdExtendClaim implements TabExecutor {
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
 
-    public CmdExtendClaim(Pl3xClaims plugin) {
+    public CmdExtendClaim(LandClaims plugin) {
         this.plugin = plugin;
     }
 

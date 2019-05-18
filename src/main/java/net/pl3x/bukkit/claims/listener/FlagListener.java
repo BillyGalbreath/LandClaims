@@ -1,12 +1,12 @@
 package net.pl3x.bukkit.claims.listener;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.claim.flag.FlagType;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.util.EntityUtil;
-import net.pl3x.bukkit.claims.util.MaterialTags;
+import net.pl3x.bukkit.claims.util.Tags;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -38,9 +38,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class FlagListener implements Listener {
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
 
-    public FlagListener(Pl3xClaims plugin) {
+    public FlagListener(LandClaims plugin) {
         this.plugin = plugin;
     }
 
@@ -166,7 +166,7 @@ public class FlagListener implements Listener {
         }
 
         Block block = event.getBlock();
-        if (block.getType() != Material.FARMLAND && !MaterialTags.FARMABLE.isTagged(block)) {
+        if (block.getType() != Material.FARMLAND && !Tags.FARMABLE.isTagged(block)) {
             return;
         }
 

@@ -1,12 +1,13 @@
 package net.pl3x.bukkit.claims.listener;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import com.destroystokyo.paper.MaterialTags;
+import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.player.Pl3xPlayer;
 import net.pl3x.bukkit.claims.util.EntityUtil;
-import net.pl3x.bukkit.claims.util.MaterialTags;
+import net.pl3x.bukkit.claims.util.Tags;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.TravelAgent;
@@ -47,9 +48,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
 public class TrustListener implements Listener {
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
 
-    public TrustListener(Pl3xClaims plugin) {
+    public TrustListener(LandClaims plugin) {
         this.plugin = plugin;
     }
 
@@ -70,7 +71,7 @@ public class TrustListener implements Listener {
         }
 
         // container trust
-        if (MaterialTags.FARMABLE.isTagged(event.getBlock())) {
+        if (Tags.FARMABLE.isTagged(event.getBlock())) {
             if (!claim.allowContainers(event.getPlayer())) {
                 Lang.send(event.getPlayer(), Lang.CONTAINER_DENY);
                 event.setCancelled(true);
@@ -103,7 +104,7 @@ public class TrustListener implements Listener {
         }
 
         // container trust
-        if (MaterialTags.FARMABLE.isTagged(event.getBlock())) {
+        if (Tags.FARMABLE.isTagged(event.getBlock())) {
             if (!claim.allowContainers(event.getPlayer())) {
                 Lang.send(event.getPlayer(), Lang.CONTAINER_DENY);
                 event.setCancelled(true);
@@ -397,7 +398,7 @@ public class TrustListener implements Listener {
 
         // (container trust)
         // special farmland check
-        if (clickedBlock.getType() == Material.FARMLAND && MaterialTags.FARMABLE.isTagged(itemInHand)) {
+        if (clickedBlock.getType() == Material.FARMLAND && Tags.FARMABLE.isTagged(itemInHand)) {
             if (!claim.allowContainers(event.getPlayer())) {
                 Lang.send(player, Lang.CONTAINER_DENY);
                 event.setCancelled(true);
@@ -407,7 +408,7 @@ public class TrustListener implements Listener {
         // (container trust)
         // prevent opening containers
         // prevent placing minecarts
-        else if (MaterialTags.CONTAINER.isTagged(clickedBlock) || MaterialTags.MINECARTS.isTagged(itemInHand)) {
+        else if (Tags.CONTAINER.isTagged(clickedBlock) || Tags.MINECARTS.isTagged(itemInHand)) {
             if (!claim.allowContainers(event.getPlayer())) {
                 Lang.send(player, Lang.CONTAINER_DENY);
                 event.setCancelled(true);
@@ -419,8 +420,8 @@ public class TrustListener implements Listener {
         // prevent using beds, doors, buttons, and levers
         else if (clickedBlock.getType() == Material.CAKE ||
                 MaterialTags.BEDS.isTagged(clickedBlock) ||
-                MaterialTags.DOORS.isTagged(clickedBlock) ||
-                MaterialTags.BUTTONS.isTagged(clickedBlock)) {
+                Tags.DOORS.isTagged(clickedBlock) ||
+                Tags.BUTTONS.isTagged(clickedBlock)) {
             if (!claim.allowAccess(player)) {
                 Lang.send(player, Lang.ACCESS_DENY);
                 event.setCancelled(true);
@@ -431,9 +432,9 @@ public class TrustListener implements Listener {
         // prevent using note blocks, repeaters, comparators, daylight sensors, dragon eggs, flower pots, and end crystals
         // prevent placing ink sack (bone meal), end crystals, armorstands, item frames, boats, and minecarts
         // prevent spawning monsters using eggs or monster blocks
-        else if (MaterialTags.INTERACTABLE.isTagged(itemInHand) ||
-                MaterialTags.BOATS.isTagged(itemInHand) ||
-                MaterialTags.MINECARTS.isTagged(itemInHand)) {
+        else if (Tags.INTERACTABLE.isTagged(itemInHand) ||
+                Tags.BOATS.isTagged(itemInHand) ||
+                Tags.MINECARTS.isTagged(itemInHand)) {
             if (!claim.allowBuild(player)) {
                 Lang.send(player, Lang.BUILD_DENY);
                 event.setCancelled(true);
@@ -512,6 +513,7 @@ public class TrustListener implements Listener {
     /*
      * Stops players from creating nether portals where they cannot build
      */
+    /* TODO update this! 1.14 removed TravelAgent! >:(
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerPortal(PlayerPortalEvent event) {
         if (event.getTo() == null || event.getTo().getWorld() == null) {
@@ -541,7 +543,7 @@ public class TrustListener implements Listener {
             agent.setCanCreatePortal(true);
         }
 
-        if (MaterialTags.PORTAL.isTagged(destination.getBlock())) {
+        if (Tags.PORTAL.isTagged(destination.getBlock())) {
             return; // already a portal there
         }
 
@@ -551,6 +553,7 @@ public class TrustListener implements Listener {
             event.setCancelled(true);
         }
     }
+    */
 
     /*
      * Stops players from placing liquids
@@ -639,7 +642,7 @@ public class TrustListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerShootButton(EntityInteractEvent event) {
         Block block = event.getBlock();
-        if (block == null || !MaterialTags.BUTTONS.isTagged(block.getType())) {
+        if (!Tags.BUTTONS.isTagged(block.getType())) {
             return;
         }
 

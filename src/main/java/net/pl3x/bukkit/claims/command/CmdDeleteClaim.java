@@ -1,6 +1,6 @@
 package net.pl3x.bukkit.claims.command;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
@@ -15,9 +15,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class CmdDeleteClaim implements TabExecutor {
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
 
-    public CmdDeleteClaim(Pl3xClaims plugin) {
+    public CmdDeleteClaim(LandClaims plugin) {
         this.plugin = plugin;
     }
 

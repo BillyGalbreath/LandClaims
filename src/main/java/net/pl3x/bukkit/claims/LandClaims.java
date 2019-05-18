@@ -30,7 +30,6 @@ import net.pl3x.bukkit.claims.command.CmdTrustList;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.dynmap.DynmapHook;
-import net.pl3x.bukkit.claims.hook.DiscordSRVHook;
 import net.pl3x.bukkit.claims.listener.ClaimToolListener;
 import net.pl3x.bukkit.claims.listener.FlagListener;
 import net.pl3x.bukkit.claims.listener.PlayerListener;
@@ -42,17 +41,22 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Pl3xClaims extends JavaPlugin {
+public class LandClaims extends JavaPlugin {
+    private static LandClaims instance;
     private final Logger logger;
     private final ClaimManager claimManager;
     private final PlayerManager playerManager;
     private DynmapHook dynmapHook;
-    private DiscordSRVHook discordSRVHook;
 
-    public Pl3xClaims() {
+    public LandClaims() {
+        instance = this;
         logger = new Logger(this);
         claimManager = new ClaimManager(this);
         playerManager = new PlayerManager(this);
+    }
+
+    public static LandClaims getInstance() {
+        return instance;
     }
 
     public Logger getLog() {
@@ -67,37 +71,14 @@ public class Pl3xClaims extends JavaPlugin {
         return playerManager;
     }
 
-    public DiscordSRVHook getDiscordSRVHook() {
-        return discordSRVHook;
-    }
-
     @Override
     public void onEnable() {
         Config.reload(this);
         Lang.reload(this);
 
-        getLog().info("&3                                      ▄▄▄█████▄▄▄                               ");
-        getLog().info("&3                                   ▄███▀▀▀   ▀▀▀███▄                            ");
-        getLog().info("&3                                ▄██▀▀             ▀▀██▄                         ");
-        getLog().info("&3                              ▄██▀                   ▀██▄                       ");
-        getLog().info("&3 ▄███████████▄▄   ▄▄         ██▌ ▄██████████████████▄  ▐██  ▄▄▄             ▄▄▄ ");
-        getLog().info("&3             ▀██ ▐██        ▐██                    ▀██  ██▌   ▀██▄       ▄██▀   ");
-        getLog().info("&3 ▄▄▄▄▄▄▄▄▄▄▄▄███ ▐██        ██▌  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄██▌ ▐██     ▀██ ▄▄▄ ██▀     ");
-        getLog().info("&3▐███▀▀▀▀▀▀▀▀▀▀▀  ▐██        ██▌  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀██ ▐██     ▄██ ▀▀▀ ██▄     ");
-        getLog().info("&3▐██              ▐██▌       ▐██                     ▄██ ██▌   ▄██▀       ▀██▄   ");
-        getLog().info("&3 ▀█               ▀█████████▄   ▀█████████████████████ ███  ▀▀▀             ▀▀▀ ");
-        getLog().info("&3                              ▀██▄                   ▄██▀                       ");
-        getLog().info("&3                                ▀██▄▄             ▄▄██▀                         ");
-        getLog().info("&3                                   ▀███▄▄▄   ▄▄▄███▀                  Pl3x&oClaims");
-        getLog().info("&3                                      ▀▀▀█████▀▀▀                          ©2017");
-
         if (getServer().getPluginManager().isPluginEnabled("Dynmap")) {
             getLog().info("Found Dynmap. Hooking claim markers...");
             dynmapHook = new DynmapHook(this);
-        }
-
-        if (getServer().getPluginManager().isPluginEnabled("DiscordSRV")) {
-            discordSRVHook = new DiscordSRVHook();
         }
 
         getServer().getPluginManager().registerEvents(new ClaimToolListener(this), this);

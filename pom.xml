@@ -2,8 +2,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.pl3x.bukkit.claims</groupId>
-    <artifactId>Pl3xClaims</artifactId>
-    <version>1.13.2</version>
+    <artifactId>LandClaims</artifactId>
+    <version>1.0</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -12,13 +12,13 @@
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <version>1.14.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <version>1.14.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -27,25 +27,15 @@
             <version>2.0</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>github.scarsz.discordsrv</groupId>
-            <artifactId>DiscordSRV</artifactId>
-            <version>1.16.4</version>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
     <repositories>
         <repository>
             <id>paper-repo</id>
-            <url>https://repo.destroystokyo.com/repository/maven-public/</url>
+            <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
         <repository>
             <id>dynmap-repo</id>
             <url>http://repo.mikeprimm.com/</url>
-        </repository>
-        <repository>
-            <id>Scarsz-Jenkins</id>
-            <url>http://ci.scarsz.me/plugin/repository/everything/</url>
         </repository>
     </repositories>
     <build>
@@ -67,7 +57,7 @@
                 <version>2.10.3</version>
                 <configuration>
                     <links>
-                        <link>https://hub.spigotmc.org/javadocs/spigot/</link>
+                        <link>https://papermc.io/javadocs/paper/1.14/</link>
                     </links>
                 </configuration>
             </plugin>

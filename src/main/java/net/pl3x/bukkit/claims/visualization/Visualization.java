@@ -1,6 +1,6 @@
 package net.pl3x.bukkit.claims.visualization;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.visualization.task.VisualizationApplyTask;
 import org.bukkit.Location;
@@ -14,11 +14,11 @@ import java.util.Collection;
 import java.util.HashSet;
 
 public class Visualization {
-    private final Pl3xClaims plugin;
+    private final LandClaims plugin;
     private final Collection<VisualizationElement> elements = new HashSet<>();
     private final Location center;
 
-    public Visualization(Pl3xClaims plugin, Collection<Claim> claims, VisualizationType type, Location center) {
+    public Visualization(LandClaims plugin, Collection<Claim> claims, VisualizationType type, Location center) {
         this.plugin = plugin;
         this.center = center;
         claims.forEach(claim -> addClaimElements(claim, type));
@@ -32,7 +32,7 @@ public class Visualization {
         return center;
     }
 
-    public void apply(Pl3xClaims plugin, Player player) {
+    public void apply(LandClaims plugin, Player player) {
         if (!player.isOnline()) {
             return; // sanity check
         }
@@ -220,8 +220,18 @@ public class Visualization {
             case DARK_OAK_FENCE_GATE:
             case SPRUCE_FENCE_GATE:
             case JUNGLE_FENCE_GATE:
-            case SIGN:
-            case WALL_SIGN:
+            case ACACIA_SIGN:
+            case BIRCH_SIGN:
+            case SPRUCE_SIGN:
+            case DARK_OAK_SIGN:
+            case JUNGLE_SIGN:
+            case OAK_SIGN:
+            case ACACIA_WALL_SIGN:
+            case BIRCH_WALL_SIGN:
+            case SPRUCE_WALL_SIGN:
+            case DARK_OAK_WALL_SIGN:
+            case JUNGLE_WALL_SIGN:
+            case OAK_WALL_SIGN:
                 return true;
         }
         return (waterIsTransparent && block.getType() == Material.WATER) || block.getType().isTransparent();

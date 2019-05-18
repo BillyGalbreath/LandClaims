@@ -1,6 +1,6 @@
 package net.pl3x.bukkit.claims.claim;
 
-import net.pl3x.bukkit.claims.Pl3xClaims;
+import net.pl3x.bukkit.claims.LandClaims;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -123,7 +123,7 @@ public class Coordinates {
                 (location.getZ() == minZ || location.getZ() == maxZ);
     }
 
-    public Collection<Long> getChunkHashes(Pl3xClaims plugin) {
+    public Collection<Long> getChunkHashes(LandClaims plugin) {
         Collection<Long> hashes = new HashSet<>();
         for (int x = minX >> 4; x <= maxX >> 4; x++) {
             for (int z = minZ >> 4; z <= maxZ >> 4; z++) {
