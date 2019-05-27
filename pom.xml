@@ -31,7 +31,7 @@
     <repositories>
         <repository>
             <id>purpur-repo</id>
-            <url>https://ci.pl3x.net/plugin/repository/everything/</url>
+            <url>https://repo.pl3x.net/</url>
         </repository>
         <repository>
             <id>dynmap-repo</id>
@@ -57,7 +57,7 @@
                 <version>2.10.3</version>
                 <configuration>
                     <links>
-                        <link>https://papermc.io/javadocs/paper/1.14/</link>
+                        <link>https://ci.pl3x.net/job/Purpur/javadoc/</link>
                     </links>
                 </configuration>
             </plugin>

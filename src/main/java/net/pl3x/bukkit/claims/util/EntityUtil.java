@@ -7,6 +7,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Ghast;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Monster;
+import org.bukkit.entity.Phantom;
 import org.bukkit.entity.Shulker;
 import org.bukkit.entity.Slime;
 import org.bukkit.entity.Snowman;
@@ -26,6 +27,7 @@ public class EntityUtil {
                 entity instanceof Slime || // slime / magmacube
                 entity instanceof Ghast ||
                 entity instanceof Shulker ||
-                entity instanceof EnderDragon;
+                entity instanceof EnderDragon ||
+                entity instanceof Phantom;
     }
 }
