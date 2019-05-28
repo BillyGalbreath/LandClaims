@@ -65,15 +65,13 @@ public class CmdTransferClaim implements TabExecutor {
         }
 
         if (claim.isAdminClaim()) {
-            if (!sender.hasPermission("command.adminclaims")) {
-                Lang.send(sender, Lang.TRANSFER_NO_PERMISSION);
-                return true;
-            }
-        } else {
-            if (!claim.isOwner(player)) {
-                Lang.send(sender, Lang.NOT_YOUR_CLAIM);
-                return true;
-            }
+            Lang.send(sender, Lang.TRANSFER_ADMIN);
+            return true;
+        }
+
+        if (!claim.isOwner(player)) {
+            Lang.send(sender, Lang.NOT_YOUR_CLAIM);
+            return true;
         }
 
         UUID owner = null;

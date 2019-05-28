@@ -146,6 +146,7 @@ public class Lang {
     public static String TRANSFER_NO_CLAIM;
     public static String TRANSFER_CHILD;
     public static String TRANSFER_NO_PERMISSION;
+    public static String TRANSFER_ADMIN;
     public static String TRANSFER_SUCCESS;
 
     public static String TRUST_ERROR_NO_PERMISSION;
@@ -322,6 +323,7 @@ public class Lang {
         SETEXITMESSAGE_SUCCESS = config.getString("setexitmessage-success", "&dExit message set");
 
         TRANSFER_NO_CLAIM = config.getString("transfer-no-claim", "&4There's no claim here. Stand in the claim you want to transfer");
+        TRANSFER_ADMIN = config.getString("transfer-admin", "&4You cannot transfer an admin claim");
         TRANSFER_CHILD = config.getString("transfer-child", "&4Only top level claims can be transferred. Stand outside the child claim and try again");
         TRANSFER_NO_PERMISSION = config.getString("transfer-no-permission", "&4That requires the administrative claims permission");
         TRANSFER_SUCCESS = config.getString("transfer-success", "&dClaim transferred");
