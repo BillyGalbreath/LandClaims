@@ -10,10 +10,10 @@ import org.bukkit.command.TabExecutor;
 import java.util.Collections;
 import java.util.List;
 
-public class CmdPl3xClaims implements TabExecutor {
+public class CmdLandClaims implements TabExecutor {
     private final LandClaims plugin;
 
-    public CmdPl3xClaims(LandClaims plugin) {
+    public CmdLandClaims(LandClaims plugin) {
         this.plugin = plugin;
     }
 
@@ -27,7 +27,7 @@ public class CmdPl3xClaims implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("command.pl3xclaims")) {
+        if (!sender.hasPermission("command.landclaims")) {
             Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
             return true;
         }

@@ -32,7 +32,7 @@ public class DeleteInactiveClaims extends BukkitRunnable {
                 .map(claim -> plugin.getPlayerManager().getPlayer(claim.getOwner()))
                 .collect(Collectors.toSet());
 
-        targets.forEach(target -> new DeleteClaims(target).runTaskLater(plugin, 1));
+        targets.forEach(target -> new DeleteClaims(target).runTask(plugin));
     }
 
     private class DeleteClaims extends BukkitRunnable {
@@ -45,6 +45,7 @@ public class DeleteInactiveClaims extends BukkitRunnable {
         @Override
         public void run() {
             Collection<Claim> claims = pl3xPlayer.getClaims();
+
             String name = pl3xPlayer.getPlayer().getName();
             int count = claims.size();
 
@@ -58,6 +59,12 @@ public class DeleteInactiveClaims extends BukkitRunnable {
             Lang.send(Bukkit.getConsoleSender(), Lang.DELETED_INACTIVE_CLAIMS
                     .replace("{owner}", name)
                     .replace("{count}", Integer.toString(count)));
+
+            if (plugin.getDiscordHook() != null) {
+                plugin.getDiscordHook().sendToDiscord(Lang.DELETED_INACTIVE_CLAIMS_DISCORD
+                        .replace("{owner}", name)
+                        .replace("{count}", Integer.toString(count)));
+            }
         }
     }
 }

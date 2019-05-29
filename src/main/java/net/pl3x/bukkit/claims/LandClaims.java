@@ -19,7 +19,7 @@ import net.pl3x.bukkit.claims.command.CmdDeleteAllUserClaimsInWorld;
 import net.pl3x.bukkit.claims.command.CmdDeleteClaim;
 import net.pl3x.bukkit.claims.command.CmdExtendClaim;
 import net.pl3x.bukkit.claims.command.CmdIgnoreClaims;
-import net.pl3x.bukkit.claims.command.CmdPl3xClaims;
+import net.pl3x.bukkit.claims.command.CmdLandClaims;
 import net.pl3x.bukkit.claims.command.CmdSetEntryMessage;
 import net.pl3x.bukkit.claims.command.CmdSetExitMessage;
 import net.pl3x.bukkit.claims.command.CmdSetFlag;
@@ -30,6 +30,7 @@ import net.pl3x.bukkit.claims.command.CmdTrustList;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.dynmap.DynmapHook;
+import net.pl3x.bukkit.claims.hook.DiscordHook;
 import net.pl3x.bukkit.claims.listener.ClaimToolListener;
 import net.pl3x.bukkit.claims.listener.FlagListener;
 import net.pl3x.bukkit.claims.listener.PlayerListener;
@@ -47,6 +48,7 @@ public class LandClaims extends JavaPlugin {
     private final ClaimManager claimManager;
     private final PlayerManager playerManager;
     private DynmapHook dynmapHook;
+    private DiscordHook discordHook;
 
     public LandClaims() {
         instance = this;
@@ -76,11 +78,6 @@ public class LandClaims extends JavaPlugin {
         Config.reload(this);
         Lang.reload(this);
 
-        if (getServer().getPluginManager().isPluginEnabled("Dynmap")) {
-            getLog().info("Found Dynmap. Hooking claim markers...");
-            dynmapHook = new DynmapHook(this);
-        }
-
         getServer().getPluginManager().registerEvents(new ClaimToolListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         getServer().getPluginManager().registerEvents(new ProtectionListener(this), this);
@@ -104,7 +101,7 @@ public class LandClaims extends JavaPlugin {
         getCommand("deletealluserclaimsinworld").setExecutor(new CmdDeleteAllUserClaimsInWorld(this));
         getCommand("extendclaim").setExecutor(new CmdExtendClaim(this));
         getCommand("ignoreclaims").setExecutor(new CmdIgnoreClaims(this));
-        getCommand("pl3xclaims").setExecutor(new CmdPl3xClaims(this));
+        getCommand("landclaims").setExecutor(new CmdLandClaims(this));
         getCommand("setflag").setExecutor(new CmdSetFlag(this));
         getCommand("setentrymessage").setExecutor(new CmdSetEntryMessage(this));
         getCommand("setexitmessage").setExecutor(new CmdSetExitMessage(this));
@@ -116,8 +113,18 @@ public class LandClaims extends JavaPlugin {
         getClaimManager().loadClaims();
 
         // Delete inactive claims task - delay 60 seconds, repeat 30 minutes
-        new DeleteInactiveClaims(this)
-                .runTaskTimerAsynchronously(this, 600, 36000);
+        new DeleteInactiveClaims(this).runTaskTimerAsynchronously(this, 600, 36000);
+
+        // Dynmap hook
+        if (getServer().getPluginManager().isPluginEnabled("Dynmap")) {
+            getLog().info("Found Dynmap. Hooking claim markers...");
+            dynmapHook = new DynmapHook(this);
+        }
+
+        // Discord
+        if (getServer().getPluginManager().isPluginEnabled("Discord4Bukkit")) {
+            discordHook = new DiscordHook();
+        }
 
         getLog().info(getName() + " v" + getDescription().getVersion() + " enabled!");
     }
@@ -138,5 +145,9 @@ public class LandClaims extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         sender.sendMessage(ChatColor.DARK_RED + getName() + " is disabled. Please check console logs for more information.");
         return true;
+    }
+
+    public DiscordHook getDiscordHook() {
+        return discordHook;
     }
 }

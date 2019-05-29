@@ -8,7 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Logger {
     private final JavaPlugin plugin;
 
-    public Logger(JavaPlugin plugin) {
+    Logger(JavaPlugin plugin) {
         this.plugin = plugin;
     }
 

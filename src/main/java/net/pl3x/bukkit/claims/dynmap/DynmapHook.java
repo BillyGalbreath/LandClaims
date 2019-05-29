@@ -8,7 +8,6 @@ import net.pl3x.bukkit.claims.configuration.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.dynmap.DynmapAPI;
 import org.dynmap.markers.AreaMarker;
@@ -20,11 +19,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.UUID;
 
 public class DynmapHook {
     private final LandClaims plugin;
-
-    private static final String ADMIN_ID = "administrator";
 
     private Map<String, AreaMarker> resAreas = new HashMap<>();
     private MarkerSet markerSetTop;
@@ -36,17 +34,17 @@ public class DynmapHook {
 
     public DynmapHook(LandClaims plugin) {
         this.plugin = plugin;
-        DynmapAPI api = (DynmapAPI) plugin.getServer().getPluginManager().getPlugin("Dynmap");
-        MarkerAPI markerapi = api.getMarkerAPI();
+        MarkerAPI markerapi = ((DynmapAPI) plugin.getServer().getPluginManager().getPlugin("Dynmap")).getMarkerAPI();
+
 
         if (markerapi == null) {
             plugin.getLog().error("Error loading dynmap marker API!");
             return;
         }
 
-        markerSetTop = markerapi.getMarkerSet("pl3xclaims.markerset");
+        markerSetTop = markerapi.getMarkerSet("landclaims.markerset");
         if (markerSetTop == null) {
-            markerSetTop = markerapi.createMarkerSet("pl3xclaims.markerset", "Claims", null, false);
+            markerSetTop = markerapi.createMarkerSet("landclaims.markerset", "Claims", null, false);
         } else {
             markerSetTop.setMarkerSetLabel("Claims");
         }
@@ -55,9 +53,9 @@ public class DynmapHook {
             return;
         }
 
-        markerSetChild = markerapi.getMarkerSet("pl3xclaims.markersetchild");
+        markerSetChild = markerapi.getMarkerSet("landclaims.markersetchild");
         if (markerSetChild == null) {
-            markerSetChild = markerapi.createMarkerSet("pl3xclaims.markersetchild", "Child Claims", null, false);
+            markerSetChild = markerapi.createMarkerSet("landclaims.markersetchild", "Child Claims", null, false);
         } else {
             markerSetChild.setMarkerSetLabel("Child Claims");
         }
@@ -91,6 +89,14 @@ public class DynmapHook {
         new DynmapUpdate(this).runTaskTimerAsynchronously(plugin, 40, 1200);
     }
 
+    private String getName(UUID uuid) {
+        if (uuid.equals(Claim.PUBLIC_UUID)) {
+            return Lang.TRUST_PUBLIC;
+        } else {
+            return Bukkit.getOfflinePlayer(uuid).getName();
+        }
+    }
+
     private String formatInfoWindow(Claim claim) {
         Collection<String> builders = new HashSet<>();
         Collection<String> containers = new HashSet<>();
@@ -98,39 +104,17 @@ public class DynmapHook {
         Collection<String> managers = new HashSet<>();
 
         claim.getTrusts().forEach((uuid, trustType) -> {
-            String targetName = null;
-            if (uuid.equals(Claim.PUBLIC_UUID)) {
-                targetName = Lang.TRUST_PUBLIC;
+            if (trustType == TrustType.BUILDER) {
+                builders.add(getName(uuid));
+            } else if (trustType == TrustType.CONTAINER) {
+                containers.add(getName(uuid));
             } else {
-                OfflinePlayer target = Bukkit.getOfflinePlayer(uuid);
-                if (target != null) {
-                    targetName = target.getName();
-                }
-            }
-            if (targetName != null) {
-                if (trustType == TrustType.BUILDER) {
-                    builders.add(targetName);
-                } else if (trustType == TrustType.CONTAINER) {
-                    containers.add(targetName);
-                } else {
-                    accessors.add(targetName);
-                }
+                accessors.add(getName(uuid));
             }
         });
 
         claim.getManagers().forEach(uuid -> {
-            String targetName = null;
-            if (uuid.equals(Claim.PUBLIC_UUID)) {
-                targetName = Lang.TRUST_PUBLIC;
-            } else {
-                OfflinePlayer target = Bukkit.getOfflinePlayer(uuid);
-                if (target != null) {
-                    targetName = target.getName();
-                }
-            }
-            if (targetName != null) {
-                managers.add(targetName);
-            }
+            managers.add(getName(uuid));
         });
 
         return ("<div class=\"regioninfo\">" + (claim.isAdminClaim() ? Config.DYNMAP_ADMIN_WINDOW : Config.DYNMAP_INFO_WINDOW) + "</div>")
@@ -143,7 +127,7 @@ public class DynmapHook {
                 .replace("%accessors%", String.join(", ", accessors))
                 .replace("%managers%", String.join(", ", managers))
                 .replace("%flags%", ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', claim.getFlagsList()))
-                                .replace("\n", "<br>"));
+                        .replace("\n", "<br>"));
     }
 
     private boolean isVisible(String ownerName, String worldName) {
@@ -155,10 +139,10 @@ public class DynmapHook {
             }
         }
         if (Config.DYNMAP_HIDDEN_REGIONS != null && !Config.DYNMAP_HIDDEN_REGIONS.isEmpty()) {
-            if (Config.DYNMAP_HIDDEN_REGIONS.contains(ownerName) ||
+            return !(Config.DYNMAP_HIDDEN_REGIONS.contains(ownerName) ||
                     Config.DYNMAP_HIDDEN_REGIONS.contains("world:" + worldName) ||
-                    Config.DYNMAP_HIDDEN_REGIONS.contains(worldName + "/" + ownerName))
-                return false;
+                    Config.DYNMAP_HIDDEN_REGIONS.contains(worldName + "/" + ownerName));
+
         }
         return true;
     }

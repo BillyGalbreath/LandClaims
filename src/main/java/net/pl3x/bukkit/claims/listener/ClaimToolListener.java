@@ -363,6 +363,11 @@ public class ClaimToolListener implements Listener {
         Lang.send(player, Lang.CREATE_SUCCESS
                 .replace("{amount}", Integer.toString(pl3xPlayer.getRemainingClaimBlocks())));
 
+        if (!newClaim.isAdminClaim() && plugin.getDiscordHook() != null) {
+            plugin.getDiscordHook().sendToDiscord(Lang.CREATE_SUCCESS_DISCORD
+                    .replace("{owner}", newClaim.getOwnerName()));
+        }
+
         pl3xPlayer.showVisualization(newClaim);
 
         pl3xPlayer.setLastToolLocation(null);

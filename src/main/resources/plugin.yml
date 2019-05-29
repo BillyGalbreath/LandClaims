@@ -6,7 +6,7 @@ author: "BillyGalbreath"
 api-version: "1.13"
 softdepend:
 - Dynmap
-- DiscordSRV
+- Discord4Bukkit
 
 commands:
   abandonallclaims:
@@ -125,9 +125,9 @@ commands:
     permission: command.ignoreclaims
     usage: /<command>
     aliases: []
-  pl3xclaims:
+  landclaims:
     description: Reload configs
-    permission: command.pl3xclaims
+    permission: command.landclaims
     usage: /<command> (reload)
     aliases:
     - claims
@@ -241,7 +241,7 @@ permissions:
   command.ignoreclaims:
     description: Allows to toggle ignore claims mode
     default: op
-  command.pl3xclaims:
+  command.landclaims:
     description: Allows reload configs
     default: op
   command.setflag:
