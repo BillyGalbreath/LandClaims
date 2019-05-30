@@ -10,9 +10,11 @@ import net.pl3x.bukkit.claims.util.Tags;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.AbstractVillager;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Villager;
@@ -118,8 +120,12 @@ public class FlagListener implements Listener {
         }
 
         LivingEntity entity = event.getEntity();
-        if (entity instanceof Villager) {
-            return; // aways allow villagers
+        if (entity instanceof AbstractVillager) {
+            return; // always allow villagers
+        }
+
+        if (entity instanceof Pillager && event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.VILLAGE_RAID) {
+            return; // always allow raids
         }
 
         Claim claim = plugin.getClaimManager().getClaim(entity.getLocation());
