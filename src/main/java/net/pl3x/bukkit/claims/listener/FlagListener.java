@@ -55,7 +55,10 @@ public class FlagListener implements Listener {
 
         // dont let blocks explode inside this claim
         event.blockList().removeAll(event.blockList().stream()
-                .filter(block -> plugin.getClaimManager().getClaim(block.getLocation()) != null)
+                .filter(block -> {
+                    Claim claim = plugin.getClaimManager().getClaim(block.getLocation());
+                    return claim != null && !claim.getFlag(FlagType.EXPLOSIONS);
+                })
                 .collect(Collectors.toSet()));
     }
 

@@ -136,7 +136,7 @@ public class ProtectionListener implements Listener {
 
         Claim from = plugin.getClaimManager().getClaim(event.getEntity().getLocation());
 
-        // dont let blocks explode passed claim borders
+        // dont let blocks explode past claim borders
         event.blockList().removeAll(event.blockList().stream()
                 .filter(block -> !Objects.equals(from, plugin.getClaimManager().getClaim(block.getLocation())))
                 .collect(Collectors.toSet()));
