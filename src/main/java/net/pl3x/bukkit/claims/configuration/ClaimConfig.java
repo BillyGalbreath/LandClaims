@@ -56,8 +56,7 @@ public class ClaimConfig extends YamlConfiguration {
         super();
         this.plugin = plugin;
         this.claimId = claimId;
-        this.file = new File(plugin.getDataFolder(),
-                CLAIM_DIRECTORY + File.separator + claimId + ".yml");
+        this.file = new File(plugin.getDataFolder(), CLAIM_DIRECTORY + File.separator + claimId + ".yml");
         if (!file.exists()) {
             save();
         }

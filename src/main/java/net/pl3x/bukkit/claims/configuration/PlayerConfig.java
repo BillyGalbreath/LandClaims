@@ -12,8 +12,7 @@ public abstract class PlayerConfig extends YamlConfiguration {
 
     public PlayerConfig(LandClaims plugin, UUID uuid) {
         super();
-        this.file = new File(plugin.getDataFolder(),
-                "userdata" + File.separator + uuid.toString() + ".yml");
+        this.file = new File(plugin.getDataFolder(), "userdata" + File.separator + uuid.toString() + ".yml");
         if (!file.exists()) {
             save(); // api will make sure parent directories are made
         }
