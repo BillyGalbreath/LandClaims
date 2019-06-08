@@ -8,11 +8,10 @@ import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.player.Pl3xPlayer;
 import net.pl3x.bukkit.claims.util.EntityUtil;
 import net.pl3x.bukkit.claims.util.Tags;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.TravelAgent;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Lectern;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -41,7 +40,7 @@ import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerPortalEvent;
+import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -439,6 +438,39 @@ public class TrustListener implements Listener {
                 Lang.send(player, Lang.BUILD_DENY);
                 event.setCancelled(true);
             }
+        }
+    }
+
+    /*
+     * Stops players from taking books off lecterns
+     */
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerTakeBook(PlayerTakeLecternBookEvent event) {
+        Player player = event.getPlayer();
+        if (Config.isWorldDisabled(player.getWorld())) {
+            return; // claims not enabled in this world
+        }
+
+        if (plugin.getPlayerManager().getPlayer(player).isIgnoringClaims()) {
+            return; // overrides claims
+        }
+
+        ItemStack book = event.getBook();
+        if (book == null) {
+            return; // no book on lectern
+        }
+
+        Lectern lectern = event.getLectern();
+        Claim claim = plugin.getClaimManager().getClaim(lectern.getLocation());
+        if (claim == null) {
+            return;
+        }
+
+        // (container trust)
+        // prevent taking book
+        if (!claim.allowContainers(event.getPlayer())) {
+            Lang.send(player, Lang.CONTAINER_DENY);
+            event.setCancelled(true);
         }
     }
 
