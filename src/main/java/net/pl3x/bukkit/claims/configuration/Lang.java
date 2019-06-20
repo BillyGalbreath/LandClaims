@@ -1,5 +1,6 @@
 package net.pl3x.bukkit.claims.configuration;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -56,6 +57,7 @@ public class Lang {
     public static String ADJUST_BONUS_BLOCKS_SUCCESS;
 
     public static String AVOID_GRIEF_CLAIM_LAND;
+    public static String NEW_PLAYER_JOINED;
 
     public static String CLAIMBOOK_DISABLED;
     public static String CLAIMBOOK_GIVEN;
@@ -231,6 +233,7 @@ public class Lang {
         ADJUST_BONUS_BLOCKS_SUCCESS = config.getString("adjust-bonus-blocks-success", "&dAdjusted {target}'s bonus claim blocks by {amount}");
 
         AVOID_GRIEF_CLAIM_LAND = config.getString("avoid-grief-claim-land", "&dPrevent grief! If you claim your land, you will be grief-proof");
+        NEW_PLAYER_JOINED = config.getString("new-player-joined", "&a{player} has joined for the first time!");
 
         CLAIMBOOK_DISABLED = config.getString("claimbook-disabled", "&4Claimbooks are disabled");
         CLAIMBOOK_GIVEN = config.getString("claimbook-given", "&gGiven claimbook to {target}");
@@ -357,17 +360,50 @@ public class Lang {
         TRAPPED_RESCUE_PENDING = config.getString("trapped-rescue-pending", "&dIf you stay put for 10 seconds, you'll be teleported out. Please wait");
     }
 
+    /**
+     * Sends a message to a recipient
+     *
+     * @param recipient Recipient of message
+     * @param message   Message to send
+     */
     public static void send(CommandSender recipient, String message) {
-        if (message == null) {
-            return; // do not send blank messages
+        if (recipient != null) {
+            for (String part : colorize(message).split("\n")) {
+                if (part != null && !part.isEmpty()) {
+                    recipient.sendMessage(part);
+                }
+            }
         }
-        message = ChatColor.translateAlternateColorCodes('&', message);
-        if (ChatColor.stripColor(message).isEmpty()) {
-            return; // do not send blank messages
-        }
+    }
 
-        for (String part : message.split("\n")) {
-            recipient.sendMessage(part);
+    /**
+     * Broadcast a message to server
+     *
+     * @param message Message to broadcast
+     */
+    public static void broadcast(String message) {
+        for (String part : colorize(message).split("\n")) {
+            if (part != null && !part.isEmpty()) {
+                Bukkit.getOnlinePlayers().forEach(recipient -> recipient.sendMessage(part));
+                Bukkit.getConsoleSender().sendMessage(part);
+            }
         }
+    }
+
+    /**
+     * Colorize a String
+     *
+     * @param str String to colorize
+     * @return Colorized String
+     */
+    public static String colorize(String str) {
+        if (str == null) {
+            return "";
+        }
+        str = ChatColor.translateAlternateColorCodes('&', str);
+        if (ChatColor.stripColor(str).isEmpty()) {
+            return "";
+        }
+        return str;
     }
 }
