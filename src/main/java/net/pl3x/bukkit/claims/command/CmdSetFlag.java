@@ -67,7 +67,7 @@ public class CmdSetFlag implements TabExecutor {
             return true;
         }
 
-        FlagType flag = FlagType.getType(args[0]);
+        FlagType flag = FlagType.getType(args[0].toUpperCase());
         if (flag == null) {
             Lang.send(sender, Lang.COMMAND_FLAG_NOT_FOUND);
             return true;
