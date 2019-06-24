@@ -256,7 +256,7 @@ public class ClaimToolListener implements Listener {
 
                 Claim parent = pl3xPlayer.getParentClaim();
                 Claim newChildClaim = new Claim(plugin, plugin.getClaimManager().getNextId(), player.getUniqueId(), // child claims have no owner
-                        parent, newChildCoords, parent.isAdminClaim());
+                        parent, newChildCoords, false);
 
                 CreateClaimEvent createClaimEvent = new CreateClaimEvent(player, newChildClaim);
                 Bukkit.getPluginManager().callEvent(createClaimEvent);
