@@ -74,11 +74,12 @@ public class TrustListener implements Listener {
             if (!claim.allowContainers(event.getPlayer())) {
                 Lang.send(event.getPlayer(), Lang.CONTAINER_DENY);
                 event.setCancelled(true);
+                return;
             }
         }
 
         // build trust
-        else if (!claim.allowBuild(event.getPlayer())) {
+        if (!claim.allowBuild(event.getPlayer())) {
             Lang.send(event.getPlayer(), Lang.BUILD_DENY);
             event.setCancelled(true);
         }
@@ -107,11 +108,12 @@ public class TrustListener implements Listener {
             if (!claim.allowContainers(event.getPlayer())) {
                 Lang.send(event.getPlayer(), Lang.CONTAINER_DENY);
                 event.setCancelled(true);
+                return;
             }
         }
 
         // build trust
-        else if (!claim.allowBuild(event.getPlayer())) {
+        if (!claim.allowBuild(event.getPlayer())) {
             Lang.send(event.getPlayer(), Lang.BUILD_DENY);
             event.setCancelled(true);
         }
@@ -401,29 +403,32 @@ public class TrustListener implements Listener {
             if (!claim.allowContainers(event.getPlayer())) {
                 Lang.send(player, Lang.CONTAINER_DENY);
                 event.setCancelled(true);
+                return;
             }
         }
 
         // (container trust)
         // prevent opening containers
         // prevent placing minecarts
-        else if (Tags.CONTAINER.isTagged(clickedBlock) || Tags.MINECARTS.isTagged(itemInHand)) {
+        if (Tags.CONTAINER.isTagged(clickedBlock) || Tags.MINECARTS.isTagged(itemInHand)) {
             if (!claim.allowContainers(event.getPlayer())) {
                 Lang.send(player, Lang.CONTAINER_DENY);
                 event.setCancelled(true);
+                return;
             }
         }
 
         // (access trust)
         // prevent stealing cake
         // prevent using beds, doors, buttons, and levers
-        else if (clickedBlock.getType() == Material.CAKE ||
+        if (clickedBlock.getType() == Material.CAKE ||
                 MaterialTags.BEDS.isTagged(clickedBlock) ||
                 Tags.DOORS.isTagged(clickedBlock) ||
                 Tags.BUTTONS.isTagged(clickedBlock)) {
             if (!claim.allowAccess(player)) {
                 Lang.send(player, Lang.ACCESS_DENY);
                 event.setCancelled(true);
+                return;
             }
         }
 
@@ -431,7 +436,7 @@ public class TrustListener implements Listener {
         // prevent using note blocks, repeaters, comparators, daylight sensors, dragon eggs, flower pots, and end crystals
         // prevent placing ink sack (bone meal), end crystals, armorstands, item frames, boats, and minecarts
         // prevent spawning monsters using eggs or monster blocks
-        else if (Tags.INTERACTABLE.isTagged(itemInHand) ||
+        if (Tags.INTERACTABLE.isTagged(itemInHand) ||
                 Tags.BOATS.isTagged(itemInHand) ||
                 Tags.MINECARTS.isTagged(itemInHand)) {
             if (!claim.allowBuild(player)) {
