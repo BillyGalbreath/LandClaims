@@ -408,6 +408,16 @@ public class TrustListener implements Listener {
         }
 
         // (container trust)
+        // special berries check
+        if (clickedBlock.getType() == Material.SWEET_BERRY_BUSH) {
+            if (!claim.allowContainers(event.getPlayer())) {
+                Lang.send(player, Lang.CONTAINER_DENY);
+                event.setCancelled(true);
+                return;
+            }
+        }
+
+        // (container trust)
         // prevent opening containers
         // prevent placing minecarts
         if (Tags.CONTAINER.isTagged(clickedBlock) || Tags.MINECARTS.isTagged(itemInHand)) {
