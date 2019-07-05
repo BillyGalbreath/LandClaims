@@ -19,6 +19,10 @@ public class Coordinates {
     }
 
     public Coordinates(World world, int x1, int z1, int x2, int z2) {
+        if (world == null) {
+            throw new RuntimeException("World not loaded");
+        }
+
         this.world = world;
 
         minX = Math.min(x1, x2);
