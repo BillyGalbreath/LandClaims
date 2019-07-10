@@ -14,6 +14,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.Lectern;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Creature;
+import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Hanging;
@@ -189,6 +190,44 @@ public class TrustListener implements Listener {
             Lang.send(event.getPlayer(), Lang.BUILD_DENY);
             event.setCancelled(true);
         }
+    }
+
+    /*
+     * Stops players from hurting non-mob entities (animals, armorstands, etc)
+     */
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onEnderCrystalDamaged(EntityDamageByEntityEvent event) {
+        Entity entity = event.getEntity();
+        if (Config.isWorldDisabled(entity.getWorld())) {
+            return;
+        }
+
+        if (!(entity instanceof EnderCrystal)) {
+            return; // not an ender crystal
+        }
+
+        Claim claim = plugin.getClaimManager().getClaim(entity.getLocation());
+        if (claim == null) {
+            return;
+        }
+
+        Entity killer = event.getDamager();
+        Player player = null;
+        if (killer instanceof Player) {
+            player = (Player) killer;
+        } else if (killer instanceof Projectile) {
+            ProjectileSource shooter = ((Projectile) killer).getShooter();
+            if (shooter instanceof Player) {
+                player = (Player) shooter;
+            }
+        }
+
+        if (player != null && claim.allowBuild(player)) {
+            return; // player can hurt this crystal
+        }
+
+        // nothing else can damage this crystal
+        event.setCancelled(true);
     }
 
     /*

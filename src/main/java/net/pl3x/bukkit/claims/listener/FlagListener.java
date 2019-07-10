@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.AbstractVillager;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -27,6 +28,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.LingeringPotionSplashEvent;
@@ -197,6 +199,37 @@ public class FlagListener implements Listener {
         if (cancelDamage(event.getDamager(), event.getEntity())) {
             event.setCancelled(true);
         }
+    }
+
+    /*
+     * prevent tile entities from being damaged by explosions
+     */
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onExplosionDamageEntity(EntityDamageEvent event) {
+        Entity entity = event.getEntity();
+        if (Config.isWorldDisabled(entity.getWorld())) {
+            return; // claims not enabled in this world
+        }
+
+        if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_EXPLOSION && event.getCause() != EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
+            return; // not damaged from an explosion
+        }
+
+        if (entity instanceof LivingEntity && !(entity instanceof ArmorStand)) {
+            return; // don't care about living entities
+        }
+
+        Claim claim = plugin.getClaimManager().getClaim(entity.getLocation());
+        if (claim == null) {
+            return; // not in a claim
+        }
+
+        if (claim.getFlag(FlagType.EXPLOSIONS)) {
+            return; // explosions allowed in this claim
+        }
+
+        // explosions not allowed to damage anything
+        event.setCancelled(true);
     }
 
     /*
