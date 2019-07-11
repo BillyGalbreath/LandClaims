@@ -5,6 +5,7 @@ import net.pl3x.bukkit.claims.configuration.Lang;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -25,13 +26,22 @@ public class WelcomeTask extends BukkitRunnable {
 
         Lang.send(player, Lang.AVOID_GRIEF_CLAIM_LAND);
 
-        Lang.broadcast(Lang.NEW_PLAYER_JOINED
-                .replace("{player}", player.getName()));
-
-        if (!Config.SUPPLY_CLAIMBOOK) {
-            return;
+        String message = Lang.NEW_PLAYER_JOINED.replace("{player}", player.getName());
+        for (String part : Lang.colorize(message).split("\n")) {
+            if (part != null && !part.isEmpty()) {
+                Bukkit.getOnlinePlayers().stream()
+                        .filter(recipient -> recipient != player)
+                        .forEach(recipient -> recipient.sendMessage(part));
+                Bukkit.getConsoleSender().sendMessage(part);
+            }
         }
 
+        if (Config.SUPPLY_CLAIMBOOK) {
+            giveClaimBook(player);
+        }
+    }
+
+    public static void giveClaimBook(Player player) {
         BookMeta meta = (BookMeta) Bukkit.getItemFactory().getItemMeta(Material.WRITTEN_BOOK);
         meta.setAuthor(Lang.CLAIMBOOK_AUTHOR);
         meta.setTitle(Lang.CLAIMBOOK_TITLE);
@@ -45,6 +55,11 @@ public class WelcomeTask extends BukkitRunnable {
 
         ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
         book.setItemMeta(meta);
-        player.getInventory().addItem(book);
+        player.getInventory().addItem(book).forEach((index, overflow) -> {
+            Item item = player.getWorld().dropItem(player.getLocation(), overflow);
+            item.setPickupDelay(0);
+            item.setOwner(player.getUniqueId());
+            item.setCanMobPickup(false);
+        });
     }
 }

@@ -66,7 +66,7 @@ public class CmdClaimBook implements TabExecutor {
             target = (Player) sender;
         }
 
-        new WelcomeTask(target).run();
+        WelcomeTask.giveClaimBook(target);
         return true;
     }
 }
