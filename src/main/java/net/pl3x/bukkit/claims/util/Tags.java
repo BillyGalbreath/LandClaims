@@ -26,7 +26,7 @@ public class Tags {
             .add(Material.CHEST, Material.CHEST_MINECART, Material.ENDER_CHEST, Material.TRAPPED_CHEST,
                     Material.BEACON, Material.BREWING_STAND, Material.DISPENSER, Material.DROPPER, Material.HOPPER,
                     Material.HOPPER_MINECART, Material.FURNACE, Material.FURNACE_MINECART,
-                    Material.CAULDRON, Material.JUKEBOX, Material.ANVIL, Material.CAKE, Material.BARREL)
+                    Material.CAULDRON, Material.JUKEBOX, Material.ANVIL, Material.CAKE, Material.BARREL, Material.BLAST_FURNACE)
             .add(MaterialTags.SHULKER_BOXES);
     public static final MaterialSetTag INTERACTABLE = (new MaterialSetTag(new NamespacedKey(LandClaims.getInstance(), "interactable")))
             .add(Material.NOTE_BLOCK, Material.REPEATER, Material.COMPARATOR, Material.DAYLIGHT_DETECTOR,
