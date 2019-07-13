@@ -156,8 +156,11 @@ public class FlagListener implements Listener {
             return; // claims not enabled in this world
         }
 
-        if (event.getEntityType() == EntityType.FALLING_BLOCK ||
-                event.getEntityType() == EntityType.PLAYER) {
+        if (event.getEntityType() == EntityType.FALLING_BLOCK || event.getEntityType() == EntityType.PLAYER) {
+            return;
+        }
+
+        if (event.getEntity() instanceof Projectile && ((Projectile) event.getEntity()).getShooter() instanceof Player) {
             return;
         }
 

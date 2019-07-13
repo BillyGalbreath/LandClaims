@@ -7,8 +7,6 @@ import net.pl3x.bukkit.claims.util.Tags;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,7 +18,6 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -188,42 +185,6 @@ public class ProtectionListener implements Listener {
         Claim claim = plugin.getClaimManager().getClaim(event.getBlock().getLocation());
         if (claim != null) {
             event.setCancelled(true);
-        }
-    }
-
-    /*
-     * Stop entities from changing blocks in the world
-     */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onEntityChangeBlock(EntityChangeBlockEvent event) {
-        if (Config.isWorldDisabled(event.getBlock().getWorld())) {
-            return; // claims not enabled in this world
-        }
-
-        EntityType type = event.getEntityType();
-
-        if (type == EntityType.ARROW) {
-            type = ((Entity) ((Arrow) event.getEntity()).getShooter()).getType();
-        }
-
-        Claim claim = plugin.getClaimManager().getClaim(event.getBlock().getLocation());
-        if (claim == null) {
-            return; // no claim here
-        }
-
-        // stop these entities only if in a claim
-        if (type == EntityType.ENDERMAN ||       // endermen steal blocks
-                type == EntityType.SILVERFISH || // silverfish break/replace stone
-                type == EntityType.RABBIT ||     // rabbit eats crops
-                type == EntityType.WITHER ||     // wither explodes blocks
-                type == EntityType.ZOMBIE ||     // zombie breaks doors
-                type == EntityType.PIG_ZOMBIE || // zombie breaks doors
-                type == EntityType.HUSK ||       // zombie breaks doors
-                type == EntityType.DROWNED ||    // zombie breaks doors
-                type == EntityType.SPIDER ||     // spider shoots webs (ridables)
-                type == EntityType.SHEEP ||      // sheep eat grass
-                type == EntityType.VILLAGER) {   // villagers farm crops
-            event.setCancelled(true); // dont let mobs grief claims
         }
     }
 
