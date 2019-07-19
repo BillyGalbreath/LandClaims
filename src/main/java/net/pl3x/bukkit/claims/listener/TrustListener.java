@@ -193,7 +193,7 @@ public class TrustListener implements Listener {
     }
 
     /*
-     * Stops players from hurting non-mob entities (animals, armorstands, etc)
+     * Stops players from hurting ender crystals
      */
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEnderCrystalDamaged(EntityDamageByEntityEvent event) {
@@ -387,9 +387,9 @@ public class TrustListener implements Listener {
         ItemStack itemInHand = event.getPlayer().getInventory().getItem(event.getHand());
 
         // (build trust)
-        // check interaction with armorstands and item frames/paintings (build trust)
-        if ((entity.getType() == EntityType.ARMOR_STAND || entity instanceof Hanging) && !claim.allowBuild(event.getPlayer())) {
-            Lang.send(event.getPlayer(), Lang.BUILD_DENY);
+        // check interaction with armorstands and item frames/paintings (container trust)
+        if ((entity.getType() == EntityType.ARMOR_STAND || entity instanceof Hanging) && !claim.allowContainers(event.getPlayer())) {
+            Lang.send(event.getPlayer(), Lang.CONTAINER_DENY);
             event.setCancelled(true);
             return;
         }
