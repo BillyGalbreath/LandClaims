@@ -5,6 +5,7 @@ import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.player.Pl3xPlayer;
 import net.pl3x.bukkit.claims.player.task.WelcomeTask;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,7 +43,20 @@ public class PlayerListener implements Listener {
         // make sure everyone has at least the starting amount of claimblocks
         if (!player.hasPlayedBefore() || (int) pl3xPlayer.getClaimBlocks() < 1) {
             pl3xPlayer.setClaimBlocks(Config.STARTING_BLOCKS);
+        }
+
+        if (!player.hasPlayedBefore()) {
             new WelcomeTask(player).runTaskLater(plugin, 200L);
+
+            String message = Lang.NEW_PLAYER_JOINED.replace("{player}", player.getName());
+            for (String part : Lang.colorize(message).split("\n")) {
+                if (part != null && !part.isEmpty()) {
+                    Bukkit.getOnlinePlayers().stream()
+                            .filter(recipient -> recipient != player)
+                            .forEach(recipient -> recipient.sendMessage(part));
+                    Bukkit.getConsoleSender().sendMessage(part);
+                }
+            }
         }
     }
 

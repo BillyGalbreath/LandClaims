@@ -26,16 +26,6 @@ public class WelcomeTask extends BukkitRunnable {
 
         Lang.send(player, Lang.AVOID_GRIEF_CLAIM_LAND);
 
-        String message = Lang.NEW_PLAYER_JOINED.replace("{player}", player.getName());
-        for (String part : Lang.colorize(message).split("\n")) {
-            if (part != null && !part.isEmpty()) {
-                Bukkit.getOnlinePlayers().stream()
-                        .filter(recipient -> recipient != player)
-                        .forEach(recipient -> recipient.sendMessage(part));
-                Bukkit.getConsoleSender().sendMessage(part);
-            }
-        }
-
         if (Config.SUPPLY_CLAIMBOOK) {
             giveClaimBook(player);
         }
