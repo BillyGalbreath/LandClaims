@@ -66,7 +66,7 @@ public class Claim {
         if (owner == null && getParent() != null) {
             return getParent().isOwner(player);
         }
-        return isAdminClaim && player.hasPermission("command.adminclaims") || isOwner(player.getUniqueId());
+        return plugin.getPlayerManager().getPlayer(player).isIgnoringClaims() || (isAdminClaim && player.hasPermission("command.adminclaims")) || isOwner(player.getUniqueId());
     }
 
     public boolean isOwner(UUID uuid) {
