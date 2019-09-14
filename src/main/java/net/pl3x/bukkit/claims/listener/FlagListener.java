@@ -126,7 +126,7 @@ public class FlagListener implements Listener {
             return; // always allow villagers
         }
 
-        if (entity instanceof Pillager && event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.VILLAGE_RAID) {
+        if (entity instanceof Pillager && event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.RAID) {
             return; // always allow raids
         }
 
