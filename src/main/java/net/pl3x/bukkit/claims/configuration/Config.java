@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -118,8 +119,15 @@ public class Config {
         if (item.getData().getData() != Config.CLAIM_TOOL_DATA) {
             return false; // wrong data
         }
+        ItemMeta meta = null;
+        if (item.hasItemMeta()) {
+            meta = item.getItemMeta();
+            if (meta.hasCustomModelData()) {
+                return false;
+            }
+        }
         if (Config.CLAIM_TOOL_NAME != null && !Config.CLAIM_TOOL_NAME.equals("")) {
-            if (!item.hasItemMeta()) {
+            if (meta == null) {
                 return false; // no item meta
             }
             if (!item.getItemMeta().getDisplayName().equals(Config.CLAIM_TOOL_NAME)) {
@@ -127,8 +135,11 @@ public class Config {
             }
         }
         if (!Config.CLAIM_TOOL_LORE.isEmpty()) {
-            if (!item.hasItemMeta()) {
+            if (meta == null) {
                 return false; // no item meta
+            }
+            if (!meta.hasLore()) {
+                return false; // has no lore
             }
             // lore mismatch
             return item.getItemMeta().getLore().containsAll(Config.CLAIM_TOOL_LORE);
@@ -146,8 +157,15 @@ public class Config {
         if (item.getData().getData() != Config.INSPECT_TOOL_DATA) {
             return false; // wrong data
         }
+        ItemMeta meta = null;
+        if (item.hasItemMeta()) {
+            meta = item.getItemMeta();
+            if (meta.hasCustomModelData()) {
+                return false;
+            }
+        }
         if (Config.INSPECT_TOOL_NAME != null && !Config.INSPECT_TOOL_NAME.equals("")) {
-            if (!item.hasItemMeta()) {
+            if (meta == null) {
                 return false; // no item meta
             }
             if (!item.getItemMeta().getDisplayName().equals(Config.INSPECT_TOOL_NAME)) {
@@ -155,8 +173,11 @@ public class Config {
             }
         }
         if (!Config.INSPECT_TOOL_LORE.isEmpty()) {
-            if (!item.hasItemMeta()) {
+            if (meta == null) {
                 return false; // no item meta
+            }
+            if (!meta.hasLore()) {
+                return false; // has no lore
             }
             // lore mismatch
             return item.getItemMeta().getLore().containsAll(Config.INSPECT_TOOL_LORE);
