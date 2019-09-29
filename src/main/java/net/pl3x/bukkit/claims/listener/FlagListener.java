@@ -51,7 +51,7 @@ public class FlagListener implements Listener {
     /*
      * Explosions
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onEntityExplosion(EntityExplodeEvent event) {
         if (Config.isWorldDisabled(event.getEntity().getWorld())) {
             return; // claims not enabled in this world
@@ -69,7 +69,7 @@ public class FlagListener implements Listener {
     /*
      * Fire Spread
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onFireSpread(BlockSpreadEvent event) {
         if (event.getSource().getType() != Material.FIRE) {
             return; // not fire that is spreading
@@ -89,7 +89,7 @@ public class FlagListener implements Listener {
     /*
      * Another check for Fire Spread
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBlockIgnite(BlockIgniteEvent event) {
         //don't track in worlds where claims are not enabled
         if (Config.isWorldDisabled(event.getBlock().getWorld())) {
@@ -115,7 +115,7 @@ public class FlagListener implements Listener {
     /*
      * Spawn Animals & Spawn Mobs
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onCreatureSpawn(CreatureSpawnEvent event) {
         if (Config.isWorldDisabled(event.getEntity().getWorld())) {
             return; // claims not enabled in this world
@@ -150,7 +150,7 @@ public class FlagListener implements Listener {
     /*
      * Mob Griefing
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onMobGrief(EntityChangeBlockEvent event) {
         if (Config.isWorldDisabled(event.getBlock().getWorld())) {
             return; // claims not enabled in this world
@@ -173,7 +173,7 @@ public class FlagListener implements Listener {
     /*
      * Mob Griefing
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onMobGrief(EntityInteractEvent event) {
         if (Config.isWorldDisabled(event.getBlock().getWorld())) {
             return; // claims not enabled in this world
@@ -193,7 +193,7 @@ public class FlagListener implements Listener {
     /*
      * PvP & Mob Damage & Mob Griefing
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
         if (Config.isWorldDisabled(event.getEntity().getWorld())) {
             return; // claims not enabled in this world
@@ -207,7 +207,7 @@ public class FlagListener implements Listener {
     /*
      * prevent tile entities from being damaged by explosions
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onExplosionDamageEntity(EntityDamageEvent event) {
         Entity entity = event.getEntity();
         if (Config.isWorldDisabled(entity.getWorld())) {
@@ -238,7 +238,7 @@ public class FlagListener implements Listener {
     /*
      * PvP & Mob Damage & Mob Griefing
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onEntityCombustEntity(EntityCombustByEntityEvent event) {
         if (Config.isWorldDisabled(event.getEntity().getWorld())) {
             return; // claims not enabled in this world
@@ -252,7 +252,7 @@ public class FlagListener implements Listener {
     /*
      * Mob Griefing hanging (item frame, paintings, etc)
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onEntityBreakHangingEntity(HangingBreakByEntityEvent event) {
         if (Config.isWorldDisabled(event.getEntity().getWorld())) {
             return; // claims not enabled in this world
@@ -281,7 +281,7 @@ public class FlagListener implements Listener {
     /*
      * PvP & Mob Damage
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPotionSplash(PotionSplashEvent event) {
         if (Config.isWorldDisabled(event.getEntity().getWorld())) {
             return; // claims not enabled in this world
@@ -296,7 +296,7 @@ public class FlagListener implements Listener {
     /*
      * PvP & Mob Damage
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onLingeringPotionSplash(LingeringPotionSplashEvent event) {
         if (Config.isWorldDisabled(event.getAreaEffectCloud().getWorld())) {
             return; // claims not enabled in this world
@@ -406,7 +406,7 @@ public class FlagListener implements Listener {
         return false;
     }
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (event.getTo().getBlockX() == event.getFrom().getBlockX()
                 && event.getTo().getBlockY() == event.getFrom().getBlockY()

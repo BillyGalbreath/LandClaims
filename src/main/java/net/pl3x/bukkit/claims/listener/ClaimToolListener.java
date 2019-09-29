@@ -35,7 +35,7 @@ public class ClaimToolListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerInspectTool(PlayerInteractEvent event) {
         if (event.getHand() != EquipmentSlot.HAND) {
             return; // only care about main hand packet
@@ -135,7 +135,7 @@ public class ClaimToolListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerClaimTool(PlayerInteractEvent event) {
         if (event.getHand() != EquipmentSlot.HAND) {
             return; // only care about main hand packet

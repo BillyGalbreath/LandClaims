@@ -57,7 +57,7 @@ public class TrustListener implements Listener {
     /*
      * Stops players from breaking blocks
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         if (Config.isWorldDisabled(event.getBlock().getWorld())) {
             return; // claims not enabled in this world
@@ -89,7 +89,7 @@ public class TrustListener implements Listener {
     /*
      * Stops players from placing blocks
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
         if (Config.isWorldDisabled(event.getBlock().getWorld())) {
             return; // claims not enabled in this world
@@ -123,7 +123,7 @@ public class TrustListener implements Listener {
     /*
      * Stops players from placing multiple blocks
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBlocksPlace(BlockMultiPlaceEvent event) {
         if (Config.isWorldDisabled(event.getBlock().getWorld())) {
             return; // claims not enabled in this world
@@ -146,7 +146,7 @@ public class TrustListener implements Listener {
     /*
      * Stops players from forming blocks (frost walker, etc)
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerFormBlock(EntityBlockFormEvent event) {
         if (Config.isWorldDisabled(event.getEntity().getWorld())) {
             return; // claims not enabled in this world
@@ -171,7 +171,7 @@ public class TrustListener implements Listener {
     /*
      * Stops players from editing signs without build rights using plugins/mods
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onSignChange(SignChangeEvent event) {
         if (Config.isWorldDisabled(event.getBlock().getWorld())) {
             return; // claims not enabled in this world
@@ -195,7 +195,7 @@ public class TrustListener implements Listener {
     /*
      * Stops players from hurting ender crystals
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onEnderCrystalDamaged(EntityDamageByEntityEvent event) {
         Entity entity = event.getEntity();
         if (Config.isWorldDisabled(entity.getWorld())) {
@@ -233,7 +233,7 @@ public class TrustListener implements Listener {
     /*
      * Stops players from hurting non-mob entities (animals, armorstands, etc)
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerHurtEntity(EntityDamageByEntityEvent event) {
         Entity entity = event.getEntity();
         if (Config.isWorldDisabled(entity.getWorld())) {
@@ -284,7 +284,7 @@ public class TrustListener implements Listener {
     /*
      * Stops reeling of animals, villagers, and armorstands
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerFish(PlayerFishEvent event) {
         Entity entity = event.getCaught();
         if (entity == null) {
@@ -316,7 +316,7 @@ public class TrustListener implements Listener {
     /*
      * Prevent players from harming protected animals with flame bow
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onEntityCombustEntity(EntityCombustByEntityEvent event) {
         if (Config.isWorldDisabled(event.getEntity().getWorld())) {
             return; // claims not enabled in this world
@@ -367,7 +367,7 @@ public class TrustListener implements Listener {
      * interacting with animals and villagers,
      * and from leashing entities
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         Entity entity = event.getRightClicked();
         if (Config.isWorldDisabled(entity.getWorld())) {
@@ -409,7 +409,7 @@ public class TrustListener implements Listener {
     /*
      * Stops players from opening containers, placing minecarts
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
@@ -498,7 +498,7 @@ public class TrustListener implements Listener {
     /*
      * Stops players from taking books off lecterns
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerTakeBook(PlayerTakeLecternBookEvent event) {
         Player player = event.getPlayer();
         if (Config.isWorldDisabled(player.getWorld())) {
@@ -531,7 +531,7 @@ public class TrustListener implements Listener {
     /*
      * Stops players from putting out fires
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerInteractLeft(PlayerInteractEvent event) {
         if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
             return;
@@ -570,7 +570,7 @@ public class TrustListener implements Listener {
     /*
      * Stops players from teleporting places they cannot access using chorus fruit and enderpearls
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         if (Config.isWorldDisabled(event.getTo().getWorld())) {
             return; // claims not enabled in this world
@@ -600,7 +600,7 @@ public class TrustListener implements Listener {
      * Stops players from creating nether portals where they cannot build
      */
     /* TODO update this! 1.14 removed TravelAgent! >:(
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerPortal(PlayerPortalEvent event) {
         if (event.getTo() == null || event.getTo().getWorld() == null) {
             return; // not going anywhere
@@ -644,7 +644,7 @@ public class TrustListener implements Listener {
     /*
      * Stops players from placing liquids
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerEmptyBucket(PlayerBucketEmptyEvent event) {
         if (Config.isWorldDisabled(event.getBlockClicked().getWorld())) {
             return; // claims not enabled in this world
@@ -664,7 +664,7 @@ public class TrustListener implements Listener {
     /*
      * Stops players from stealing liquids
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerFillBucket(PlayerBucketFillEvent event) {
         if (Config.isWorldDisabled(event.getBlockClicked().getWorld())) {
             return; // claims not enabled in this world
@@ -688,7 +688,7 @@ public class TrustListener implements Listener {
     /*
      * Stops players from breaking paintings, item frames, and leash hitches
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerHangingBreak(HangingBreakByEntityEvent event) {
         if (Config.isWorldDisabled(event.getEntity().getWorld())) {
             return; // claims not enabled in this world
@@ -725,7 +725,7 @@ public class TrustListener implements Listener {
     /*
      * Stops players from shooting wood button
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerShootButton(EntityInteractEvent event) {
         Block block = event.getBlock();
         if (!Tags.BUTTONS.isTagged(block.getType())) {

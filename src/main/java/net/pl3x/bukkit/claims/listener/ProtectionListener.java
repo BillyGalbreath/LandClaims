@@ -37,7 +37,7 @@ public class ProtectionListener implements Listener {
     /*
      * Stop liquids from passing claim borders
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onLiquidSpread(BlockFromToEvent event) {
         if (event.getFace() == BlockFace.DOWN) {
             return; // let liquids go straight down
@@ -60,7 +60,7 @@ public class ProtectionListener implements Listener {
     /*
      * Stops pistons from pushing blocks passed claim borders
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPistonPush(BlockPistonExtendEvent event) {
         if (Config.isWorldDisabled(event.getBlock().getWorld())) {
             return; // claims not enabled in this world
@@ -81,7 +81,7 @@ public class ProtectionListener implements Listener {
     /*
      * Stops pistons from pulling blocks passed claim borders
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPistonPull(BlockPistonRetractEvent event) {
         if (Config.isWorldDisabled(event.getBlock().getWorld())) {
             return; // claims not enabled in this world
@@ -102,7 +102,7 @@ public class ProtectionListener implements Listener {
     /*
      * Stops dispensers from pushing blocks passed claim borders
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBlockDispense(BlockDispenseEvent event) {
         if (Config.isWorldDisabled(event.getBlock().getWorld())) {
             return; // claims not enabled in this world
@@ -119,7 +119,7 @@ public class ProtectionListener implements Listener {
     /*
      * Stops explosions from passing claim borders
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onEntityExplosion(EntityExplodeEvent event) {
         if (Config.isWorldDisabled(event.getEntity().getWorld())) {
             return; // claims not enabled in this world
@@ -142,7 +142,7 @@ public class ProtectionListener implements Listener {
     /*
      * Stops fire from spreading passed claim borders
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onFireSpread(BlockSpreadEvent event) {
         if (!event.getSource().getType().equals(Material.FIRE)) {
             return; // not fire that is spreading
@@ -162,7 +162,7 @@ public class ProtectionListener implements Listener {
     /*
      * Stops trees from growing passed claim borders
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onTreeGrow(StructureGrowEvent event) {
         if (Config.isWorldDisabled(event.getWorld())) {
             return; // claims not enabled in this world
@@ -176,7 +176,7 @@ public class ProtectionListener implements Listener {
     /*
      * Stop claimed blocks from being destroyed by fire
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onFireDestroy(BlockBurnEvent event) {
         if (Config.isWorldDisabled(event.getBlock().getWorld())) {
             return; // claims not enabled in this world
@@ -191,7 +191,7 @@ public class ProtectionListener implements Listener {
     /*
      * Stops soil from being trampled by entities
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onSoilTrample(EntityInteractEvent event) {
         if (Config.isWorldDisabled(event.getBlock().getWorld())) {
             return; // claims not enabled in this world
@@ -212,7 +212,7 @@ public class ProtectionListener implements Listener {
     /*
      * Stops soil from being trampled by players
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onSoilTrample(PlayerInteractEvent event) {
         if (event.getAction() != Action.PHYSICAL) {
             return;
@@ -237,7 +237,7 @@ public class ProtectionListener implements Listener {
     /*
      * Stops dragon eggs from teleporting from/to claims
      */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onDragonEggTouch(BlockFromToEvent event) {
         if (event.getBlock().getType() != Material.DRAGON_EGG) {
             return; // not a dragon egg
