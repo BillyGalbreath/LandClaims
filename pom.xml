@@ -12,13 +12,13 @@
         <dependency>
             <groupId>net.pl3x.purpur</groupId>
             <artifactId>purpur-api</artifactId>
-            <version>1.14.4-R0.1-SNAPSHOT</version>
+            <version>1.15.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.pl3x.purpur</groupId>
             <artifactId>purpur</artifactId>
-            <version>1.14.4-R0.1-SNAPSHOT</version>
+            <version>1.15.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -45,7 +45,7 @@
     </repositories>
     <build>
         <finalName>${project.artifactId}</finalName>
-        <defaultGoal>clean package install javadoc:javadoc</defaultGoal>
+        <defaultGoal>clean package install</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
