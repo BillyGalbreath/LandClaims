@@ -5,7 +5,7 @@ description: "${project.artifactId} Plugin"
 author: "BillyGalbreath"
 api-version: "1.13"
 softdepend:
-- Dynmap
+- dynmap
 - DynmapAPI
 - Discord4Bukkit
 - WorldLoader
