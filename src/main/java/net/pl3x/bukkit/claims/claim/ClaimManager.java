@@ -204,7 +204,7 @@ public class ClaimManager {
             claim.getParent().removeChild(claim);
         } else {
             // check for children
-            Collection<Claim> children = claim.getChildren();
+            Collection<Claim> children = new HashSet<>(claim.getChildren());
             if (children.size() > 0) {
                 if (!deleteChildren) {
                     return false; // has child claims!
