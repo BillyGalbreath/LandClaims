@@ -47,6 +47,9 @@ public class DeleteInactiveClaims extends BukkitRunnable {
             Collection<Claim> claims = pl3xPlayer.getClaims();
 
             String name = pl3xPlayer.getPlayer().getName();
+            if (name == null) {
+                name = "Unknown";
+            }
             int count = claims.size();
 
             claims.forEach(claim -> plugin.getClaimManager().deleteClaim(claim, true));
