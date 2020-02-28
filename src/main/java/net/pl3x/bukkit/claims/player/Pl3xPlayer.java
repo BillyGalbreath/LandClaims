@@ -133,7 +133,7 @@ public class Pl3xPlayer extends PlayerConfig {
         }
 
         if (player.isOnline()) {
-            new PlayerChangedClaimEvent(player.getPlayer(), claim, inClaim).callEvent();
+            new PlayerChangedClaimEvent(player.getPlayer(), inClaim, claim).callEvent();
             if (inClaim != null && inClaim.hasExitMessage() && !exitMessageOnCooldown.contains(inClaim.getId())) {
                 Lang.send(player.getPlayer(), inClaim.getExitMessage().replace("\\n", "\n"));
                 long id = inClaim.getId();
