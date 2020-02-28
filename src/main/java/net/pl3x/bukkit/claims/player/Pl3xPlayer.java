@@ -5,6 +5,7 @@ import net.pl3x.bukkit.claims.claim.Claim;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.configuration.PlayerConfig;
 import net.pl3x.bukkit.claims.event.claim.VisualizeClaimsEvent;
+import net.pl3x.bukkit.claims.event.player.PlayerChangedClaimEvent;
 import net.pl3x.bukkit.claims.player.task.AccrueClaimBlocksTask;
 import net.pl3x.bukkit.claims.visualization.Visualization;
 import net.pl3x.bukkit.claims.visualization.VisualizationType;
@@ -132,6 +133,7 @@ public class Pl3xPlayer extends PlayerConfig {
         }
 
         if (player.isOnline()) {
+            new PlayerChangedClaimEvent(player.getPlayer(), claim, inClaim).callEvent();
             if (inClaim != null && inClaim.hasExitMessage() && !exitMessageOnCooldown.contains(inClaim.getId())) {
                 Lang.send(player.getPlayer(), inClaim.getExitMessage().replace("\\n", "\n"));
                 long id = inClaim.getId();
