@@ -72,8 +72,11 @@ public class Visualization {
                 player.getLocation().getBlockX() + 100,
                 player.getLocation().getBlockZ() + 100);
 
-        visualization.getElements().removeIf(e ->
-                e.getLocation().distanceSquared(player.getLocation()) > 22500);
+        visualization.getElements().removeIf(e -> {
+            Location eLoc = e.getLocation();
+            Location pLoc = player.getLocation();
+            return pLoc.getWorld() != eLoc.getWorld() || eLoc.distanceSquared(pLoc) > 22500;
+        });
 
         //send real block information for any remaining elements
         for (VisualizationElement element : visualization.getElements()) {
@@ -114,7 +117,7 @@ public class Visualization {
             accentMaterial = Material.GOLD_BLOCK;
         } else if (visualizationType == VisualizationType.ADMIN) {
             cornerMaterial = Material.GLOWSTONE;
-            accentMaterial = Material.PUMPKIN;
+            accentMaterial = Material.ORANGE_WOOL;
         } else if (visualizationType == VisualizationType.CHILD) {
             cornerMaterial = Material.IRON_BLOCK;
             accentMaterial = Material.WHITE_WOOL;
