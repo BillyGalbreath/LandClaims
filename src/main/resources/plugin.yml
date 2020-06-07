@@ -91,7 +91,7 @@ commands:
     - listclaims
     - adminclaimslist
   deleteclaim:
-    description: Deletes the claim you're stnading in, even if it's not your claim
+    description: Deletes the claim you're standing in, even if it's not your claim
     permission: command.deleteclaim
     usage: /<command> (force)
     aliases: []
