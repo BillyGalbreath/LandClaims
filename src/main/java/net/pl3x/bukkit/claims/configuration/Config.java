@@ -50,6 +50,9 @@ public class Config {
     public static List<String> DYNMAP_VISIBLE_REGIONS;
     public static List<String> DYNMAP_HIDDEN_REGIONS;
 
+    public static boolean PREVENT_GLOBAL_CREEPER_POTHOLES = false;
+    public static boolean PREVENT_GLOBAL_ENDERMAN_GRIEFING = false;
+
     private Config() {
     }
 
@@ -103,6 +106,9 @@ public class Config {
 
         DYNMAP_VISIBLE_REGIONS = config.getStringList("visibleregions");
         DYNMAP_HIDDEN_REGIONS = config.getStringList("hiddenregions");
+
+        PREVENT_GLOBAL_CREEPER_POTHOLES = config.getBoolean("prevent-global-creeper-potholes", PREVENT_GLOBAL_CREEPER_POTHOLES);
+        PREVENT_GLOBAL_ENDERMAN_GRIEFING = config.getBoolean("prevent-global-enderman-griefing", PREVENT_GLOBAL_ENDERMAN_GRIEFING);
     }
 
     public static boolean isWorldDisabled(World world) {

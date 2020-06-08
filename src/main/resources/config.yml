@@ -59,3 +59,6 @@ dynmap:
         administrator:
             strokeColor: "#0000FF"
             fillColor: "#0000FF"
+
+prevent-global-creeper-potholes: false
+prevent-global-enderman-griefing: false

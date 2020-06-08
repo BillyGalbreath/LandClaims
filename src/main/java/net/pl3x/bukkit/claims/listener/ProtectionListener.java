@@ -18,6 +18,7 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -126,7 +127,7 @@ public class ProtectionListener implements Listener {
         }
 
         // NEVER let creepers make potholes
-        if (event.getEntityType() == EntityType.CREEPER) {
+        if (Config.PREVENT_GLOBAL_CREEPER_POTHOLES && event.getEntityType() == EntityType.CREEPER) {
             event.blockList().clear();
             return;
         }
@@ -253,5 +254,25 @@ public class ProtectionListener implements Listener {
         if (fromClaim != null || toClaim != null) {
             event.setCancelled(true); // do not teleport the egg
         }
+    }
+
+    /*
+     * Stops enderman from picking up and placing blocks
+     */
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onEndermanPickup(EntityChangeBlockEvent event) {
+        if (!Config.PREVENT_GLOBAL_ENDERMAN_GRIEFING) {
+            return;
+        }
+
+        if (event.getEntityType() != EntityType.ENDERMAN) {
+            return;
+        }
+
+        if (Config.isWorldDisabled(event.getEntity().getWorld())) {
+            return; // claims not enabled in this world
+        }
+
+        event.setCancelled(true);
     }
 }
