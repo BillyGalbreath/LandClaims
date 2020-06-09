@@ -66,7 +66,7 @@ public class Claim {
         if (owner == null && getParent() != null) {
             return getParent().isOwner(player);
         }
-        return plugin.getPlayerManager().getPlayer(player).isIgnoringClaims() || (isAdminClaim && player.hasPermission("command.adminclaims")) || isOwner(player.getUniqueId());
+        return plugin.getPlayerManager().getPlayer(player).isIgnoringClaims() || (isAdminClaim && player.hasPermission("command.admin.adminclaims")) || isOwner(player.getUniqueId());
     }
 
     public boolean isOwner(UUID uuid) {
@@ -270,11 +270,11 @@ public class Claim {
         }
 
         if (isAdminClaim) {
-            if (player.hasPermission("command.adminclaims")) {
+            if (player.hasPermission("command.admin.adminclaims")) {
                 return true;
             }
         } else {
-            if (player.hasPermission("command.deleteclaim")) {
+            if (player.hasPermission("command.admin.deleteclaim")) {
                 return true;
             }
         }
@@ -284,6 +284,6 @@ public class Claim {
 
     public boolean allowManage(Player player) {
         return isOwner(player) || managers.contains(player.getUniqueId()) ||
-                (isAdminClaim() && player.hasPermission("command.adminclaims"));
+                (isAdminClaim() && player.hasPermission("command.admin.adminclaims"));
     }
 }

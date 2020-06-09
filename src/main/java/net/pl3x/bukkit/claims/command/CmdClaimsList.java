@@ -37,14 +37,9 @@ public class CmdClaimsList implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("command.claimslist")) {
-            Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
-            return true;
-        }
-
         if (label.equalsIgnoreCase("adminclaimslist")) {
-            if (!sender.hasPermission("command.claimslist.admin")) {
-                Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
+            if (!sender.hasPermission("command.user.claimslist.admin")) {
+                Lang.send(sender, command.getPermissionMessage());
                 return true;
             }
 
@@ -60,8 +55,8 @@ public class CmdClaimsList implements TabExecutor {
 
         OfflinePlayer target;
         if (args.length > 0) {
-            if (!sender.hasPermission("command.claimslist.others")) {
-                Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
+            if (!sender.hasPermission("command.user.claimslist.others")) {
+                Lang.send(sender, command.getPermissionMessage());
                 return true;
             }
 

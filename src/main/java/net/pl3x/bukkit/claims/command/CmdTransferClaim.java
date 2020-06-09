@@ -42,11 +42,6 @@ public class CmdTransferClaim implements TabExecutor {
             return true;
         }
 
-        if (!sender.hasPermission("command.transferclaim")) {
-            Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
-            return true;
-        }
-
         Player player = (Player) sender;
         if (Config.isWorldDisabled(player.getWorld())) {
             Lang.send(sender, Lang.WORLD_DISABLED);
@@ -84,7 +79,7 @@ public class CmdTransferClaim implements TabExecutor {
             owner = target.getUniqueId();
         }
 
-        if (owner == null && !sender.hasPermission("command.adminclaims")) {
+        if (owner == null && !sender.hasPermission("command.admin.adminclaims")) {
             Lang.send(sender, Lang.TRANSFER_NO_PERMISSION);
             return true;
         }

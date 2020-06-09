@@ -45,11 +45,6 @@ public class CmdSetFlag implements TabExecutor {
             return true;
         }
 
-        if (!sender.hasPermission("command.setflag")) {
-            Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
-            return true;
-        }
-
         Player player = (Player) sender;
         if (Config.isWorldDisabled(player.getWorld())) {
             Lang.send(sender, Lang.WORLD_DISABLED);
@@ -73,8 +68,8 @@ public class CmdSetFlag implements TabExecutor {
             return true;
         }
 
-        if (!sender.hasPermission("command.setflag.*") &&
-                !sender.hasPermission("command.setflag." + flag.name().toLowerCase())) {
+        if (!sender.hasPermission("command.user.setflag.*") &&
+                !sender.hasPermission("command.user.setflag." + flag.name().toLowerCase())) {
             Lang.send(sender, Lang.SETFLAG_NO_PERMISSION);
             return true;
         }

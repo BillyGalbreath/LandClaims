@@ -35,11 +35,6 @@ public class CmdClaim implements TabExecutor {
             return true;
         }
 
-        if (!sender.hasPermission("command.claim")) {
-            Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
-            return true;
-        }
-
         Player player = (Player) sender;
         if (Config.isWorldDisabled(player.getWorld())) {
             Lang.send(sender, Lang.WORLD_DISABLED);
@@ -50,7 +45,7 @@ public class CmdClaim implements TabExecutor {
 
         // check max claims per player limit
         if (Config.CLAIMS_MAX_PER_PLAYER > 0 &&
-                !player.hasPermission("claims.overridelimits") &&
+                !player.hasPermission("claims.admin.overridelimits") &&
                 pl3xPlayer.getClaims().size() >= Config.CLAIMS_MAX_PER_PLAYER) {
             Lang.send(sender, Lang.CREATE_FAILED_CLAIM_LIMIT
                     .replace("{limit}", Integer.toString(Config.CLAIMS_MAX_PER_PLAYER)));

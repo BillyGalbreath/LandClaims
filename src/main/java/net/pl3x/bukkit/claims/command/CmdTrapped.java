@@ -35,11 +35,6 @@ public class CmdTrapped implements TabExecutor {
             return true;
         }
 
-        if (!sender.hasPermission("command.trapped")) {
-            Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
-            return true;
-        }
-
         Player player = (Player) sender;
         if (Config.isWorldDisabled(player.getWorld())) {
             Lang.send(sender, Lang.WORLD_DISABLED);

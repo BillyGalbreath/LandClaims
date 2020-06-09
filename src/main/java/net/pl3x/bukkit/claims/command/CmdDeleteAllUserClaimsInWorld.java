@@ -39,11 +39,6 @@ public class CmdDeleteAllUserClaimsInWorld implements TabExecutor {
             return true;
         }
 
-        if (!sender.hasPermission("command.deletealluserclaimsinworld")) {
-            Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
-            return true;
-        }
-
         if (args.length == 0) {
             Lang.send(sender, Lang.COMMAND_MISSING_WORLD);
             return true;
@@ -60,7 +55,7 @@ public class CmdDeleteAllUserClaimsInWorld implements TabExecutor {
                 .filter(claim -> !claim.isAdminClaim())
                 .collect(Collectors.toSet());
 
-        if (claims == null || claims.isEmpty()) {
+        if (claims.isEmpty()) {
             Lang.send(sender, Lang.DELETE_ALL_USER_CLAIMS_IN_WORLD_NO_CLAIMS
                     .replace("{world}", world.getName()));
             return true;

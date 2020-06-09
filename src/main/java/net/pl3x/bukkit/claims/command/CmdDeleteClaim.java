@@ -36,11 +36,6 @@ public class CmdDeleteClaim implements TabExecutor {
             return true;
         }
 
-        if (!sender.hasPermission("command.deleteclaim")) {
-            Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
-            return true;
-        }
-
         Player player = (Player) sender;
         if (Config.isWorldDisabled(player.getWorld())) {
             Lang.send(sender, Lang.WORLD_DISABLED);
@@ -53,7 +48,7 @@ public class CmdDeleteClaim implements TabExecutor {
             return true;
         }
 
-        if (claim.isAdminClaim() && !sender.hasPermission("command.adminclaims")) {
+        if (claim.isAdminClaim() && !sender.hasPermission("command.admin.adminclaims")) {
             Lang.send(sender, Lang.DELETE_NO_PERMISSION);
             return true;
         }

@@ -34,11 +34,6 @@ public class CmdAdjustBonusBlocks implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("command.adjustbonusblocks")) {
-            Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
-            return true;
-        }
-
         if (args.length < 1) {
             Lang.send(sender, Lang.COMMAND_MISSING_PLAYER);
             return false;

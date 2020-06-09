@@ -33,11 +33,6 @@ public class CmdClaimBook implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("command.claimbook")) {
-            Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
-            return true;
-        }
-
         if (!Config.SUPPLY_CLAIMBOOK) {
             Lang.send(sender, Lang.CLAIMBOOK_DISABLED);
             return true;
@@ -45,8 +40,8 @@ public class CmdClaimBook implements TabExecutor {
 
         Player target;
         if (args.length > 0) {
-            if (!sender.hasPermission("command.claimbook.others")) {
-                Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
+            if (!sender.hasPermission("command.admin.claimbook.others")) {
+                Lang.send(sender, command.getPermissionMessage());
                 return true;
             }
 

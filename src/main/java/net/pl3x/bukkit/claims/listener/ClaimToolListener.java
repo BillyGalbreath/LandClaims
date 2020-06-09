@@ -46,7 +46,7 @@ public class ClaimToolListener implements Listener {
             return; // claims not enabled in this world
         }
 
-        if (!player.hasPermission("claims.visualize")) {
+        if (!player.hasPermission("claims.user.visualize")) {
             return;
         }
 
@@ -70,7 +70,7 @@ public class ClaimToolListener implements Listener {
             return; // no block clicked
         }
 
-        if (player.isSneaking() && player.hasPermission("claims.visualize.nearby")) {
+        if (player.isSneaking() && player.hasPermission("claims.user.visualize.nearby")) {
             // is inspecting all nearby claims
             Collection<Claim> nearbyClaims = plugin.getClaimManager().getNearbyClaims(player.getLocation());
 
@@ -119,7 +119,7 @@ public class ClaimToolListener implements Listener {
         }
         pl3xPlayer.showVisualization(showClaim);
 
-        if (player.hasPermission("claims.inspect.seeclaimsize")) {
+        if (player.hasPermission("claims.user.inspect.seeclaimsize")) {
             Lang.send(player, Lang.INSPECT_CLAIM_DIMENSIONS
                     .replace("{type}", claim.getParent() == null ? "Top Level" : "Child")
                     .replace("{widthX}", Integer.toString(claim.getCoordinates().getWidthX()))
@@ -128,8 +128,8 @@ public class ClaimToolListener implements Listener {
         }
 
         if (!claim.isAdminClaim() &&
-                (player.hasPermission("command.deleteclaim") ||
-                        player.hasPermission("claims.inspect.seeinactivity"))) {
+                (player.hasPermission("command.admin.deleteclaim") ||
+                        player.hasPermission("claims.user.inspect.seeinactivity"))) {
             Lang.send(player, Lang.INSPECT_OWNER_INACTIVITY
                     .replace("{amount}", Integer.toString(claim.getLastActive())));
         }
@@ -146,7 +146,7 @@ public class ClaimToolListener implements Listener {
             return; // claims not enabled in this world
         }
 
-        if (!player.hasPermission("command.claim")) {
+        if (!player.hasPermission("command.user.claim")) {
             return; // no permission to create/resize claims
         }
 
@@ -289,7 +289,7 @@ public class ClaimToolListener implements Listener {
         Location toolLocation = pl3xPlayer.getLastToolLocation();
         if (toolLocation == null) {
             if (Config.CLAIMS_MAX_PER_PLAYER > 0 &&
-                    !player.hasPermission("claims.overridelimits") &&
+                    !player.hasPermission("claims.admin.overridelimits") &&
                     pl3xPlayer.getClaims().size() > Config.CLAIMS_MAX_PER_PLAYER) {
                 Lang.send(player, Lang.CREATE_FAILED_CLAIM_LIMIT
                         .replace("{limit}", Integer.toString(Config.CLAIMS_MAX_PER_PLAYER)));

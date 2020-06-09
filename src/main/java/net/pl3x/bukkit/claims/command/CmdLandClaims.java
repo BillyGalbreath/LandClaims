@@ -27,11 +27,6 @@ public class CmdLandClaims implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("command.landclaims")) {
-            Lang.send(sender, Lang.COMMAND_NO_PERMISSION);
-            return true;
-        }
-
         if (args.length > 0 && args[0].equalsIgnoreCase("reload")) {
             Config.reload(plugin);
             Lang.reload(plugin);

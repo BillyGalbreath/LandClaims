@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Lang {
-    public static String COMMAND_NO_PERMISSION;
     public static String COMMAND_MISSING_WORLD;
     public static String COMMAND_WORLD_NOT_FOUND;
     public static String COMMAND_MISSING_PLAYER;
@@ -188,7 +187,6 @@ public class Lang {
         }
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
-        COMMAND_NO_PERMISSION = config.getString("command-no-permission", "&4You do not have permission for that command");
         COMMAND_MISSING_WORLD = config.getString("command-missing-world", "&4Missing world in command");
         COMMAND_WORLD_NOT_FOUND = config.getString("command-world-not-found", "&4World not found");
         COMMAND_MISSING_PLAYER = config.getString("command-missing-player-name", "&4Missing player name in command");
