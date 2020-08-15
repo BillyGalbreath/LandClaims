@@ -30,7 +30,6 @@ import net.pl3x.bukkit.claims.command.CmdTrustList;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.dynmap.DynmapHook;
-import net.pl3x.bukkit.claims.hook.DiscordHook;
 import net.pl3x.bukkit.claims.listener.ClaimToolListener;
 import net.pl3x.bukkit.claims.listener.FlagListener;
 import net.pl3x.bukkit.claims.listener.PlayerListener;
@@ -48,7 +47,6 @@ public class LandClaims extends JavaPlugin {
     private final ClaimManager claimManager;
     private final PlayerManager playerManager;
     private DynmapHook dynmapHook;
-    private DiscordHook discordHook;
 
     public LandClaims() {
         instance = this;
@@ -121,11 +119,6 @@ public class LandClaims extends JavaPlugin {
             dynmapHook = new DynmapHook(this);
         }
 
-        // Discord
-        if (getServer().getPluginManager().isPluginEnabled("Discord4Bukkit")) {
-            discordHook = new DiscordHook();
-        }
-
         getLog().info(getName() + " v" + getDescription().getVersion() + " enabled!");
     }
 
@@ -145,9 +138,5 @@ public class LandClaims extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         sender.sendMessage(ChatColor.DARK_RED + getName() + " is disabled. Please check console logs for more information.");
         return true;
-    }
-
-    public DiscordHook getDiscordHook() {
-        return discordHook;
     }
 }

@@ -6,7 +6,6 @@ import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.player.Pl3xPlayer;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Collection;
@@ -54,20 +53,9 @@ public class DeleteInactiveClaims extends BukkitRunnable {
 
             claims.forEach(claim -> plugin.getClaimManager().deleteClaim(claim, true));
 
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                Lang.send(player, Lang.DELETED_INACTIVE_CLAIMS
-                        .replace("{owner}", name)
-                        .replace("{count}", Integer.toString(count)));
-            }
-            Lang.send(Bukkit.getConsoleSender(), Lang.DELETED_INACTIVE_CLAIMS
+            Bukkit.broadcastMessage(Lang.DELETED_INACTIVE_CLAIMS
                     .replace("{owner}", name)
                     .replace("{count}", Integer.toString(count)));
-
-            if (plugin.getDiscordHook() != null) {
-                plugin.getDiscordHook().sendToDiscord(Lang.DELETED_INACTIVE_CLAIMS_DISCORD
-                        .replace("{owner}", name)
-                        .replace("{count}", Integer.toString(count)));
-            }
         }
     }
 }
