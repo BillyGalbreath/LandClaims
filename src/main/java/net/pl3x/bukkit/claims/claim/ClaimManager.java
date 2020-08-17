@@ -1,7 +1,7 @@
 package net.pl3x.bukkit.claims.claim;
 
-import net.pl3x.bukkit.claims.Logger;
 import net.pl3x.bukkit.claims.LandClaims;
+import net.pl3x.bukkit.claims.Logger;
 import net.pl3x.bukkit.claims.configuration.ClaimConfig;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
@@ -11,6 +11,7 @@ import net.pl3x.bukkit.claims.visualization.VisualizationType;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -28,7 +29,7 @@ public class ClaimManager {
         this.plugin = plugin;
     }
 
-    private final Map<Long, Collection<Claim>> chunks = new HashMap<>();
+    private final Map<UUID, Map<Long, Collection<Claim>>> chunks = new HashMap<>();
     private final Map<Long, Claim> topLevelClaims = new HashMap<>();
     private long nextId = 0;
 
@@ -54,6 +55,7 @@ public class ClaimManager {
 
     public Collection<Claim> getNearbyClaims(Location location) {
         Collection<Claim> claims = new HashSet<>();
+        Map<Long, Collection<Claim>> chunks = getChunks(location.getWorld());
 
         Chunk minChunk = location.getWorld().getChunkAt(location.subtract(150, 0, 150));
         Chunk maxChunk = location.getWorld().getChunkAt(location.add(300, 0, 300));
@@ -335,14 +337,30 @@ public class ClaimManager {
     }
 
     public void removeChunkHashes(Claim claim) {
+        Map<Long, Collection<Claim>> chunks = getChunks(claim.getWorld());
         chunks.forEach((k, v) -> v.removeIf(c -> c.getId() == claim.getId())); // remove claim's chunk hashes
         chunks.entrySet().removeIf(e -> e.getValue().isEmpty()); // remove empty chunk hashes from memory
+        putChunks(claim.getWorld(), chunks);
+    }
+
+    public Map<Long, Collection<Claim>> getChunks(World world) {
+        Map<Long, Collection<Claim>> chunks = this.chunks.get(world.getUID());
+        if (chunks == null) {
+            chunks = new HashMap<>();
+        }
+        return chunks;
+    }
+
+    public void putChunks(World world, Map<Long, Collection<Claim>> chunks) {
+        this.chunks.put(world.getUID(), chunks);
     }
 
     public void calculateChunkHashes(Claim claim) {
         removeChunkHashes(claim);
+        Map<Long, Collection<Claim>> chunks = getChunks(claim.getWorld());
         claim.getCoordinates().getChunkHashes(plugin).forEach(hash ->
                 chunks.computeIfAbsent(hash, k -> new HashSet<>()).add(claim));
+        putChunks(claim.getWorld(), chunks);
     }
 
     public long getChunkHash(long x, long z) {

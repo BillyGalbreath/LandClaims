@@ -1,11 +1,12 @@
 package net.pl3x.bukkit.claims.claim;
 
-import net.pl3x.bukkit.claims.Logger;
 import net.pl3x.bukkit.claims.LandClaims;
+import net.pl3x.bukkit.claims.Logger;
 import net.pl3x.bukkit.claims.claim.flag.FlagType;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -114,6 +115,10 @@ public class Claim {
 
     public Coordinates getCoordinates() {
         return coordinates;
+    }
+
+    public World getWorld() {
+        return getCoordinates().getWorld();
     }
 
     public boolean isAdminClaim() {
