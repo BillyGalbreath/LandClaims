@@ -94,7 +94,6 @@ public class Lang {
     public static String CREATE_FAILED_NEED_MORE_BLOCKS;
     public static String CREATE_START;
     public static String CREATE_SUCCESS;
-    public static String CREATE_SUCCESS_DISCORD;
     public static String CREATE_FAILED_CHILD;
     public static String CREATE_FAILED_CHILD_OVERLAP;
     public static String CREATE_FAILED_CHILD_OVERLAP_PARENT;
@@ -118,7 +117,6 @@ public class Lang {
     public static String DELETE_ALL_USER_CLAIMS_IN_WORLD_SUCCESS;
 
     public static String DELETED_INACTIVE_CLAIMS;
-    public static String DELETED_INACTIVE_CLAIMS_DISCORD;
 
     public static String ENTRY_DENIED;
     public static String EXIT_DENIED;
@@ -275,7 +273,6 @@ public class Lang {
         CREATE_FAILED_NEED_MORE_BLOCKS = config.getString("create-failed-need-more-blocks", "&4You don't have enough blocks to claim that entire area. You need {required} more blocks");
         CREATE_START = config.getString("create-start", "&dClaim corner set! Use the tool again at the opposite corner to claim a rectangle of land. To cancel, put your tool away");
         CREATE_SUCCESS = config.getString("create-success", "&dClaim created! {amount} available claim blocks remaining. Use /trust to share it with friends");
-        CREATE_SUCCESS_DISCORD = config.getString("create-success-discord", ":pick: {owner} created a new claim!");
         CREATE_FAILED_CHILD = config.getString("create-failed-child", "&4You can't create a child here because it would overlap another child");
         CREATE_FAILED_CHILD_OVERLAP = config.getString("create-failed-child-overlap", "&4Your selected area overlaps another child");
         CREATE_FAILED_CHILD_OVERLAP_PARENT = config.getString("create-failed-child-overlap-parent", "&4Your selected area overlaps the parent claim's border");
@@ -299,7 +296,6 @@ public class Lang {
         DELETE_ALL_USER_CLAIMS_IN_WORLD_SUCCESS = config.getString("delete-all-user-claims-in-world-success", "&dDeleted all non-admin claims in {world}");
 
         DELETED_INACTIVE_CLAIMS = config.getString("delete-inactive-claims", "&d{owner}'s claims have been deleted due to inactivity ({count})");
-        DELETED_INACTIVE_CLAIMS_DISCORD = config.getString("delete-inactive-claims-discord", ":sleeping: **{owner}'s claims have been deleted due to inactivity ({count})**");
 
         ENTRY_DENIED = config.getString("entry-denied", "&4You are not allowed to enter this claim");
         EXIT_DENIED = config.getString("exit-denied", "&4You are not allowed to exit this claim");
