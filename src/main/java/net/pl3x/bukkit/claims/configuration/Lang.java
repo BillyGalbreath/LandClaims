@@ -217,7 +217,7 @@ public class Lang {
         BUILD_DENY = config.getString("build-deny", "&4You can't build here");
         PVP_DENY = config.getString("pvp-deny", "&4PvP is disabled here");
         CONTAINER_DENY = config.getString("container-deny", "&4You don't have permission to use that");
-        ACCESS_DENY = config.getString("access-deny", "&4You don't have permission to access that");
+        ACCESS_DENY = config.getString("container-deny", "&4You don't have permission to access that");
 
         USE_STICK_TO_CLAIM_THIS_LAND = config.getString("use-stick-to-claim-this-land", "&dUh oh! This chest is unprotected!\n&dUse a stick to protect it by claiming this land");
 
