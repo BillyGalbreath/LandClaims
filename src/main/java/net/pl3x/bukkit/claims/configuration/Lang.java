@@ -342,7 +342,7 @@ public class Lang {
         TRUST_CURRENT_CLAIM = config.getString("trust-current-claim", "in this claim");
         TRUST_ALL_CLAIMS = config.getString("trust-all-claims", "in all your claims");
         TRUST_SUCCESS = config.getString("trust-success", "&dGranted {target} permission to {desc} {location}");
-        UNTRUST_SUCCESS = config.getString("trust-success", "&dRevoked {target}'s trust {location}");
+        UNTRUST_SUCCESS = config.getString("untrust-success", "&dRevoked {target}'s trust {location}");
 
         TRUSTLIST_NO_CLAIM = config.getString("trustlist-no-claim", "&4Stand inside the claim you're curious about");
         TRUSTLIST_NO_PERMISSION = config.getString("trustlist-no-permission", "&4You don't have access to manage permissions here");
