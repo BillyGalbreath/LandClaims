@@ -7,6 +7,7 @@ api-version: "1.13"
 softdepend:
 - dynmap
 - DynmapAPI
+- Pl3xMap
 - Discord4Bukkit
 - WorldLoader
 

@@ -35,6 +35,7 @@ import net.pl3x.bukkit.claims.listener.FlagListener;
 import net.pl3x.bukkit.claims.listener.PlayerListener;
 import net.pl3x.bukkit.claims.listener.ProtectionListener;
 import net.pl3x.bukkit.claims.listener.TrustListener;
+import net.pl3x.bukkit.claims.pl3xmap.Pl3xMapHook;
 import net.pl3x.bukkit.claims.player.PlayerManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -47,6 +48,7 @@ public class LandClaims extends JavaPlugin {
     private final ClaimManager claimManager;
     private final PlayerManager playerManager;
     private DynmapHook dynmapHook;
+    private Pl3xMapHook pl3xmapHook;
 
     public LandClaims() {
         instance = this;
@@ -119,12 +121,22 @@ public class LandClaims extends JavaPlugin {
             dynmapHook = new DynmapHook(this);
         }
 
+        // Pl3xMap hook
+        if (getServer().getPluginManager().isPluginEnabled("Pl3xMap")) {
+            getLog().info("Found Pl3xMap. Hooking claim markers...");
+            pl3xmapHook = new Pl3xMapHook(this);
+        }
+
         getLog().info(getName() + " v" + getDescription().getVersion() + " enabled!");
     }
 
     public void onDisable() {
         if (dynmapHook != null) {
             dynmapHook.disable();
+        }
+
+        if (pl3xmapHook != null) {
+            pl3xmapHook.disable();
         }
 
         getClaimManager().unloadClaims();

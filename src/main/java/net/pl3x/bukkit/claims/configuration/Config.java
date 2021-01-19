@@ -112,7 +112,11 @@ public class Config {
     }
 
     public static boolean isWorldDisabled(World world) {
-        return !ENABLED_WORLDS.contains(world.getName());
+        return !isWorldEnabled(world.getName());
+    }
+
+    public static boolean isWorldEnabled(String name) {
+        return ENABLED_WORLDS.contains(name);
     }
 
     public static boolean isClaimTool(ItemStack item) {
