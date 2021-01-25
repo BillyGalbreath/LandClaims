@@ -56,13 +56,13 @@ public class Pl3xMapTask extends BukkitRunnable {
         String worldName = min.getWorld().getName();
         String ownerName = claim.getOwnerName();
 
-        Rectangle rect = Marker.rectangle(Point.of(min.getBlockX(), min.getBlockZ()), Point.of(max.getBlockX(), max.getBlockZ()));
+        Rectangle rect = Marker.rectangle(Point.of(min.getBlockX(), min.getBlockZ()), Point.of(max.getBlockX() + 1, max.getBlockZ() + 1));
 
         MarkerOptions.Builder options = MarkerOptions.builder()
                 .strokeColor(Color.GREEN)
                 .fillColor(Color.GREEN)
                 .fillOpacity(0.2)
-                .tooltip("Region owned by<br/>" + ownerName);
+                .clickTooltip("Region owned by<br/>" + ownerName);
 
         if (claim.isAdminClaim()) {
             options.strokeColor(Color.BLUE).fillColor(Color.BLUE);
