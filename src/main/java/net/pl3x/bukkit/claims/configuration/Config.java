@@ -41,14 +41,14 @@ public class Config {
 
     public static int DELETE_INACTIVE_CLAIMS;
 
-    public static int DYNMAP_LAYER_PRIORITY;
-    public static boolean DYNMAP_LAYER_HIDEBYDEFAULT;
-    public static int DYNMAP_MIN_ZOOM;
-    public static String DYNMAP_INFO_WINDOW;
-    public static String DYNMAP_ADMIN_WINDOW;
-    public static boolean DYNMAP_3D_REGIONS;
-    public static List<String> DYNMAP_VISIBLE_REGIONS;
-    public static List<String> DYNMAP_HIDDEN_REGIONS;
+    public static int MAP_LAYER_PRIORITY;
+    public static boolean MAP_LAYER_HIDEBYDEFAULT;
+    public static int MAP_MIN_ZOOM;
+    public static String MAP_TOOLIP;
+    public static String MAP_ADMIN_TOOLTIP;
+    public static boolean MAP_3D_REGIONS;
+    public static List<String> MAP_VISIBLE_REGIONS;
+    public static List<String> MAP_HIDDEN_REGIONS;
 
     public static boolean PREVENT_GLOBAL_CREEPER_POTHOLES = false;
     public static boolean PREVENT_GLOBAL_ENDERMAN_GRIEFING = false;
@@ -97,15 +97,15 @@ public class Config {
 
         DELETE_INACTIVE_CLAIMS = config.getInt("delete-inactive-claims", 30);
 
-        DYNMAP_LAYER_PRIORITY = config.getInt("dynmap.layer.priority", 2);
-        DYNMAP_LAYER_HIDEBYDEFAULT = config.getBoolean("dynmap.layer.hidebydefault", false);
-        DYNMAP_MIN_ZOOM = config.getInt("dynmap.minzoom", 0);
-        DYNMAP_INFO_WINDOW = config.getString("dynmap.info-window", "<div class=\"infowindow\"><span style=\"font-weight:bold;\">%owner%</span>''s Claim<br/>%dimensions% = <span style=\"font-weight:bold;\">%area%</span><br/>Last Active: <span style=\"font-weight:bold;\">%lastactive%</span><br/><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span><br/><br/><span style=\"font-weight:bold;\">Flags:</span>%flags%</div>");
-        DYNMAP_ADMIN_WINDOW = config.getString("dynmap.admin-window", "<div class=\"infowindow\"><span style=\"font-weight:bold;\">Administrator</span> Claim<br/>%dimensions% = <span style=\"font-weight:bold;\">%area%</span><br/><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span><br/><br/><span style=\"font-weight:bold;\">Flags:</span>%flags%</div>");
-        DYNMAP_3D_REGIONS = config.getBoolean("use3dregions", false);
+        MAP_LAYER_PRIORITY = config.getInt("dynmap.layer.priority", 2);
+        MAP_LAYER_HIDEBYDEFAULT = config.getBoolean("dynmap.layer.hidebydefault", false);
+        MAP_MIN_ZOOM = config.getInt("dynmap.minzoom", 0);
+        MAP_TOOLIP = config.getString("dynmap.info-window", "<div class=\"infowindow\"><span style=\"font-weight:bold;\">%owner%</span>''s Claim<br/>%dimensions% = <span style=\"font-weight:bold;\">%area%</span><br/>Last Active: <span style=\"font-weight:bold;\">%lastactive%</span><br/><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span><br/><br/><span style=\"font-weight:bold;\">Flags:</span>%flags%</div>");
+        MAP_ADMIN_TOOLTIP = config.getString("dynmap.admin-window", "<div class=\"infowindow\"><span style=\"font-weight:bold;\">Administrator</span> Claim<br/>%dimensions% = <span style=\"font-weight:bold;\">%area%</span><br/><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span><br/><br/><span style=\"font-weight:bold;\">Flags:</span>%flags%</div>");
+        MAP_3D_REGIONS = config.getBoolean("use3dregions", false);
 
-        DYNMAP_VISIBLE_REGIONS = config.getStringList("visibleregions");
-        DYNMAP_HIDDEN_REGIONS = config.getStringList("hiddenregions");
+        MAP_VISIBLE_REGIONS = config.getStringList("visibleregions");
+        MAP_HIDDEN_REGIONS = config.getStringList("hiddenregions");
 
         PREVENT_GLOBAL_CREEPER_POTHOLES = config.getBoolean("prevent-global-creeper-potholes", PREVENT_GLOBAL_CREEPER_POTHOLES);
         PREVENT_GLOBAL_ENDERMAN_GRIEFING = config.getBoolean("prevent-global-enderman-griefing", PREVENT_GLOBAL_ENDERMAN_GRIEFING);

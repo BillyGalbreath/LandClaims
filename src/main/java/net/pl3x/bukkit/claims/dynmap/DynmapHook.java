@@ -2,11 +2,8 @@ package net.pl3x.bukkit.claims.dynmap;
 
 import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
-import net.pl3x.bukkit.claims.claim.TrustType;
 import net.pl3x.bukkit.claims.configuration.Config;
-import net.pl3x.bukkit.claims.configuration.Lang;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import net.pl3x.bukkit.claims.pl3xmap.Pl3xMapTask;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.dynmap.DynmapAPI;
@@ -17,9 +14,7 @@ import org.dynmap.markers.MarkerSet;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.UUID;
 
 public class DynmapHook {
     private final LandClaims plugin;
@@ -64,15 +59,15 @@ public class DynmapHook {
             return;
         }
 
-        int minzoom = Config.DYNMAP_MIN_ZOOM;
+        int minzoom = Config.MAP_MIN_ZOOM;
         if (minzoom > 0) {
             markerSetTop.setMinZoom(minzoom);
             markerSetChild.setMinZoom(minzoom);
         }
-        markerSetTop.setLayerPriority(Config.DYNMAP_LAYER_PRIORITY);
-        markerSetTop.setHideByDefault(Config.DYNMAP_LAYER_HIDEBYDEFAULT);
-        markerSetChild.setLayerPriority(Config.DYNMAP_LAYER_PRIORITY + 1);
-        markerSetChild.setHideByDefault(Config.DYNMAP_LAYER_HIDEBYDEFAULT);
+        markerSetTop.setLayerPriority(Config.MAP_LAYER_PRIORITY);
+        markerSetTop.setHideByDefault(Config.MAP_LAYER_HIDEBYDEFAULT);
+        markerSetChild.setLayerPriority(Config.MAP_LAYER_PRIORITY + 1);
+        markerSetChild.setHideByDefault(Config.MAP_LAYER_HIDEBYDEFAULT);
 
         /* Get style information */
         defStyle = new AreaStyle(plugin.getConfig(), "regionstyle");
@@ -89,59 +84,18 @@ public class DynmapHook {
         new DynmapUpdate(this).runTaskTimerAsynchronously(plugin, 40, 1200);
     }
 
-    private String getName(UUID uuid) {
-        if (uuid.equals(Claim.PUBLIC_UUID)) {
-            return Lang.TRUST_PUBLIC;
-        } else {
-            return Bukkit.getOfflinePlayer(uuid).getName();
-        }
-    }
-
-    private String formatInfoWindow(Claim claim) {
-        Collection<String> builders = new HashSet<>();
-        Collection<String> containers = new HashSet<>();
-        Collection<String> accessors = new HashSet<>();
-        Collection<String> managers = new HashSet<>();
-
-        claim.getTrusts().forEach((uuid, trustType) -> {
-            if (trustType == TrustType.BUILDER) {
-                builders.add(getName(uuid));
-            } else if (trustType == TrustType.CONTAINER) {
-                containers.add(getName(uuid));
-            } else {
-                accessors.add(getName(uuid));
-            }
-        });
-
-        claim.getManagers().forEach(uuid -> {
-            managers.add(getName(uuid));
-        });
-
-        return ("<div class=\"regioninfo\">" + (claim.isAdminClaim() ? Config.DYNMAP_ADMIN_WINDOW : Config.DYNMAP_INFO_WINDOW) + "</div>")
-                .replace("%owner%", claim.getOwnerName())
-                .replace("%dimensions%", claim.getCoordinates().getWidthX() + "x" + claim.getCoordinates().getWidthZ())
-                .replace("%area%", Integer.toString(claim.getCoordinates().getArea()))
-                .replace("%lastactive%", claim.getLastActive() + " days ago")
-                .replace("%builders%", String.join(", ", builders))
-                .replace("%containers%", String.join(", ", containers))
-                .replace("%accessors%", String.join(", ", accessors))
-                .replace("%managers%", String.join(", ", managers))
-                .replace("%flags%", ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', claim.getFlagsList()))
-                        .replace("\n", "<br>"));
-    }
-
     private boolean isVisible(String ownerName, String worldName) {
-        if (Config.DYNMAP_VISIBLE_REGIONS != null && !Config.DYNMAP_VISIBLE_REGIONS.isEmpty()) {
-            if (Config.DYNMAP_VISIBLE_REGIONS.contains(ownerName) ||
-                    Config.DYNMAP_VISIBLE_REGIONS.contains("world:" + worldName) ||
-                    Config.DYNMAP_VISIBLE_REGIONS.contains(worldName + "/" + ownerName)) {
+        if (Config.MAP_VISIBLE_REGIONS != null && !Config.MAP_VISIBLE_REGIONS.isEmpty()) {
+            if (Config.MAP_VISIBLE_REGIONS.contains(ownerName) ||
+                    Config.MAP_VISIBLE_REGIONS.contains("world:" + worldName) ||
+                    Config.MAP_VISIBLE_REGIONS.contains(worldName + "/" + ownerName)) {
                 return false;
             }
         }
-        if (Config.DYNMAP_HIDDEN_REGIONS != null && !Config.DYNMAP_HIDDEN_REGIONS.isEmpty()) {
-            return !(Config.DYNMAP_HIDDEN_REGIONS.contains(ownerName) ||
-                    Config.DYNMAP_HIDDEN_REGIONS.contains("world:" + worldName) ||
-                    Config.DYNMAP_HIDDEN_REGIONS.contains(worldName + "/" + ownerName));
+        if (Config.MAP_HIDDEN_REGIONS != null && !Config.MAP_HIDDEN_REGIONS.isEmpty()) {
+            return !(Config.MAP_HIDDEN_REGIONS.contains(ownerName) ||
+                    Config.MAP_HIDDEN_REGIONS.contains("world:" + worldName) ||
+                    Config.MAP_HIDDEN_REGIONS.contains(worldName + "/" + ownerName));
 
         }
         return true;
@@ -216,12 +170,12 @@ public class DynmapHook {
                 marker.setCornerLocations(x, z);
                 marker.setLabel(ownerName);
             }
-            if (Config.DYNMAP_3D_REGIONS) {
+            if (Config.MAP_3D_REGIONS) {
                 marker.setRangeY(max.getY() + 1.0, min.getY());
             }
 
             addStyle(claim, marker);
-            marker.setDescription(formatInfoWindow(claim));
+            marker.setDescription(Pl3xMapTask.tooltip(claim));
             newmap.put(markerid, marker);
         }
     }

@@ -2,19 +2,15 @@ package net.pl3x.bukkit.claims.command;
 
 import net.pl3x.bukkit.claims.LandClaims;
 import net.pl3x.bukkit.claims.claim.Claim;
-import net.pl3x.bukkit.claims.claim.TrustType;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
-import org.bukkit.Bukkit;
+import net.pl3x.bukkit.claims.util.Permission;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 public class CmdTrustList implements TabExecutor {
@@ -53,53 +49,13 @@ public class CmdTrustList implements TabExecutor {
             return true;
         }
 
-        Collection<String> builders = new HashSet<>();
-        Collection<String> containers = new HashSet<>();
-        Collection<String> accessors = new HashSet<>();
-        Collection<String> managers = new HashSet<>();
-
-        claim.getTrusts().forEach((uuid, trustType) -> {
-            String targetName = null;
-            if (uuid.equals(Claim.PUBLIC_UUID)) {
-                targetName = Lang.TRUST_PUBLIC;
-            } else {
-                OfflinePlayer target = Bukkit.getOfflinePlayer(uuid);
-                if (target != null) {
-                    targetName = target.getName();
-                }
-            }
-            System.out.print("targetName: " + targetName);
-            if (targetName != null) {
-                if (trustType == TrustType.BUILDER) {
-                    builders.add(targetName);
-                } else if (trustType == TrustType.CONTAINER) {
-                    containers.add(targetName);
-                } else {
-                    accessors.add(targetName);
-                }
-            }
-        });
-
-        claim.getManagers().forEach(uuid -> {
-            String targetName = null;
-            if (uuid.equals(Claim.PUBLIC_UUID)) {
-                targetName = Lang.TRUST_PUBLIC;
-            } else {
-                OfflinePlayer target = Bukkit.getOfflinePlayer(uuid);
-                if (target != null) {
-                    targetName = target.getName();
-                }
-            }
-            if (targetName != null) {
-                managers.add(targetName);
-            }
-        });
+        Permission perm = new Permission(claim);
 
         Lang.send(sender, Lang.TRUSTLIST_HEADER);
-        Lang.send(sender, ChatColor.GOLD + "> " + String.join(", ", managers));
-        Lang.send(sender, ChatColor.YELLOW + "> " + String.join(", ", builders));
-        Lang.send(sender, ChatColor.GREEN + "> " + String.join(", ", containers));
-        Lang.send(sender, ChatColor.BLUE + "> " + String.join(", ", accessors));
+        Lang.send(sender, ChatColor.GOLD + "> " + String.join(", ", perm.managers()));
+        Lang.send(sender, ChatColor.YELLOW + "> " + String.join(", ", perm.builders()));
+        Lang.send(sender, ChatColor.GREEN + "> " + String.join(", ", perm.containers()));
+        Lang.send(sender, ChatColor.BLUE + "> " + String.join(", ", perm.accessors()));
         Lang.send(sender, ChatColor.GOLD + Lang.TRUSTLIST_MANAGERS + " " +
                 ChatColor.YELLOW + Lang.TRUSTLIST_BUILDERS + " " +
                 ChatColor.GREEN + Lang.TRUSTLIST_CONTAINERS + " " +
