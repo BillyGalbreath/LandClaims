@@ -25,7 +25,6 @@ public class Config {
     public static int CLAIMS_AUTO_RADIUS = 5;
 
     public static String CLAIM_TOOL_MATERIAL = "STICK";
-    public static byte CLAIM_TOOL_DATA = (byte) 0;
     public static String CLAIM_TOOL_NAME = "Claim Tool";
     public final static List<String> CLAIM_TOOL_LORE = new ArrayList<>();
 
@@ -75,7 +74,6 @@ public class Config {
         CLAIMS_AUTO_RADIUS = config.getInt("claims.auto-radius", 5);
 
         CLAIM_TOOL_MATERIAL = config.getString("claim-tool.material", "STICK");
-        CLAIM_TOOL_DATA = (byte) config.getInt("claim-tool.data", 0);
         CLAIM_TOOL_NAME = ChatColor.translateAlternateColorCodes('&',
                 config.getString("claim-tool.name", "Claim Tool"));
         CLAIM_TOOL_LORE.clear();
@@ -125,9 +123,6 @@ public class Config {
         }
         if (!item.getType().name().equals(Config.CLAIM_TOOL_MATERIAL)) {
             return false; // wrong material
-        }
-        if (item.getData().getData() != Config.CLAIM_TOOL_DATA) {
-            return false; // wrong data
         }
         ItemMeta meta = null;
         if (item.hasItemMeta()) {

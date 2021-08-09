@@ -30,6 +30,7 @@ import net.pl3x.bukkit.claims.command.CmdTrustList;
 import net.pl3x.bukkit.claims.configuration.Config;
 import net.pl3x.bukkit.claims.configuration.Lang;
 import net.pl3x.bukkit.claims.dynmap.DynmapHook;
+import net.pl3x.bukkit.claims.hook.SafariNetHook;
 import net.pl3x.bukkit.claims.listener.ClaimToolListener;
 import net.pl3x.bukkit.claims.listener.FlagListener;
 import net.pl3x.bukkit.claims.listener.PlayerListener;
@@ -125,6 +126,12 @@ public class LandClaims extends JavaPlugin {
         if (getServer().getPluginManager().isPluginEnabled("Pl3xMap")) {
             getLog().info("Found Pl3xMap. Hooking claim markers...");
             pl3xmapHook = new Pl3xMapHook(this);
+        }
+
+        // SafariNet hook
+        if (getServer().getPluginManager().isPluginEnabled("SafariNet")) {
+            getLog().info("Found SafariNet. Hooking entity listeners...");
+            new SafariNetHook();
         }
 
         getLog().info(getName() + " v" + getDescription().getVersion() + " enabled!");

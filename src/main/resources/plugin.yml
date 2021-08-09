@@ -8,6 +8,7 @@ softdepend:
 - dynmap
 - DynmapAPI
 - Pl3xMap
+- SafariNet
 - Discord4Bukkit
 - WorldLoader
 

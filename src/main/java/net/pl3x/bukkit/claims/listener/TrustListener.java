@@ -448,7 +448,8 @@ public class TrustListener implements Listener {
 
         // (container trust)
         // special berries check
-        if (clickedBlock.getType() == Material.SWEET_BERRY_BUSH) {
+        if (clickedBlock.getType() == Material.SWEET_BERRY_BUSH ||
+                clickedBlock.getType() == Material.CAVE_VINES_PLANT) {
             if (!claim.allowContainers(event.getPlayer())) {
                 Lang.send(player, Lang.CONTAINER_DENY);
                 event.setCancelled(true);
@@ -485,9 +486,11 @@ public class TrustListener implements Listener {
         // prevent using note blocks, repeaters, comparators, daylight sensors, dragon eggs, flower pots, and end crystals
         // prevent placing ink sack (bone meal), end crystals, armorstands, item frames, boats, and minecarts
         // prevent spawning monsters using eggs or monster blocks
+        // prevent bonemeal
         if (Tags.INTERACTABLE.isTagged(itemInHand) ||
                 Tags.BOATS.isTagged(itemInHand) ||
-                Tags.MINECARTS.isTagged(itemInHand)) {
+                Tags.MINECARTS.isTagged(itemInHand) ||
+                itemInHand.getType() == Material.BONE_MEAL) {
             if (!claim.allowBuild(player)) {
                 Lang.send(player, Lang.BUILD_DENY);
                 event.setCancelled(true);
