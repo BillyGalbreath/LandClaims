@@ -434,7 +434,15 @@ public class TrustListener implements Listener {
             return;
         }
 
+        if (event.getHand() == null) {
+            return;
+        }
+
         ItemStack itemInHand = event.getPlayer().getInventory().getItem(event.getHand());
+
+        if (itemInHand == null) {
+            return;
+        }
 
         // (container trust)
         // special farmland check
@@ -487,7 +495,8 @@ public class TrustListener implements Listener {
         // prevent placing ink sack (bone meal), end crystals, armorstands, item frames, boats, and minecarts
         // prevent spawning monsters using eggs or monster blocks
         // prevent bonemeal
-        if (Tags.INTERACTABLE.isTagged(itemInHand) ||
+        if (Tags.INTERACTABLE.isTagged(clickedBlock) ||
+                Tags.INTERACTABLE.isTagged(itemInHand) ||
                 Tags.BOATS.isTagged(itemInHand) ||
                 Tags.MINECARTS.isTagged(itemInHand) ||
                 itemInHand.getType() == Material.BONE_MEAL) {
